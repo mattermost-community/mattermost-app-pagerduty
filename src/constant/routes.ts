@@ -9,6 +9,10 @@ const AppPaths = {
     BindingPathHelp: '/help',
 
     CallPathIncidentCreate: '/incident/create',
+
+    CallPathConnectSubmit: '/connect/login/submit',
+    OAuthCompletePath: '/oauth2/complete',
+    OAuthConnectPath: '/oauth2/connect',
 }
 
 const PagerDutyPaths = {

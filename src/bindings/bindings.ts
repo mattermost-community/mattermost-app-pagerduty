@@ -43,3 +43,58 @@ export const createAlertBinding = (): AppBinding => {
     }
 }
 
+export const connectAccountBinding = (): any => {
+    const subCommands: string[] = [
+        Commands.LOGIN,
+        Commands.LOGOUT
+    ];
+
+    const bindings: AppBinding[] = [];
+
+    bindings.push(accountLoginBinding());
+    bindings.push(accountLogoutBinding());
+
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.ACCOUNT,
+        description: 'Connect your PagerDuty account',
+        hint: `[${subCommands.join(' | ')}]`,
+        bindings
+    }
+};
+
+export const accountLoginBinding = (): any => {
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.LOGIN,
+        description: 'Connect your PagerDuty account',
+        form: {
+            title: "Account login",
+            icon: PagerDutyIcon,
+            submit: {
+                path: Routes.App.CallPathConnectSubmit,
+                expand: {
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                }
+            }
+        }
+    }
+};
+
+export const accountLogoutBinding = (): any => {
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.LOGIN,
+        description: 'Connect your PagerDuty account',
+        form: {
+            title: "Account logout",
+            icon: PagerDutyIcon,
+            submit: {
+                path: Routes.App.CallPathConnectSubmit,
+                expand: {
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                }
+            }
+        }
+    }
+};

@@ -1,7 +1,16 @@
 import {AppBinding, AppsState} from '../types';
 
-import {createAlertBinding, getHelpBinding} from './bindings';
-import {AppBindingLocations, Commands, CommandTrigger, PagerDutyIcon} from '../constant';
+import {
+    connectAccountBinding,
+    createAlertBinding,
+    getHelpBinding
+} from './bindings';
+import {
+    AppBindingLocations,
+    Commands,
+    CommandTrigger,
+    PagerDutyIcon
+} from '../constant';
 
 const newCommandBindings = (bindings: AppBinding[]): AppsState => {
     return {
@@ -22,6 +31,7 @@ export const getCommandBindings = (): AppsState => {
     const bindings: AppBinding[] = [];
 
     bindings.push(getHelpBinding());
+    bindings.push(connectAccountBinding());
     bindings.push(createAlertBinding());
     return newCommandBindings(bindings);
 };
