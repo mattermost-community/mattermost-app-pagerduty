@@ -2,6 +2,8 @@ const PathsVariable = {
     Identifier: ':IDENTIFIER'
 }
 
+export const AppsPluginName = 'com.mattermost.apps';
+
 const AppPaths = {
     ManifestPath: '/manifest.json',
     BindingsPath: '/bindings',
@@ -20,11 +22,14 @@ const PagerDutyPaths = {
 };
 
 const MattermostPaths = {
+    PathKV: '/kv',
     PostsPath: '/posts',
     PostPath: `/posts/${PathsVariable.Identifier}`,
     UserPath: `/users/${PathsVariable.Identifier}`,
+    ChannelPath: `/channels/${PathsVariable.Identifier}`,
     DialogsOpenPath: '/actions/dialogs/open',
-    ApiVersionV4: '/api/v4'
+    ApiVersionV4: '/api/v4',
+    ApiVersionV1: '/api/v1',
 }
 
 export const Routes = {
