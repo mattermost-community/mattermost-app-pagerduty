@@ -6,7 +6,7 @@ export interface KVStoreOptions {
     accessToken: string;
 }
 
-export interface ConfigStoreProps {
+export interface KVStoreProps {
     pagerduty_client_id: string;
     pagerduty_url: string;
 }
@@ -20,7 +20,7 @@ export class KVStoreClient {
         this.config = config;
     }
 
-    public kvSet(key: string, value: ConfigStoreProps): Promise<any> {
+    public kvSet(key: string, value: KVStoreProps): Promise<any> {
         const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathKV}/${key}`;
         return axios.post(url, value, {
             headers: {
@@ -30,7 +30,7 @@ export class KVStoreClient {
         }).then((response: AxiosResponse<any>) => response.data);
     }
 
-    public kvGet(key: string): Promise<ConfigStoreProps> {
+    public kvGet(key: string): Promise<KVStoreProps> {
         const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathKV}/${key}`;
         return axios.get(url, {
             headers: {

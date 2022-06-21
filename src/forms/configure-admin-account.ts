@@ -4,7 +4,7 @@ import {
     AppForm,
 } from '../types';
 import {AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys} from '../constant';
-import {ConfigStoreProps, KVStoreClient, KVStoreOptions} from '../clients/kvstore';
+import {KVStoreProps, KVStoreClient, KVStoreOptions} from '../clients/kvstore';
 
 export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
@@ -16,7 +16,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
     };
     const kvStoreClient = new KVStoreClient(options);
 
-    const config: ConfigStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
+    const config: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
 
     const form: AppForm = {
         title: 'Configure PagerDuty',
@@ -63,7 +63,7 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void>
     };
     const kvStoreClient = new KVStoreClient(options);
 
-    const config: ConfigStoreProps = {
+    const config: KVStoreProps = {
         pagerduty_client_id: pagerDutyClientID,
         pagerduty_url: pagerDutyURL
     };

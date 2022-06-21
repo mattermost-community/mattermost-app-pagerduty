@@ -4,20 +4,22 @@ import {
     CallResponseHandler,
     newErrorCallResponseWithMessage,
     newFormCallResponse,
+    newOKCallResponse,
     newOKCallResponseWithData,
     newOKCallResponseWithMarkdown
 } from '../utils/call-responses';
 import {AppCallRequest, AppCallResponse} from '../types';
 import {hyperlink} from '../utils/markdown';
 import config from '../config';
-import {Routes} from '../constant';
+import {Routes, StoreKeys} from '../constant';
 import {
     base64Unicode,
     digestVerifier,
     encodeFormData,
     gen128x8bitNonce
 } from '../utils/utils';
-import {pagerDutyConfigForm, pagerDutyConfigSubmit} from "../forms/configure-admin-account";
+import {pagerDutyConfigForm, pagerDutyConfigSubmit} from '../forms/configure-admin-account';
+import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
 
 export const configureAdminAccountForm: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
@@ -61,8 +63,14 @@ export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Re
 
     let callResponse: AppCallResponse;
 
-    const pdHost: string = config.PAGERDUTY.OAUTH;
-    const url: string = `${pdHost}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
+    const kvOptions: KVStoreOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>botAccessToken
+    };
+    const kvStoreClient = new KVStoreClient(kvOptions);
+    const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
+
+    const url: string = `${kvStoreProps.pagerduty_url}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
     const redirectUrl: string = `${config.APP.HOST}${Routes.App.OAuthCompletePath}`;
 
     const codeVerifier: string = gen128x8bitNonce();
@@ -70,7 +78,7 @@ export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Re
     const challenge = base64Unicode(challengeBuffer);
 
     const urlWithParams = new URL(url);
-    urlWithParams.searchParams.append('client_id', '8858cc37-4a3c-4ae0-a063-f6d4fd9182b4');
+    urlWithParams.searchParams.append('client_id', kvStoreProps.pagerduty_client_id);
     urlWithParams.searchParams.append('redirect_uri', redirectUrl);
     urlWithParams.searchParams.append('response_type', 'code');
     urlWithParams.searchParams.append('scope', 'read write');
@@ -84,14 +92,27 @@ export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Re
 }
 
 export const fOauth2Complete: CallResponseHandler = async (req: Request, res: Response) => {
+    const call: AppCallRequest = req.body;
+    console.log('call', req);
+    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
+    const botAccessToken: string | undefined = call.context.bot_access_token;
     const queryParams = req.query as { code: string, subdomain: string, session_state: string; };
-    const pdHost: string = config.PAGERDUTY.OAUTH;
-    const url: string = `${pdHost}${Routes.PagerDuty.OAuthTokenPathPrefix}`;
+
+    let callResponse: AppCallResponse;
+
+    const kvOptions: KVStoreOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>botAccessToken
+    };
+    const kvStoreClient = new KVStoreClient(kvOptions);
+    const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
+
+    const url: string = `${kvStoreProps.pagerduty_url}${Routes.PagerDuty.OAuthTokenPathPrefix}`;
     const redirectUrl: string = `${config.APP.HOST}${Routes.App.OAuthCompletePath}`;
 
     const ouathData: any = {
         grant_type: 'authorization_code',
-        client_id: '8858cc37-4a3c-4ae0-a063-f6d4fd9182b4',
+        client_id: kvStoreProps.pagerduty_client_id,
         redirect_uri: redirectUrl,
         code: queryParams['code'],
         code_verifier: 'dO4FiQGBDerTrbjsMeqU4RZkqtERqX-lj0iXxVspKZd02SxiFLbFU8TX5JwWlkmbu_HzIxQi163GnR2mxg6G7eAQ77R2WolPOxON1uGHv9pi_gqhVjzklz_bzHkz'
@@ -104,6 +125,9 @@ export const fOauth2Complete: CallResponseHandler = async (req: Request, res: Re
         body: encodeFormData(ouathData)
     }).then((response) => response.json());
     console.log('data', data);
+
+    callResponse = newOKCallResponse();
+    res.json(callResponse);
 }
 
 
