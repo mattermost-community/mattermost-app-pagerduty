@@ -16,7 +16,7 @@ router.post(`${Routes.App.BindingPathHelp}`, cHelp.getHelp);
 
 router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
 router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);
-router.post(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);
+router.get(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));

@@ -6,6 +6,7 @@ export default {
         HOST: process.env.HOST
     },
     PAGERDUTY: {
-        URL: 'https://api.pagerduty.com'
+        URL: 'https://api.pagerduty.com',
+        OAUTH: 'https://identity.pagerduty.com'
     }
 }

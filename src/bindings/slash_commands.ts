@@ -13,13 +13,19 @@ import {
 } from '../constant';
 
 const newCommandBindings = (bindings: AppBinding[]): AppsState => {
+    const commands: string[] = [
+        Commands.HELP,
+        Commands.ACCOUNT,
+        Commands.INCIDENT
+    ];
+
     return {
         location: AppBindingLocations.COMMAND,
         bindings: [
             {
                 icon: PagerDutyIcon,
                 label: CommandTrigger,
-                hint: `[${Commands.HELP} | ${Commands.INCIDENT}]`,
+                hint: `[${commands.join(' | ')}]`,
                 description: 'Manage OpsGenie',
                 bindings,
             },

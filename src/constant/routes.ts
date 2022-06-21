@@ -18,7 +18,8 @@ const AppPaths = {
 }
 
 const PagerDutyPaths = {
-    APIVersionV2: '/v2',
+    OAuthAuthorizationPathPrefix: '/oauth/authorize',
+    OAuthTokenPathPrefix: '/oauth/token'
 };
 
 const MattermostPaths = {
