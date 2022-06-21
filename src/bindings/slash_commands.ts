@@ -3,6 +3,7 @@ import {AppBinding, AppsState} from '../types';
 import {
     connectAccountBinding,
     createAlertBinding,
+    getConfigureBinding,
     getHelpBinding
 } from './bindings';
 import {
@@ -15,6 +16,7 @@ import {
 const newCommandBindings = (bindings: AppBinding[]): AppsState => {
     const commands: string[] = [
         Commands.HELP,
+        Commands.CONFIGURE,
         Commands.ACCOUNT,
         Commands.INCIDENT
     ];
@@ -26,7 +28,7 @@ const newCommandBindings = (bindings: AppBinding[]): AppsState => {
                 icon: PagerDutyIcon,
                 label: CommandTrigger,
                 hint: `[${commands.join(' | ')}]`,
-                description: 'Manage OpsGenie',
+                description: 'Manage PagerDuty',
                 bindings,
             },
         ],
@@ -37,6 +39,7 @@ export const getCommandBindings = (): AppsState => {
     const bindings: AppBinding[] = [];
 
     bindings.push(getHelpBinding());
+    bindings.push(getConfigureBinding());
     bindings.push(connectAccountBinding());
     bindings.push(createAlertBinding());
     return newCommandBindings(bindings);

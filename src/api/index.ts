@@ -11,8 +11,10 @@ const router: Router = express.Router();
 router.get(Routes.App.ManifestPath, cManifest.getManifest);
 router.post(Routes.App.BindingsPath, cBindings.getBindings);
 router.post(Routes.App.InstallPath, cInstall.getInstall);
-
 router.post(`${Routes.App.BindingPathHelp}`, cHelp.getHelp);
+
+router.post(`${Routes.App.CallPathConfigForm}`, cConfigure.configureAdminAccountForm);
+router.post(`${Routes.App.CallPathConfigSubmit}`, cConfigure.configureAdminAccountSubmit);
 
 router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
 router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);

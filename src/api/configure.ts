@@ -2,6 +2,8 @@ import {Request, Response} from 'express';
 import fetch from 'node-fetch';
 import {
     CallResponseHandler,
+    newErrorCallResponseWithMessage,
+    newFormCallResponse,
     newOKCallResponseWithData,
     newOKCallResponseWithMarkdown
 } from '../utils/call-responses';
@@ -15,7 +17,33 @@ import {
     encodeFormData,
     gen128x8bitNonce
 } from '../utils/utils';
+import {pagerDutyConfigForm, pagerDutyConfigSubmit} from "../forms/configure-admin-account";
 
+export const configureAdminAccountForm: CallResponseHandler = async (req: Request, res: Response) => {
+    let callResponse: AppCallResponse;
+
+    try {
+        const form = await pagerDutyConfigForm(req.body);
+        callResponse = newFormCallResponse(form);
+        res.json(callResponse);
+    } catch (error: any) {
+        callResponse = newErrorCallResponseWithMessage('Unable to open configuration form: ' + error.message);
+        res.json(callResponse);
+    }
+};
+
+export const configureAdminAccountSubmit: CallResponseHandler = async (req: Request, res: Response) => {
+    let callResponse: AppCallResponse;
+
+    try {
+        await pagerDutyConfigSubmit(req.body);
+        callResponse = newOKCallResponseWithMarkdown('Successfully updated OpsGenie configuration');
+        res.json(callResponse);
+    } catch (error: any) {
+        callResponse = newErrorCallResponseWithMessage('Error processing form request: ' + error.message);
+        res.json(callResponse);
+    }
+};
 
 export const connectAccountLoginSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     const call: AppCallRequest = req.body;

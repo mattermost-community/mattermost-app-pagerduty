@@ -10,11 +10,14 @@ const AppPaths = {
     InstallPath: '/install',
     BindingPathHelp: '/help',
 
-    CallPathIncidentCreate: '/incident/create',
+    CallPathConfigForm: '/config/form',
+    CallPathConfigSubmit: '/config/form/submit',
 
     CallPathConnectSubmit: '/connect/login/submit',
     OAuthCompletePath: '/oauth2/complete',
     OAuthConnectPath: '/oauth2/connect',
+
+    CallPathIncidentCreate: '/incident/create',
 }
 
 const PagerDutyPaths = {
