@@ -109,6 +109,17 @@ export type AppContext = {
     app_path?: string;
     bot_user_id?: string;
     bot_access_token?: string;
+    app?: {
+        SchemaVersion: string;
+        app_id: string;
+        version: string;
+        homepage_url: string;
+        deploy_type: string;
+        webhook_secret: string;
+        bot_user_id: string;
+        bot_username: string;
+        remote_oauth2: any;
+    },
     channel: {
         id: string;
         create_at: number;

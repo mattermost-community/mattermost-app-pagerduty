@@ -8,7 +8,7 @@ export interface KVStoreOptions {
 
 export interface KVStoreProps {
     pagerduty_client_id: string;
-    pagerduty_url: string;
+    pagerduty_client_url: string;
 }
 
 export class KVStoreClient {

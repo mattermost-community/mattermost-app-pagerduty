@@ -1,5 +1,13 @@
 import {AppBinding} from '../types';
-import {AppExpandLevels, PagerDutyIcon, Routes, Commands} from '../constant';
+import {
+    AppExpandLevels,
+    PagerDutyIcon,
+    Routes,
+    Commands,
+    SubscriptionCreateForm,
+    AppFieldTypes,
+    SubscriptionDeleteForm
+} from '../constant';
 
 export const getHelpBinding = (): any => {
     return {
@@ -54,6 +62,7 @@ export const getConfigureBinding = (): any => {
             submit: {
                 path: Routes.App.CallPathConfigForm,
                 expand: {
+                    admin_access_token: AppExpandLevels.EXPAND_SUMMARY,
                     acting_user: AppExpandLevels.EXPAND_SUMMARY,
                     acting_user_access_token: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
@@ -120,3 +129,102 @@ export const accountLogoutBinding = (): any => {
         }
     }
 };
+
+export const subscriptionBinding = (): AppBinding => {
+    const subCommands: string[] = [
+        Commands.ADD,
+        Commands.DELETE,
+        Commands.LIST
+    ];
+
+    const bindings: AppBinding[] = [];
+
+    bindings.push(subscriptionAddBinding());
+    bindings.push(subscriptionDeleteBinding());
+    bindings.push(subscriptionListBinding());
+
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.SUBSCRIPTION,
+        description: 'Subscription teams of PagerDuty to Mattermost channel',
+        hint: `[${subCommands.join(' | ')}]`,
+        bindings
+    }
+};
+
+export const subscriptionAddBinding = (): any => {
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.ADD,
+        description: 'Add a team subscription to a channel',
+        form: {
+            title: "Add a team subscription to a channel",
+            icon: PagerDutyIcon,
+            submit: {
+                path: Routes.App.CallPathSubscriptionAddSubmit,
+                expand: {
+                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                }
+            },
+            fields: [
+                {
+                    modal_label: 'Channel',
+                    name: SubscriptionCreateForm.CHANNEL_ID,
+                    type: AppFieldTypes.CHANNEL,
+                    is_required: true,
+                    position: 1
+                }
+            ]
+        }
+    }
+};
+
+export const subscriptionDeleteBinding = (): any => {
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.DELETE,
+        description: 'Unsubscribe team from channel',
+        form: {
+            title: "Unsubscribe team from channel",
+            icon: PagerDutyIcon,
+            submit: {
+                path: Routes.App.CallPathSubscriptionDeleteSubmit,
+                expand: {
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                },
+            },
+            fields: [
+                {
+                    modal_label: 'Subscription ID',
+                    name: SubscriptionDeleteForm.SUBSCRIPTION_ID,
+                    type: AppFieldTypes.TEXT,
+                    is_required: true,
+                    position: 1,
+                    max_length: 36,
+                    min_length: 36
+                }
+            ]
+        }
+    }
+};
+
+export const subscriptionListBinding = (): any => {
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.LIST,
+        description: 'List of teams subscribed to channels',
+        form: {
+            title: "List of teams subscribed to channels",
+            icon: PagerDutyIcon,
+            submit: {
+                path: Routes.App.CallPathSubscriptionListSubmit,
+                expand: {
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                }
+            }
+        }
+    }
+};
+

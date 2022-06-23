@@ -33,10 +33,10 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
             },
             {
                 type: AppFieldTypes.TEXT,
-                name: ConfigureForm.URL,
-                modal_label: 'Url',
-                value: config.pagerduty_url,
-                description: 'API integration PagerDuty url',
+                name: ConfigureForm.CLIENT_URL,
+                modal_label: 'Client url',
+                value: config.pagerduty_client_url,
+                description: 'API integration PagerDuty client url',
                 is_required: true,
             }
         ],
@@ -55,7 +55,7 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void>
     const values: AppCallValues = <any>call.values;
 
     const pagerDutyClientID: string = values[ConfigureForm.CLIENT_ID];
-    const pagerDutyURL: string = values[ConfigureForm.URL];
+    const pagerDutyClientURL: string = values[ConfigureForm.CLIENT_URL];
 
     const options: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
@@ -65,7 +65,7 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void>
 
     const config: KVStoreProps = {
         pagerduty_client_id: pagerDutyClientID,
-        pagerduty_url: pagerDutyURL
+        pagerduty_client_url: pagerDutyClientURL
     };
     await kvStoreClient.kvSet(StoreKeys.config, config);
 }

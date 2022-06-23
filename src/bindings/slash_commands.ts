@@ -4,7 +4,7 @@ import {
     connectAccountBinding,
     createAlertBinding,
     getConfigureBinding,
-    getHelpBinding
+    getHelpBinding, subscriptionBinding
 } from './bindings';
 import {
     AppBindingLocations,
@@ -18,6 +18,7 @@ const newCommandBindings = (bindings: AppBinding[]): AppsState => {
         Commands.HELP,
         Commands.CONFIGURE,
         Commands.ACCOUNT,
+        Commands.SUBSCRIPTION,
         Commands.INCIDENT
     ];
 
@@ -41,6 +42,7 @@ export const getCommandBindings = (): AppsState => {
     bindings.push(getHelpBinding());
     bindings.push(getConfigureBinding());
     bindings.push(connectAccountBinding());
+    bindings.push(subscriptionBinding())
     bindings.push(createAlertBinding());
     return newCommandBindings(bindings);
 };

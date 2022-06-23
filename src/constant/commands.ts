@@ -4,5 +4,9 @@ export const Commands = {
     INCIDENT: 'incident',
     ACCOUNT: 'account',
     LOGIN: 'login',
-    LOGOUT: 'logout'
+    LOGOUT: 'logout',
+    SUBSCRIPTION: 'subscription',
+    ADD: 'add',
+    DELETE: 'delete',
+    LIST: 'list'
 }
