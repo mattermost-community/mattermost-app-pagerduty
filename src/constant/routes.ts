@@ -23,6 +23,12 @@ const AppPaths = {
 
     CallPathIncidentCreate: '/incident/create',
 
+    CallPathIncidentAcknowledgedAction: '/alert/acknowledged/action',
+
+    CallPathIncidentResolveAction: '/alert/resolve/action',
+
+    CallPathIncidentOtherActions: '/alert/otheractions',
+
     CallPathIncomingWebhookPath: '/webhook'
 }
 

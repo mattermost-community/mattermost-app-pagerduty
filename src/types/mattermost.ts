@@ -220,3 +220,20 @@ export type DialogProps = {
 export type AddNoteDialogForm = {
     note: string;
 }
+
+export type WebhookRequest<T> = {
+    data: T,
+    headers: {
+        Accept: string;
+        'Accept-Encoding': string;
+        'Content-Length': string;
+        'Content-Type': string;
+        'Mattermost-Session-Id': string;
+        'User-Agent': string;
+        'X-Forwarded-For': string;
+        'X-Forwarded-Proto': string;
+    }
+    httpMethod: string;
+    rawQuery: string;
+}
+

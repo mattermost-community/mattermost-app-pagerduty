@@ -6,6 +6,7 @@ import * as cInstall from './install';
 import * as cHelp from './help';
 import * as cConfigure from './configure';
 import * as cSubscription from './subscription';
+import * as cWebhook from './webhook';
 
 const router: Router = express.Router();
 
@@ -24,6 +25,8 @@ router.post(`${Routes.App.CallPathSubscriptionListSubmit}`, cSubscription.subscr
 router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
 router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);
 router.get(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);
+
+router.post(`${Routes.App.CallPathIncomingWebhookPath}`, cWebhook.incomingWebhook);
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));

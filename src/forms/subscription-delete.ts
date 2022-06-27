@@ -3,7 +3,7 @@ import {api} from '@pagerduty/pdjs';
 import {AppCallRequest, AppCallValues,} from '../types';
 import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
 import {Routes, StoreKeys, SubscriptionDeleteForm} from '../constant';
-import {replace} from "../utils/utils";
+import {replace, tryPromisePagerDuty} from "../utils/utils";
 
 export async function subscriptionDeleteCall(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
@@ -22,11 +22,11 @@ export async function subscriptionDeleteCall(call: AppCallRequest): Promise<void
     const host: string = new URL(kvProps.pagerduty_client_url).host;
     const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token', server: host });
 
-    await pdClient.delete(
+    await tryPromisePagerDuty(pdClient.delete(
         replace(
             Routes.PagerDuty.WebhookSubscriptionPathPrefix,
             Routes.PathsVariable.Identifier,
             subscriptionId
         )
-    );
+    ));
 }
