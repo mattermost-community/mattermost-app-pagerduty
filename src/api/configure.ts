@@ -10,7 +10,6 @@ import {
 } from '../utils/call-responses';
 import {AppCallRequest, AppCallResponse} from '../types';
 import {hyperlink} from '../utils/markdown';
-import config from '../config';
 import {Routes, StoreKeys} from '../constant';
 import {
     base64Unicode,

@@ -8,5 +8,6 @@ export const SubscriptionDeleteForm = {
 }
 
 export const SubscriptionCreateForm = {
+    SERVICE_ID: 'service_id',
     CHANNEL_ID: 'channel_id'
 }

@@ -4,7 +4,7 @@ import {
     connectAccountBinding,
     createAlertBinding,
     getConfigureBinding,
-    getHelpBinding, subscriptionBinding
+    getHelpBinding, listBinding, subscriptionBinding
 } from './bindings';
 import {
     AppBindingLocations,
@@ -44,6 +44,7 @@ export const getCommandBindings = (): AppsState => {
     bindings.push(connectAccountBinding());
     bindings.push(subscriptionBinding())
     bindings.push(createAlertBinding());
+    bindings.push(listBinding());
     return newCommandBindings(bindings);
 };
 

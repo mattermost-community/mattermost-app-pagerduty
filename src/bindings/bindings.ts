@@ -156,9 +156,9 @@ export const subscriptionAddBinding = (): any => {
     return {
         icon: PagerDutyIcon,
         label: Commands.ADD,
-        description: 'Add a team subscription to a channel',
+        description: 'Add a service subscription to a channel',
         form: {
-            title: "Add a team subscription to a channel",
+            title: "Add a service subscription to a channel",
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathSubscriptionAddSubmit,
@@ -170,11 +170,19 @@ export const subscriptionAddBinding = (): any => {
             },
             fields: [
                 {
+                    modal_label: 'Service id',
+                    name: SubscriptionCreateForm.SERVICE_ID,
+                    type: AppFieldTypes.TEXT,
+                    is_required: true,
+                    position: 1,
+                    max_length: 100
+                },
+                {
                     modal_label: 'Channel',
                     name: SubscriptionCreateForm.CHANNEL_ID,
                     type: AppFieldTypes.CHANNEL,
                     is_required: true,
-                    position: 1
+                    position: 2
                 }
             ]
         }
@@ -185,9 +193,9 @@ export const subscriptionDeleteBinding = (): any => {
     return {
         icon: PagerDutyIcon,
         label: Commands.DELETE,
-        description: 'Unsubscribe team from channel',
+        description: 'Unsubscribe service from channel',
         form: {
-            title: "Unsubscribe team from channel",
+            title: "Unsubscribe service from channel",
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathSubscriptionDeleteSubmit,
@@ -214,15 +222,50 @@ export const subscriptionListBinding = (): any => {
     return {
         icon: PagerDutyIcon,
         label: Commands.LIST,
-        description: 'List of teams subscribed to channels',
+        description: 'List of service subscribed to channels',
         form: {
-            title: "List of teams subscribed to channels",
+            title: "List of service subscribed to channels",
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathSubscriptionListSubmit,
                 expand: {
                     oauth2_app: AppExpandLevels.EXPAND_SUMMARY
                 }
+            }
+        }
+    }
+};
+
+export const listBinding = (): AppBinding => {
+    const subCommands: string[] = [
+        Commands.SERVICE
+    ];
+
+    const bindings: AppBinding[] = [];
+
+    bindings.push(serviceListBinding());
+
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.LIST,
+        description: 'List PagerDuty',
+        hint: `[${subCommands.join(' | ')}]`,
+        bindings
+    }
+};
+
+
+export const serviceListBinding = (): any => {
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.SERVICE,
+        description: 'List of services',
+        form: {
+            title: "List of services",
+            icon: PagerDutyIcon,
+            submit: {
+                path: Routes.App.CallPathServiceSubmit,
+                expand: {}
             }
         }
     }

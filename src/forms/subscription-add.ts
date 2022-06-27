@@ -2,11 +2,16 @@ import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
 import {api} from '@pagerduty/pdjs';
 import {
     AppCallRequest,
-    AppCallValues,
+    AppCallValues, Service,
     WebhookSubscription
 } from '../types';
-import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
-import {Routes, StoreKeys, SubscriptionCreateForm} from '../constant';
+import {
+    ExceptionType,
+    Routes,
+    SubscriptionCreateForm
+} from '../constant';
+import {Exception} from "../utils/exception";
+import {replace} from "../utils/utils";
 
 export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
@@ -17,23 +22,20 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
 
     const channelId: string = values?.[SubscriptionCreateForm.CHANNEL_ID].value;
     const channelName: string = values?.[SubscriptionCreateForm.CHANNEL_ID].label;
+    const serviceId: string = values?.[SubscriptionCreateForm.SERVICE_ID];
 
-    const options: KVStoreOptions = {
-        mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
-    };
-    const kvStore: KVStoreClient = new KVStoreClient(options);
-    const kvProps: KVStoreProps = await kvStore.kvGet(StoreKeys.config);
-
-    const host: string = new URL(kvProps.pagerduty_client_url).host;
-    const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token', server: host });
+    const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token' });
 
     const responseSubscriptions: APIResponse = await pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix)
     const subscriptions: WebhookSubscription[] = responseSubscriptions.data['webhook_subscriptions'];
+
+    const responseServices: APIResponse = await pdClient.get(replace(Routes.PagerDuty.ServicePathPrefix, Routes.PathsVariable.Identifier, serviceId));
+    const service: Service = responseServices.data['service'];
+
     for (let subscription of subscriptions) {
         const params: URLSearchParams = new URL(subscription.delivery_method.url).searchParams;
-        if (params.get('channelId') === channelId) {
-            throw new Error(`Service [PENDING] is already associated with channel [${channelName}]`);
+        if (params.get('channelId') === channelId && params.get('serviceId') === service.id) {
+            throw new Exception(ExceptionType.MARKDOWN, `Service [PENDING] is already associated with channel [${channelName}]`);
         }
     }
 
@@ -69,7 +71,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
                     'service.updated'
                 ],
                 filter: {
-                    id: 'PLGPKKQ',
+                    id: serviceId,
                     type: 'service_reference'
                 },
                 type: 'webhook_subscription'

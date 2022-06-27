@@ -35,6 +35,52 @@ export type Incident = {
     urgency: string;
 };
 
+export type Service = {
+    id: string;
+    name: string;
+    description: string;
+    created_at: Date;
+    updated_at: Date;
+    status: string;
+    teams: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    }[];
+    alert_creation: string;
+    addons: any[];
+    scheduled_actions: any[];
+    support_hours: any;
+    last_incident_timestamp: any;
+    escalation_policy: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    };
+    incident_urgency_rule: {
+        type: string;
+        urgency: string;
+    };
+    acknowledgement_timeout: any;
+    auto_resolve_timeout: any;
+    alert_grouping: any;
+    alert_grouping_timeout: any;
+    alert_grouping_parameters: {
+        type: string;
+        config: string;
+    };
+    integrations: any[];
+    response_play: any;
+    type: string;
+    summary: string;
+    self: string;
+    html_url: string;
+};
+
 export type WebhookSubscription = {
     active: boolean;
     delivery_method: {

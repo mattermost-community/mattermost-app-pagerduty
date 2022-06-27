@@ -13,6 +13,8 @@ const AppPaths = {
     CallPathConfigForm: '/config/form',
     CallPathConfigSubmit: '/config/form/submit',
 
+    CallPathServiceSubmit: '/service/list/submit',
+
     CallPathSubscriptionAddSubmit: '/subscription/add/submit',
     CallPathSubscriptionDeleteSubmit: '/subscription/delete/submit',
     CallPathSubscriptionListSubmit: '/subscription/list/submit',
@@ -35,6 +37,9 @@ const AppPaths = {
 const PagerDutyPaths = {
     OAuthAuthorizationPathPrefix: '/oauth/authorize',
     OAuthTokenPathPrefix: '/oauth/token',
+
+    ServicesPathPrefix: '/services',
+    ServicePathPrefix: `/services/${PathsVariable.Identifier}`,
 
     WebhookSubscriptionsPathPrefix: '/webhook_subscriptions',
     WebhookSubscriptionPathPrefix: `/webhook_subscriptions/${PathsVariable.Identifier}`,

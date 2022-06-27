@@ -8,5 +8,6 @@ export const Commands = {
     SUBSCRIPTION: 'subscription',
     ADD: 'add',
     DELETE: 'delete',
-    LIST: 'list'
+    LIST: 'list',
+    SERVICE: 'service'
 }
