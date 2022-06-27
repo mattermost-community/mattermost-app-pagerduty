@@ -14,7 +14,7 @@ export const listTeamsSubmit = async (request: Request, response: Response) => {
         const services: Service[] = await getAllServicesCall(request.body);
         const servicesText: string = [
             getHeader(services.length),
-            getTeams(services)
+            getServices(services)
         ].join('');
         callResponse = newOKCallResponseWithMarkdown(servicesText);
         response.json(callResponse);
@@ -28,7 +28,7 @@ function getHeader(serviceLength: number): string {
     return h6(`Service List: Found ${serviceLength} matching services.`);
 }
 
-function getTeams(services: Service[]): string {
+function getServices(services: Service[]): string {
     return `${joinLines(
         services.map((service: Service) => `- Service ID "${service.id}" - Service Name "${service.name}"`).join('\n')
     )}\n`;

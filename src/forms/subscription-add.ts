@@ -10,8 +10,8 @@ import {
     Routes,
     SubscriptionCreateForm
 } from '../constant';
-import {Exception} from "../utils/exception";
-import {replace} from "../utils/utils";
+import {Exception} from '../utils/exception';
+import {replace} from '../utils/utils';
 
 export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;

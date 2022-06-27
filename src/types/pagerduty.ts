@@ -1,4 +1,4 @@
-export type Incident = {
+export type IncidentWebhook = {
     assignees: {
         html_url: string;
         id: string;
@@ -33,6 +33,66 @@ export type Incident = {
     title: string;
     type: string;
     urgency: string;
+};
+
+export type Incident = {
+    incident_number: number;
+    title: string;
+    description: string;
+    created_at: Date;
+    status: string;
+    incident_key: string;
+    service: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    };
+    assignments: any[];
+    assigned_via: string;
+    last_status_change_at: Date;
+    first_trigger_log_entry: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    };
+    alert_counts: {
+        all: number;
+        triggered: number;
+        resolve: number;
+    };
+    is_mergeable: boolean;
+    escalation_policy: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    };
+    teams: any[];
+    pending_actions: any[];
+    acnowledgements: any[];
+    basic_alert_grouping: any;
+    alert_grouping: any;
+    last_status_change_by: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    };
+    incidents_responders: any[];
+    responder_requests: any[];
+    subscriber_requests: any[];
+    urgency: string;
+    id: string;
+    type: string;
+    summary: string;
+    self: string;
+    html_url: string;
 };
 
 export type Service = {

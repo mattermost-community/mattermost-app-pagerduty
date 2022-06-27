@@ -14,6 +14,7 @@ const AppPaths = {
     CallPathConfigSubmit: '/config/form/submit',
 
     CallPathServiceSubmit: '/service/list/submit',
+    CallPathIncidentSubmit: '/incident/list/submit',
 
     CallPathSubscriptionAddSubmit: '/subscription/add/submit',
     CallPathSubscriptionDeleteSubmit: '/subscription/delete/submit',
@@ -37,6 +38,8 @@ const AppPaths = {
 const PagerDutyPaths = {
     OAuthAuthorizationPathPrefix: '/oauth/authorize',
     OAuthTokenPathPrefix: '/oauth/token',
+
+    IncidentsPathPrefix: '/incidents',
 
     ServicesPathPrefix: '/services',
     ServicePathPrefix: `/services/${PathsVariable.Identifier}`,

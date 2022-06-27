@@ -7,7 +7,8 @@ import * as cHelp from './help';
 import * as cConfigure from './configure';
 import * as cSubscription from './subscription';
 import * as cWebhook from './webhook';
-import * as sController from './service';
+import * as cService from './service';
+import * as cIncident from './incident';
 
 const router: Router = express.Router();
 
@@ -23,7 +24,8 @@ router.post(`${Routes.App.CallPathSubscriptionAddSubmit}`, cSubscription.subscri
 router.post(`${Routes.App.CallPathSubscriptionDeleteSubmit}`, cSubscription.subscriptionDeleteSubmit);
 router.post(`${Routes.App.CallPathSubscriptionListSubmit}`, cSubscription.subscriptionListSubmit);
 
-router.post(`${Routes.App.CallPathServiceSubmit}`, sController.listTeamsSubmit);
+router.post(`${Routes.App.CallPathServiceSubmit}`, cService.listTeamsSubmit);
+router.post(`${Routes.App.CallPathIncidentSubmit}`, cIncident.listIncidentSubmit);
 
 router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
 router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);

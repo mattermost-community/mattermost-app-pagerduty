@@ -19,7 +19,8 @@ const newCommandBindings = (bindings: AppBinding[]): AppsState => {
         Commands.CONFIGURE,
         Commands.ACCOUNT,
         Commands.SUBSCRIPTION,
-        Commands.INCIDENT
+        Commands.INCIDENT,
+        Commands.LIST
     ];
 
     return {
