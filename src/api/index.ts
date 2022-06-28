@@ -32,8 +32,8 @@ router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);
 router.get(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);
 
 router.post(`${Routes.App.CallPathIncomingWebhookPath}`, cWebhook.incomingWebhook);
-router.post(`${Routes.App.Forms}${Routes.App.CallPathIncidentCreate}`, cIncident.createNewIncident);
-router.post(`${Routes.App.Forms}${Routes.App.CallPathIncidentCreate}${Routes.App.Submit}`, cIncident.submitCreateNewIncident);
+router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`, cIncident.createNewIncident);
+router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`, cIncident.submitCreateNewIncident);
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));

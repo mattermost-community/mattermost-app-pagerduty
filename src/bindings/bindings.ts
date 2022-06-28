@@ -49,7 +49,7 @@ const incidentCreateBinding = (): AppBinding => {
             title: "Show PagerDuty Help Title",
             icon: PagerDutyIcon,
             submit: {
-                path: `${Routes.App.Forms}${Routes.App.CallPathIncidentCreate}`,
+                path: `${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`,
                 expand: {
                     acting_user: AppExpandLevels.EXPAND_ALL,
                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,

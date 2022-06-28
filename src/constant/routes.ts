@@ -29,9 +29,9 @@ const AppPaths = {
     CallPathIncidentResolveAction: '/alert/resolve/action',
     CallPathIncidentOtherActions: '/alert/otheractions',
     CallPathIncomingWebhookPath: '/webhook',
-    Submit: '/submit',
-    Form: '/form',
-    Forms: '/forms',
+    CallPathSubmit: '/submit',
+    CallPathForm: '/form',
+    CallPathForms: '/forms',
 }
 
 const PagerDutyPaths = {

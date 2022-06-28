@@ -19,7 +19,7 @@ export class PagerDutyClient {
    }
 
    public getServices(): Promise<GetResponse> {
-      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.Services}`;
+      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.ServicesPathPrefix}`;
       var configMethod = {
          headers: {
             'Authorization': `Token token=${this.options?.api_token}`,
@@ -35,7 +35,7 @@ export class PagerDutyClient {
    }
 
    public postNewIncident(body: PostIncident): Promise<any> {
-      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.Incidents}`;
+      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.IncidentsPathPrefix}`;
       var configMethod = {
          headers: {
             'Authorization': `Token token=u+A6-xHEHsaUDY6U4Wmw`,
@@ -49,7 +49,7 @@ export class PagerDutyClient {
    }
 
    public getUsers(): Promise<GetResponse> {
-      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.Users}`;
+      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.UsersPathPrefix}`;
       var configMethod = {
          headers: {
             'Authorization': `Token token=${this.options?.api_token}`,

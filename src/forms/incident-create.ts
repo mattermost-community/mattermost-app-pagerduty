@@ -55,7 +55,7 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
       icon: PagerDutyIcon,
       fields: fields,
       submit: {
-         path: `${Routes.App.Forms}${Routes.App.CallPathIncidentCreate}${Routes.App.Submit}`,
+         path: `${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`,
          expand: {
          }
       }
