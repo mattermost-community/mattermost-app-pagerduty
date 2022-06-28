@@ -44,11 +44,11 @@ const PagerDutyPaths = {
     ServicesPathPrefix: '/services',
     ServicePathPrefix: `/services/${PathsVariable.Identifier}`,
 
+    UsersPathPrefix: '/users',
+    UserPathPrefix: `/users/${PathsVariable.Identifier}`,
+
     WebhookSubscriptionsPathPrefix: '/webhook_subscriptions',
     WebhookSubscriptionPathPrefix: `/webhook_subscriptions/${PathsVariable.Identifier}`,
-    Services: '/services',
-    Incidents: '/incidents',
-    Users: '/users'
 };
 
 const MattermostPaths = {
