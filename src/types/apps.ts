@@ -1,3 +1,5 @@
+import { UserProfile } from "./mattermost";
+
 export type AppManifest = {
     app_id: string;
     display_name: string;
@@ -99,6 +101,13 @@ export type AppCallResponse<Res = unknown> = {
     form?: AppForm;
 };
 
+export type ExpandedBotActingUser = AppContext & {
+    acting_user: UserProfile,
+    acting_user_access_token: string
+    bot_user_id: string,
+    bot_access_token: string,
+}
+
 export type AppContext = {
     app_id: string;
     location?: string;
@@ -143,21 +152,7 @@ export type AppContext = {
         policy_id: any;
         last_root_post_at: number;
     }
-    acting_user?: {
-        id?: string;
-        delete_at?: number;
-        username?: string;
-        auth_service?: string;
-        email?: string;
-        nickname?: string;
-        first_name?: string;
-        last_name?: string;
-        position?: string;
-        roles?: string;
-        locale?: string;
-        timezone?: string;
-        disable_welcome_email?: string;
-    };
+    acting_user?: AppActingUser;
     acting_user_access_token?: string;
     oauth2: any;
 };
@@ -167,6 +162,22 @@ export type AppContextProps = {
 };
 
 export type AppExpandLevel = string;
+
+export type AppActingUser = {
+    id: string,
+    delete_at: number,
+    username: string,
+    auth_service: string,
+    email: string,
+    nickname: string,
+    first_name: string,
+    last_name: string,
+    position: string,
+    roles: string,
+    locale: string,
+    timezone: any,
+    disable_welcome_email: boolean
+}
 
 export type AppExpand = {
     app?: AppExpandLevel;

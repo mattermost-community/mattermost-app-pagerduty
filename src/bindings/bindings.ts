@@ -19,7 +19,9 @@ export const getHelpBinding = (): any => {
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.BindingPathHelp,
-                expand: {}
+                expand: {
+                    acting_user: AppExpandLevels.EXPAND_ALL
+                }
             }
         }
     };
