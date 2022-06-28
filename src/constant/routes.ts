@@ -40,6 +40,7 @@ const PagerDutyPaths = {
     OAuthTokenPathPrefix: '/oauth/token',
 
     IncidentsPathPrefix: '/incidents',
+    IncidentPathPrefix: `/incidents/${PathsVariable.Identifier}`,
 
     ServicesPathPrefix: '/services',
     ServicePathPrefix: `/services/${PathsVariable.Identifier}`,

@@ -37,6 +37,20 @@ export type IncidentWebhook = {
     urgency: string;
 };
 
+export type AddNoteWebhook = {
+    content: string;
+    id: string;
+    incident: {
+        html_url: string;
+        id: string;
+        self: string;
+        summary: string;
+        type: string;
+    };
+    trimmed: boolean;
+    type: string;
+};
+
 export type Incident = {
     incident_number: number;
     title: string;
