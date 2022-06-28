@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 import queryString, {ParsedQuery} from 'query-string';
 import {
+    AcknowledgedWebhook,
     AddNoteWebhook,
     AppCallResponse,
     AppContext,
@@ -148,9 +149,38 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
     await mattermostClient.createPost(payload);
 }
 
+async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<AcknowledgedWebhook>>, context: AppContext) {
+    const mattermostUrl: string | undefined = context.mattermost_site_url;
+    const botAccessToken: string | undefined = context.bot_access_token;
+    const eventData: AcknowledgedWebhook = event.data;
+
+    const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
+    const channelId: string = <string>parsedQuery['channelId'];
+
+    const payload: PostCreate = {
+        message: '',
+        channel_id: channelId,
+        props: {
+            attachments: [
+                {
+                    text: `Acknowledged ${hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)}`
+                }
+            ]
+        }
+    };
+
+    const mattermostOptions: MattermostOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>botAccessToken
+    };
+    const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
+    await mattermostClient.createPost(payload);
+}
+
 const WEBHOOKS_ACTIONS: { [key: string]: Function } = {
     'incident.triggered': notifyIncidentTriggered,
-    'incident.annotated': notifyIncidentAnnotated
+    'incident.annotated': notifyIncidentAnnotated,
+    'incident.acknowledged': notifyIncidentAcknowledged
 };
 
 export const incomingWebhook = async (request: Request, response: Response) => {

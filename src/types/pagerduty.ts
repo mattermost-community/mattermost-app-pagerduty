@@ -51,6 +51,38 @@ export type AddNoteWebhook = {
     type: string;
 };
 
+export type AcknowledgedWebhook = {
+    assignees: any[];
+    conference_bridge: any;
+    created_at: Date;
+    escalation_policy: {
+        html_url: string;
+        id: string;
+        self: string;
+        summary: string;
+        type: string;
+    };
+    html_url: string;
+    id: string;
+    incident_key: string;
+    number: number;
+    priority: string;
+    resolve_reason: any;
+    self: string;
+    service: {
+        html_url: string;
+        id: string;
+        self: string;
+        summary: string;
+        type: string;
+    };
+    status: string;
+    teams: any[];
+    title: string;
+    type: string;
+    urgency: string;
+}
+
 export type Incident = {
     incident_number: number;
     title: string;
