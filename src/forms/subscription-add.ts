@@ -34,7 +34,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
 
     for (let subscription of subscriptions) {
         const params: URLSearchParams = new URL(subscription.delivery_method.url).searchParams;
-        if (params.get('channelId') === channelId && params.get('serviceId') === service.id) {
+        if (params.get('channelId') === channelId && subscription.filter.id === service.id) {
             throw new Exception(ExceptionType.MARKDOWN, `Service [PENDING] is already associated with channel [${channelName}]`);
         }
     }
@@ -51,7 +51,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
                     url: urlWithParams.href,
                     custom_headers: []
                 },
-                description: `Mattermost_${channelName}`,
+                description: `Mattermost_${service.name}_${channelName}`,
                 events: [
                     'incident.acknowledged',
                     'incident.annotated',

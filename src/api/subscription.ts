@@ -45,7 +45,7 @@ export const subscriptionListSubmit: CallResponseHandler = async (request: Reque
             h6(`Subscription List: Found ${integrations.length} open subscriptions.`),
             `${joinLines(
                 integrations.map((integration: WebhookSubscription) => 
-                    `- Subscription ID: "${integration.id}" - Team Name "${integration.description}" - Channel Name "${integration.description}"`
+                    `- Subscription ID: "${integration.id}" - Service Name "${integration.service?.name}" - Channel Name "${integration.channel?.name}"`
                 ).join('\n')
             )}`
         ].join('');
@@ -53,6 +53,7 @@ export const subscriptionListSubmit: CallResponseHandler = async (request: Reque
         callResponse = newOKCallResponseWithMarkdown(subscriptionsText);
         response.json(callResponse);
     } catch (error: any) {
+        console.log('error', error);
         callResponse = newErrorCallResponseWithMessage('Unable to open configuration form: ' + error.message);
         response.json(callResponse);
     }

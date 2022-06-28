@@ -1,3 +1,5 @@
+import {Channel} from './mattermost';
+
 export type IncidentWebhook = {
     assignees: {
         html_url: string;
@@ -157,9 +159,11 @@ export type WebhookSubscription = {
     filter: {
         id: string;
         type: string;
-    }[];
+    };
     id: string;
     type: string;
+    service?: Service;
+    channel?: Channel;
 };
 
 export type WebhookEvent<T> = {

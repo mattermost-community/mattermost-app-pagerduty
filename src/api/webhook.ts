@@ -5,6 +5,7 @@ import {
     AppContext,
     AppContextAction,
     Incident,
+    IncidentWebhook,
     PostCreate,
     WebhookEvent,
     WebhookRequest
@@ -17,10 +18,10 @@ import {Routes} from '../constant'
 import {hyperlink} from '../utils/markdown';
 import {toTitleCase} from '../utils/utils';
 
-async function notifyIncidentCreated({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<Incident>>, context: AppContext) {
+async function notifyIncidentCreated({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<IncidentWebhook>>, context: AppContext) {
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
-    const eventData: Incident = event.data;
+    const eventData: IncidentWebhook = event.data;
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
