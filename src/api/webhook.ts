@@ -1,13 +1,12 @@
 import {Request, Response} from 'express';
 import queryString, {ParsedQuery} from 'query-string';
 import {
-    AcknowledgedWebhook,
+    EventWebhook,
     AddNoteWebhook,
     AppCallResponse,
     AppContext,
     AppContextAction, Incident,
-    IncidentWebhook,
-    PostCreate, ReassignedWebhook,
+    PostCreate,
     WebhookEvent,
     WebhookRequest
 } from '../types';
@@ -21,10 +20,10 @@ import {replace, toTitleCase} from '../utils/utils';
 import {APIResponse, PartialCall} from "@pagerduty/pdjs/build/src/api";
 import {api} from "@pagerduty/pdjs";
 
-async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<IncidentWebhook>>, context: AppContext) {
+async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
-    const eventData: IncidentWebhook = event.data;
+    const eventData: EventWebhook = event.data;
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -149,10 +148,10 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
     await mattermostClient.createPost(payload);
 }
 
-async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<AcknowledgedWebhook>>, context: AppContext) {
+async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
-    const eventData: AcknowledgedWebhook = event.data;
+    const eventData: EventWebhook = event.data;
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -177,10 +176,10 @@ async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: Webhook
     await mattermostClient.createPost(payload);
 }
 
-async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<ReassignedWebhook>>, context: AppContext) {
+async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
-    const eventData: AcknowledgedWebhook = event.data;
+    const eventData: EventWebhook = event.data;
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -206,11 +205,40 @@ async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRe
     await mattermostClient.createPost(payload);
 }
 
+async function notifyIncidentResolved({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
+    const mattermostUrl: string | undefined = context.mattermost_site_url;
+    const botAccessToken: string | undefined = context.bot_access_token;
+    const eventData: EventWebhook = event.data;
+
+    const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
+    const channelId: string = <string>parsedQuery['channelId'];
+
+    const payload: PostCreate = {
+        message: '',
+        channel_id: channelId,
+        props: {
+            attachments: [
+                {
+                    text: `Resolved ${hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)}`
+                }
+            ]
+        }
+    };
+
+    const mattermostOptions: MattermostOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>botAccessToken
+    };
+    const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
+    await mattermostClient.createPost(payload);
+}
+
 const WEBHOOKS_ACTIONS: { [key: string]: Function } = {
     'incident.triggered': notifyIncidentTriggered,
     'incident.annotated': notifyIncidentAnnotated,
     'incident.acknowledged': notifyIncidentAcknowledged,
-    'incident.reassigned': notifyIncidentReassigned
+    'incident.reassigned': notifyIncidentReassigned,
+    'incident.resolved': notifyIncidentResolved
 };
 
 export const incomingWebhook = async (request: Request, response: Response) => {
