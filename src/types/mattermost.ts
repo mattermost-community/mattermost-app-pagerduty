@@ -44,7 +44,7 @@ export type BindingOptions = {
     isSystemAdmin: boolean,
     isConfigured: boolean,
     isConnected: boolean
-    opsGenieUserRole: any,
+    pagerDutyUserRole: any,
     mattermostSiteUrl: string
 }
 
@@ -129,6 +129,26 @@ export type PostCreate = {
     props?: {
         attachments: Attachment[];
     }
+}
+
+export type PostEphemeralCreate = {
+    user_id: string;
+    post: PostCreate;
+}
+
+export type PostResponse = {
+    id: string,
+    create_at: number,
+    update_at: number,
+    edit_at: 0,
+    delete_at: 0,
+    is_pinned: false,
+    user_id: string,
+    channel_id: string,
+    root_id: string,
+    original_id: string,
+    message: string,
+    props: { attachments: Attachment[]; }
 }
 
 export type PostUpdate = {

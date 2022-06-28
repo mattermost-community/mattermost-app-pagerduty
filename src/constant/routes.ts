@@ -25,14 +25,13 @@ const AppPaths = {
     OAuthConnectPath: '/oauth2/connect',
 
     CallPathIncidentCreate: '/incident/create',
-
     CallPathIncidentAcknowledgedAction: '/alert/acknowledged/action',
-
     CallPathIncidentResolveAction: '/alert/resolve/action',
-
     CallPathIncidentOtherActions: '/alert/otheractions',
-
-    CallPathIncomingWebhookPath: '/webhook'
+    CallPathIncomingWebhookPath: '/webhook',
+    Submit: '/submit',
+    Form: '/form',
+    Forms: '/forms',
 }
 
 const PagerDutyPaths = {
@@ -47,11 +46,15 @@ const PagerDutyPaths = {
 
     WebhookSubscriptionsPathPrefix: '/webhook_subscriptions',
     WebhookSubscriptionPathPrefix: `/webhook_subscriptions/${PathsVariable.Identifier}`,
+    Services: '/services',
+    Incidents: '/incidents',
+    Users: '/users'
 };
 
 const MattermostPaths = {
     PathKV: '/kv',
     PostsPath: '/posts',
+    PostsEphemeralPath: '/posts/ephemeral',
     PostPath: `/posts/${PathsVariable.Identifier}`,
     UserPath: `/users/${PathsVariable.Identifier}`,
     ChannelPath: `/channels/${PathsVariable.Identifier}`,

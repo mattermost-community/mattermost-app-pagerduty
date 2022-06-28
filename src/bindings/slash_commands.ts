@@ -1,10 +1,11 @@
 import {AppBinding, AppsState} from '../types';
-
 import {
     connectAccountBinding,
-    createAlertBinding,
     getConfigureBinding,
-    getHelpBinding, listBinding, subscriptionBinding
+    getHelpBinding, 
+    listBinding, 
+    subscriptionBinding,
+    getIncidentsBinding
 } from './bindings';
 import {
     AppBindingLocations,
@@ -44,8 +45,9 @@ export const getCommandBindings = (): AppsState => {
     bindings.push(getConfigureBinding());
     bindings.push(connectAccountBinding());
     bindings.push(subscriptionBinding())
-    bindings.push(createAlertBinding());
     bindings.push(listBinding());
+    bindings.push(getIncidentsBinding());
+    bindings.push(getConfigureBinding());
     return newCommandBindings(bindings);
 };
 

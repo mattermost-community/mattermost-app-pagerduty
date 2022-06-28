@@ -1,12 +1,16 @@
+import { Request, Response } from 'express';
 import {
-    CallResponseHandler,
-    newErrorCallResponseWithMessage,
-    newOKCallResponseWithMarkdown
-} from "../utils/call-responses";
-import {Request, Response} from "express";
-import {AppCallResponse, Incident} from "../types";
-import {getAllIncidentsCall} from '../forms/list-incident';
-import {h6, hyperlink, joinLines} from '../utils/markdown';
+   CallResponseHandler,
+   newErrorCallResponseWithMessage,
+   newFormCallResponse,
+   newOKCallResponseWithMarkdown
+} from '../utils/call-responses';
+import { getAllIncidentsCall } from '../forms/list-incident';
+import { AppCallRequest, AppCallResponse, Incident } from '../types';
+import { addIncidentFromCommand, createIncidentFormModal, submitCreateIncident } from '../forms/incident-create';
+import { CreateIncidentFormCommandType, CreateIncidentFormModalType } from '../constant';
+import { h6, hyperlink, joinLines } from '../utils/markdown';
+
 
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
@@ -35,3 +39,35 @@ function getIncidents(services: Incident[]): string {
     )}\n`;
 }
 
+
+export const createNewIncident: CallResponseHandler = async (req: Request, res: Response) => {
+   const call: AppCallRequest = req.body;
+   let callResponse: AppCallResponse;
+   const values = call.values as CreateIncidentFormCommandType;
+
+   try {
+      if (values?.incident_impacted_service && values?.incident_title) {
+         await addIncidentFromCommand(call);
+         callResponse = newOKCallResponseWithMarkdown('Incident created')
+      } else {
+         const form = await createIncidentFormModal(call);
+         callResponse = newFormCallResponse(form);
+      }
+   } catch (error: any) {
+      callResponse = newErrorCallResponseWithMessage('Unable to create a new incident' + error.message);
+   }
+   res.json(callResponse);
+};
+
+
+export const submitCreateNewIncident = async (req: Request, res: Response) => {
+   const call: AppCallRequest = req.body;
+   let callResponse: AppCallResponse;
+   try {
+      await submitCreateIncident(call);
+      callResponse = newOKCallResponseWithMarkdown('Incident created')
+   } catch (error: any) {
+      callResponse = newErrorCallResponseWithMessage('Unable to create a new incident: ' + error.message);
+   }
+   res.json(callResponse);
+}

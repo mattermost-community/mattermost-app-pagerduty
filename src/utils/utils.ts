@@ -11,6 +11,31 @@ export function replace(value: string, searchValue: string, replaceValue: string
     return value.replace(searchValue, replaceValue);
 }
 
+export function errorWithMessage(error: Error, message: string): string {
+    return `"${message}".  ${error.message}`;
+}
+
+export function errorPagerdutyWithMessage(error: Error | any, message: string): string {
+    const errorMessage: any = error?.data?.message || error?.message || error?.data || error?.statusText || error;
+    return `"${message}".  ${errorMessage}`;
+}
+
+export async function tryPromiseWithMessage(p: Promise<any>, message: string): Promise<any> {
+    return p.catch((error) => {
+        console.log('error', error);
+        throw new Error(errorWithMessage(error, message));
+    });
+}
+
+export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: string): Promise<any> {
+    return p.catch((error) => {
+        throw new Error(errorPagerdutyWithMessage(error.response, message));
+    });
+}
+
+export function isConnected(oauth2user: any): boolean {
+    return !!oauth2user?.token?.access_token;
+}
 export function encodeFormData(data: any): string {
     return Object.keys(data)
         .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
