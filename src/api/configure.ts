@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import fetch from 'node-fetch';
 import {
     CallResponseHandler,
@@ -8,17 +8,18 @@ import {
     newOKCallResponseWithData,
     newOKCallResponseWithMarkdown
 } from '../utils/call-responses';
-import {AppCallRequest, AppCallResponse} from '../types';
-import {hyperlink} from '../utils/markdown';
-import {Routes, StoreKeys} from '../constant';
+import { AppCallRequest, AppCallResponse } from '../types';
+import { hyperlink } from '../utils/markdown';
+import config from '../config';
+import { Routes, StoreKeys } from '../constant';
 import {
     base64Unicode,
     digestVerifier,
     encodeFormData,
     gen128x8bitNonce
 } from '../utils/utils';
-import {pagerDutyConfigForm, pagerDutyConfigSubmit} from '../forms/configure-admin-account';
-import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
+import { pagerDutyConfigForm, pagerDutyConfigSubmit } from '../forms/configure-admin-account';
+import { KVStoreClient, KVStoreOptions, KVStoreProps } from '../clients/kvstore';
 
 export const configureAdminAccountForm: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
@@ -54,7 +55,7 @@ export const connectAccountLoginSubmit: CallResponseHandler = async (req: Reques
     res.json(callResponse);
 };
 
-export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Response) => {
+export const fOauth2Connect: CallResponseHandler = async (req: Request, res: Response) => {
     const call: AppCallRequest = req.body;
     const appPath: string | undefined = call.context.app_path;
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
@@ -74,7 +75,7 @@ export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Re
     const url: string = `${kvStoreProps.pagerduty_client_url}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
     const redirectUri: string = `https://9cf8-201-160-205-161.ngrok.io/oauth2/complete`;
     const codeVerifier: string = gen128x8bitNonce();
-    const challengeBuffer: ArrayBuffer =  await digestVerifier('dO4FiQGBDerTrbjsMeqU4RZkqtERqX-lj0iXxVspKZd02SxiFLbFU8TX5JwWlkmbu_HzIxQi163GnR2mxg6G7eAQ77R2WolPOxON1uGHv9pi_gqhVjzklz_bzHkz');
+    const challengeBuffer: ArrayBuffer = await digestVerifier('dO4FiQGBDerTrbjsMeqU4RZkqtERqX-lj0iXxVspKZd02SxiFLbFU8TX5JwWlkmbu_HzIxQi163GnR2mxg6G7eAQ77R2WolPOxON1uGHv9pi_gqhVjzklz_bzHkz');
     const challenge = base64Unicode(challengeBuffer);
 
     const urlWithParams = new URL(url);

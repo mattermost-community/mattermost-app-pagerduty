@@ -6,6 +6,7 @@ export * from './apps';
 export * from './exception-type';
 export * from './actions-events';
 export * from './options';
+export * from './forms';
 
 export const PagerDutyIcon = 'pagerduty.png';
 export const CommandTrigger = 'pd';

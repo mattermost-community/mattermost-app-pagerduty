@@ -35,7 +35,8 @@ function getUserCommands(): string {
         addBulletSlashCommand('subscription add [Pager Duty Service ID] [Mattermost Channel]', `Add subscription of service to channel`),
         addBulletSlashCommand('subscription delete [SubscriptionId]', `Delete subscription of channel`),
         addBulletSlashCommand('subscription list', `List subscriptions open`),
-        addBulletSlashCommand('incident [create]', 'Create a new PagerDuty incidence.'),
+        addBulletSlashCommand('incident [create]', 'Trigger a new PagerDuty incident.'),
+        addBulletSlashCommand('oncall', 'Find out who is on call for a PagerDuty service.'),
         addBulletSlashCommand('list service', 'Show all services from PagerDuty'),
         addBulletSlashCommand('list incident', 'Show all incidents from PagerDuty'),
     )}\n`;
@@ -44,14 +45,15 @@ function getUserCommands(): string {
 function getAdminCommands(): string {
     const homepageUrl: string = manifest.homepage_url;
     return `${joinLines(
-        addBulletSlashCommand('help', `Launch the Jira plugin command line help syntax, check out the [documentation](${homepageUrl}).`),
+        addBulletSlashCommand('help', `Launch the PagerDuty plugin command line help syntax, check out the [documentation](${homepageUrl}).`),
         addBulletSlashCommand('configure', `Configure PagerDuty.`),
         addBulletSlashCommand('connect', `Connect your PagerDuty account`),
         addBulletSlashCommand('disconnect', `Logout from your PagerDuty account`),
         addBulletSlashCommand('subscription add [Pager Duty Service ID] [Mattermost Channel]', `Add subscription of service to channel`),
         addBulletSlashCommand('subscription delete [SubscriptionId]', `Delete subscription of channel`),
         addBulletSlashCommand('subscription list', `List subscriptions open`),
-        addBulletSlashCommand('incident [create]', 'Create a new PagerDuty incidence.'),
+        addBulletSlashCommand('incident [create]', 'Trigger a new PagerDuty incident.'),
+        addBulletSlashCommand('oncall', 'Find out who is on call for a PagerDuty service.'),
         addBulletSlashCommand('list service', 'Show all services from PagerDuty'),
         addBulletSlashCommand('list incident', 'Show all incidents from PagerDuty'),
     )}\n`;

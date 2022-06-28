@@ -9,5 +9,6 @@ export const Commands = {
     ADD: 'add',
     DELETE: 'delete',
     LIST: 'list',
-    SERVICE: 'service'
+    SERVICE: 'service',
+    CREATE: 'create'
 }
