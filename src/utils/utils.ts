@@ -16,20 +16,19 @@ export function errorWithMessage(error: Error, message: string): string {
 }
 
 export function errorPagerdutyWithMessage(error: Error | any, message: string): string {
-    const errorMessage: any = error?.data?.message || error?.message || error?.data || error?.statusText || error;
+    const errorMessage: any = error?.data?.message || error?.response?.data?.message || error?.message || error?.data || error?.statusText || error;
     return `"${message}".  ${errorMessage}`;
 }
 
 export async function tryPromiseWithMessage(p: Promise<any>, message: string): Promise<any> {
     return p.catch((error) => {
-        console.log('error', error);
         throw new Error(errorWithMessage(error, message));
     });
 }
 
 export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: string): Promise<any> {
     return p.catch((error) => {
-        throw new Error(errorPagerdutyWithMessage(error.response, message));
+        throw new Error(errorPagerdutyWithMessage(error, message));
     });
 }
 
