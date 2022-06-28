@@ -2,7 +2,8 @@ import {APIResponse} from '@pagerduty/pdjs/build/src/api';
 import {newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown} from './call-responses';
 import {ExceptionType} from "../constant";
 import {Exception} from "./exception";
-import {AppCallResponse} from "../types";
+import { AppCallResponse, AppActingUser } from "../types";
+import GeneralConstants from '../constant/general';
 
 const crypto = require('crypto').webcrypto;
 
@@ -134,4 +135,12 @@ export function toTitleCase(str: string): string {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
     );
+}
+
+export function isConfigured(oauth2: any): boolean {
+    return Boolean(oauth2.client_id && oauth2.client_secret);
+}
+
+export function isUserSystemAdmin(actingUser: AppActingUser): boolean {
+    return Boolean(actingUser.roles && actingUser.roles.includes(GeneralConstants.SYSTEM_ADMIN_ROLE));
 }
