@@ -207,6 +207,8 @@ export type GetResponse = {
    more: boolean,
 };
 
+
+
 export type ServiceResponse = {
    id: string,
    name: string,
@@ -222,6 +224,11 @@ export type UserResponse = {
    html_url: string
 }
 
+export type PostIncidentNote = {
+    note: {
+        content: string
+    }
+};
 
 export type PostIncident = {
    incident: {

@@ -27,13 +27,14 @@ export async function subscriptionListCall(call: AppCallRequest): Promise<Webhoo
     };
     const mattermostClient: MattermostClient = new MattermostClient(options);
 
-    const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token' });
+    const pdClient: PartialCall = api({ token: 'u+A6-xHEHsaUDY6U4Wmw', tokenType: 'token' });
     const response: APIResponse = await pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix);
 
     const subscriptions: WebhookSubscription[] = response.data['webhook_subscriptions'];
     const responseSubs: Promise<WebhookSubscription>[] = subscriptions.map(async (subs: WebhookSubscription) => {
         const response: APIResponse = await pdClient.get(replace(Routes.PagerDuty.ServicePathPrefix, Routes.PathsVariable.Identifier, subs.filter.id));
         const service: Service = response.data['service'];
+        console.log(subs);
 
         const params: ParsedUrl = queryString.parseUrl(subs.delivery_method.url);
         const channelId: string = <string>params.query?.['channelId'];

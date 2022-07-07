@@ -24,7 +24,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
     const channelName: string = values?.[SubscriptionCreateForm.CHANNEL_ID].label;
     const serviceId: string = values?.[SubscriptionCreateForm.SERVICE_ID];
 
-    const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token' });
+    const pdClient: PartialCall = api({ token: 'u+A6-xHEHsaUDY6U4Wmw', tokenType: 'token' });
 
     const responseSubscriptions: APIResponse = await pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix)
     const subscriptions: WebhookSubscription[] = responseSubscriptions.data['webhook_subscriptions'];
@@ -39,7 +39,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
         }
     }
 
-    const urlWithParams = new URL(`https://9ee0-201-160-205-161.ngrok.io${appPath}${Routes.App.CallPathIncomingWebhookPath}`);
+    const urlWithParams = new URL(`https://de10-189-203-193-1.ngrok.io${appPath}${Routes.App.CallPathIncomingWebhookPath}`);
     urlWithParams.searchParams.append('secret', <string>whSecret);
     urlWithParams.searchParams.append('channelId', channelId);
 

@@ -2,24 +2,13 @@ import { KVStoreClient, KVStoreOptions, KVStoreProps } from "../clients/kvstore"
 import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
 import config from "../config";
 import { ExceptionType, StoreKeys } from "../constant";
-import { AppCallDialog, AppContextAction, Identifier, IdentifierType } from "../types";
+import { AppCallDialog, AppContextAction, Identifier, IdentifierType, Incident, PostIncidentNote } from "../types";
 import { tryPromiseForGenerateMessage } from "../utils/utils";
 
-export async function addNoteToAlertAction(call: AppCallDialog<{ alert_message: string }>): Promise<any> {
+export async function addNoteToAlertAction(call: AppCallDialog<{ incident_message: string }>): Promise<any> {
    const context: AppContextAction = JSON.parse(call.state);
-   const mattermostUrl: string | undefined = context.mattermost_site_url;
-   const botAccessToken: string | undefined = context.bot_access_token;
-
-   const alertMessage: string = call.submission.alert_message;
+   const incidentMessage: string = call.submission.incident_message;
    const incidentId: string = context.incident.id;
-
-   const options: KVStoreOptions = {
-      mattermostUrl: <string>mattermostUrl,
-      accessToken: <string>botAccessToken,
-   };
-   const kvStoreClient = new KVStoreClient(options);
-
-   const kvConfig: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
    const oauthToken = config.PAGERDUTY.TOKEN;
 
    const pdOpt: PagerDutyOptions = {
@@ -33,11 +22,13 @@ export async function addNoteToAlertAction(call: AppCallDialog<{ alert_message: 
       identifierType: IdentifierType.ID
    };
 
-   const resIncident: any = await tryPromiseForGenerateMessage(pagerDutyClient.getIncidentByID(identifier), ExceptionType.MARKDOWN, 'PagerDuty failed');
+   const resIncident: { incident: Incident } = await tryPromiseForGenerateMessage(pagerDutyClient.getIncidentByID(identifier), ExceptionType.MARKDOWN, 'PagerDuty failed');
 
-   const data: any = {
-      note: alertMessage
+   const data: PostIncidentNote = {
+      note: {
+         content: incidentMessage
+      }
    };
-   const responseAlert: any = await tryPromiseForGenerateMessage(pagerDutyClient.postNewIncidentNote(identifier, {}), ExceptionType.MARKDOWN, 'PagerDuty failed');
-   return resIncident.data;
+   await tryPromiseForGenerateMessage(pagerDutyClient.postNewIncidentNote(identifier, data), ExceptionType.MARKDOWN, 'PagerDuty failed');
+   return resIncident.incident;
 }

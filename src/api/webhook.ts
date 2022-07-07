@@ -124,7 +124,7 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
 
-    const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token' });
+    const pdClient: PartialCall = api({ token: 'u+A6-xHEHsaUDY6U4Wmw', tokenType: 'token' });
     const responseIncident: APIResponse = await pdClient.get(replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, eventData.incident.id));
     const incident: Incident = responseIncident.data['incident'];
 
