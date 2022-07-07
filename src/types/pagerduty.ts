@@ -245,3 +245,14 @@ export type PostIncidentAssignee = {
       type: "user"
    }
 }
+
+export type Identifier = {
+    identifier: string;
+    identifierType: string;
+};
+
+export enum IdentifierType {
+    ID = 'id',
+    USERNAME = 'username',
+    NAME = 'name'
+}
