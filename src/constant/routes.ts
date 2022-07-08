@@ -29,6 +29,8 @@ const AppPaths = {
     CallPathIncidentResolveAction: '/incident/resolve/action',
     CallPathIncidentOtherActions: '/incident/otheractions',
     CallPathNoteToIncidentAction: '/incident/note/action',
+    CallPathAssignIncidentAction: '/incident/assign/action',
+    CallPathIncidentCloseOptions: '/incident/closeoptions',
     CallPathChangeIncidentPriorityAction: '/incident/priority/change/action',
     CallPathIncomingWebhookPath: '/webhook',
     CallPathSubmit: '/submit',

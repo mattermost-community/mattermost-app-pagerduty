@@ -13,3 +13,5 @@ export * from './forms';
 export const PagerDutyIcon = 'pagerduty.png';
 export const PagerDutyIconRoute = `${config.APP.HOST}/static/${PagerDutyIcon}`;
 export const CommandTrigger = 'pd';
+
+export const PDFailed = 'PagerDuty failed';

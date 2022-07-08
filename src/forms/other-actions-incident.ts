@@ -2,7 +2,10 @@ import {
     AppCallAction,
     AppCallResponse,
     AppContextAction,
+    AppSelectOption,
+    AttachmentOption,
     DialogProps,
+    PostCreate,
 } from '../types';
 import {MattermostClient, MattermostOptions} from '../clients/mattermost';
 import {
@@ -15,6 +18,8 @@ import {
     PagerDutyIconRoute
 } from '../constant';
 import config from '../config';
+import { PagerDutyClient, PagerDutyOptions } from '../clients/pagerduty';
+import { getUsersAttachmentOptionList, getUsersOptionList } from './pagerduty-options';
 
 const ACTIONS_EVENT: { [key: string]: Function | { [key: string]: Function } } = {
     [ActionsEvents.OTHER_OPTIONS_SELECT_EVENT]: {
@@ -110,38 +115,45 @@ async function showModalChangeIncidentPriority(call: AppCallAction<AppContextAct
 async function showPostOfListUsers(call: AppCallAction<AppContextAction>): Promise<void> {
     const mattermostUrl: string = call.context.mattermost_site_url;
     const channelId: string = call.channel_id;
+    const user_id: string = call.user_id;
     const accessToken: string = call.context.bot_access_token;
     const incident: any = call.context.incident;
-
     const mattermostOptions: MattermostOptions = {
         mattermostUrl,
         accessToken: <string>accessToken
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
 
-    /*
-    const postCreate: PostCreate = {
+    const oauthToken = config.PAGERDUTY.TOKEN;
+    const pdOpt: PagerDutyOptions = {
+        api_token: oauthToken,
+        user_email: 'lizeth.garcia@ancient.mx'
+    }
+
+    const options_users: AttachmentOption[] = await getUsersAttachmentOptionList(pdOpt);
+
+    const post: PostCreate = {
         channel_id: channelId,
         message: '',
         props: {
             attachments: [
                 {
-                    title: `Choose a user to assign the alert to`,
+                    title: `Choose a user to assign the incident to`,
                     actions: [
                         {
                             id: ActionsEvents.USER_SELECT_EVENT,
                             name: "Choose a user",
                             integration: {
-                                url: `${config.APP.HOST}${Routes.App.CallPathAssignAlertAction}`,
+                                url: `${config.APP.HOST}${Routes.App.CallPathAssignIncidentAction}`,
                                 context: {
                                     action: ActionsEvents.USER_SELECT_EVENT,
                                     bot_access_token: call.context.bot_access_token,
                                     mattermost_site_url: mattermostUrl,
-                                    alert
+                                    incident
                                 } as AppContextAction
                             },
                             type: 'select',
-                            data_source: 'users'
+                            options: options_users
                         },
                         {
                             id: ActionsEvents.CANCEL_BUTTON_EVENT,
@@ -149,7 +161,7 @@ async function showPostOfListUsers(call: AppCallAction<AppContextAction>): Promi
                             type: 'button',
                             style: 'default',
                             integration: {
-                                url: `${config.APP.HOST}${Routes.App.CallPathCloseOptions}`,
+                                url: `${config.APP.HOST}${Routes.App.CallPathIncidentCloseOptions}`,
                                 context: {
                                     action: ActionsEvents.CANCEL_BUTTON_EVENT,
                                     bot_access_token: call.context.bot_access_token,
@@ -163,6 +175,5 @@ async function showPostOfListUsers(call: AppCallAction<AppContextAction>): Promi
         }
     };
 
-    await mattermostClient.createPost(postCreate);
-    */
+    await mattermostClient.createPost(post);
 }

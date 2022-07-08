@@ -41,7 +41,8 @@ router.post(`${Routes.App.CallPathIncidentResolveAction}`, cIncident.resolveInci
 router.post(`${Routes.App.CallPathIncidentOtherActions}`, cIncident.otherActionsIncident);
 
 router.post(`${Routes.App.CallPathNoteToIncidentAction}`, cIncident.addNoteToIncidentModal);
-
+router.post(`${Routes.App.CallPathIncidentCloseOptions}`, cIncident.closePostActions);
+router.post(`${Routes.App.CallPathAssignIncidentAction}`, cIncident.reassignIncidentPost);
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));

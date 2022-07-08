@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import config from '../config';
 import { Routes } from '../constant';
-import { GetResponse, Identifier, Incident, PostIncident, PostIncidentNote } from '../types/pagerduty';
+import { GetResponse, Identifier, Incident, PostIncident, PostIncidentNote, UpdateIncident } from '../types/pagerduty';
 import { replace } from '../utils/utils';
 
 export type PagerDutyOptions = {
@@ -50,6 +50,19 @@ export class PagerDutyClient {
             console.log(error);
          });
    }
+
+   public updateIncidentByID(identifier: Identifier, incident: UpdateIncident): Promise<{ incident: Incident }> {
+      const path: string = `${replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, identifier.identifier)}`;
+      const url: string = `${config.PAGERDUTY.URL}${path}`;
+      var configMethod = this.headersFrom;
+
+      return axios.get(url, configMethod)
+         .then((response: AxiosResponse<any>) => response.data)
+         .catch(function (error) {
+            console.log(error);
+         });
+   }
+
    public postNewIncident(body: PostIncident): Promise<any> {
       const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.IncidentsPathPrefix}`;
       var configMethod = this.headersFrom;

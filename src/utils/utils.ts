@@ -11,19 +11,9 @@ export function replace(value: string, searchValue: string, replaceValue: string
     return value.replace(searchValue, replaceValue);
 }
 
-export function errorWithMessage(error: Error, message: string): string {
-    return `"${message}".  ${error.message}`;
-}
-
 export function errorPagerdutyWithMessage(error: Error | any, message: string): string {
     const errorMessage: any = error?.data?.message || error?.response?.data?.message || error?.message || error?.data || error?.statusText || error;
     return `"${message}".  ${errorMessage}`;
-}
-
-export async function tryPromiseWithMessage(p: Promise<any>, message: string): Promise<any> {
-    return p.catch((error) => {
-        throw new Error(errorWithMessage(error, message));
-    });
 }
 
 export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: string): Promise<any> {

@@ -207,7 +207,23 @@ export type GetResponse = {
    more: boolean,
 };
 
-
+export type UpdateIncident = {
+    incident: {
+        type: 'incident' | 'incident_reference',
+        status?: 'resolved' | 'acknowledged',
+        priority?: any,
+        resolution?: string,
+        title?: string,
+        escalation_level?: number,
+        assignments?: Array<any>,
+        escalation_policy?: any,
+        urgency?: 'low' | 'high',
+        conference_bridge?: {
+            conference_number: string,
+            conference_url: string
+        }
+    }
+}
 
 export type ServiceResponse = {
    id: string,

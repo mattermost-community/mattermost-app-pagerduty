@@ -70,7 +70,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                         },
                         {
                             id: ActionsEvents.CLOSE_ALERT_BUTTON_EVENT,
-                            name: 'Close',
+                            name: 'Resolve',
                             type: 'button',
                             style: 'success',
                             integration: {

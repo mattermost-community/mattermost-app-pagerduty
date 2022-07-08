@@ -1,10 +1,10 @@
 import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
 import config from "../config";
-import { ExceptionType, PDFailed } from "../constant";
+import { ExceptionType } from "../constant";
 import { AppCallDialog, AppContextAction, Identifier, IdentifierType, Incident, PostIncidentNote } from "../types";
 import { tryPromiseForGenerateMessage } from "../utils/utils";
 
-export async function addNoteToIncidentAction(call: AppCallDialog<{ incident_message: string }>): Promise<any> {
+export async function reassignIncidentAction(call: AppCallDialog<{ incident_message: string }>): Promise<any> {
    const context: AppContextAction = JSON.parse(call.state);
    const incidentMessage: string = call.submission.incident_message;
    const incidentId: string = context.incident.id;
