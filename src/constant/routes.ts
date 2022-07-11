@@ -56,6 +56,7 @@ const MattermostPaths = {
     PathKV: '/kv',
     PathOAuth2App: '/oauth2/app',
     PathOAuth2User: '/oauth2/user',
+    UsersUpdateRolePath: `/users/${PathsVariable.Identifier}/roles`,
     PostsPath: '/posts',
     PostPath: `/posts/${PathsVariable.Identifier}`,
     UserPath: `/users/${PathsVariable.Identifier}`,

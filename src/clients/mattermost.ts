@@ -66,4 +66,14 @@ export class MattermostClient {
             }
         }).then((response: AxiosResponse<any>) => response.data);
     }
+
+    public updateRolesByUser(userId: string, roles: string): Promise<any> {
+        const url: string = `${this.config.mattermostUrl}${Routes.Mattermost.ApiVersionV4}${Routes.Mattermost.UsersUpdateRolePath}`;
+
+        return axios.put(replace(url, Routes.PathsVariable.Identifier, userId), { roles }, {
+            headers: {
+                Authorization: `Bearer ${this.config.accessToken}`
+            }
+        }).then((response: AxiosResponse<any>) => response.data);
+    }
 }
