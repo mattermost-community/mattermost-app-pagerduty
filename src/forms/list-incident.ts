@@ -8,7 +8,7 @@ export async function getAllIncidentsCall(call: AppCallRequest): Promise<Inciden
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const botAccessToken: string | undefined = call.context.bot_access_token;
 
-    const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token' });
+    const pdClient: PartialCall = api({ token: 'u+A6-xHEHsaUDY6U4Wmw', tokenType: 'token' });
 
     const queryParams: string = queryString.stringify({
         limit: 500

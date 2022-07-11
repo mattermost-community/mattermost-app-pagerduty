@@ -1,3 +1,5 @@
+import config from '../config';
+
 export * from './routes';
 export * from './commands';
 export * from './store-key';
@@ -9,4 +11,7 @@ export * from './options';
 export * from './forms';
 
 export const PagerDutyIcon = 'pagerduty.png';
+export const PagerDutyIconRoute = `${config.APP.HOST}/static/${PagerDutyIcon}`;
 export const CommandTrigger = 'pd';
+
+export const PDFailed = 'PagerDuty failed';

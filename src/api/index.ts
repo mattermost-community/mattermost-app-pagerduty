@@ -36,6 +36,15 @@ router.post(`${Routes.App.CallPathIncomingWebhookPath}`, cWebhook.incomingWebhoo
 router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`, cIncident.createNewIncident);
 router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`, cIncident.submitCreateNewIncident);
 
+// FROM WEBHOOK ACTIONS
+router.post(`${Routes.App.CallPathIncidentAcknowledgedAction}`, cIncident.ackIncidentAction);
+router.post(`${Routes.App.CallPathIncidentResolveAction}`, cIncident.resolveIncidentAction);
+router.post(`${Routes.App.CallPathIncidentOtherActions}`, cIncident.otherActionsIncident);
+
+router.post(`${Routes.App.CallPathNoteToIncidentAction}`, cIncident.addNoteToIncidentModal);
+router.post(`${Routes.App.CallPathIncidentCloseOptions}`, cIncident.closePostActions);
+router.post(`${Routes.App.CallPathAssignIncidentAction}`, cIncident.reassignIncidentPost);
+
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));
 router.use('/static', staticRouter);

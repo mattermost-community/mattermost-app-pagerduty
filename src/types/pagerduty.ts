@@ -217,6 +217,24 @@ export type GetResponse = {
    more: boolean,
 };
 
+export type UpdateIncident = {
+    incident: {
+        type: 'incident' | 'incident_reference',
+        status?: 'resolved' | 'acknowledged',
+        priority?: any,
+        resolution?: string,
+        title?: string,
+        escalation_level?: number,
+        assignments?: Array<any>,
+        escalation_policy?: any,
+        urgency?: 'low' | 'high',
+        conference_bridge?: {
+            conference_number: string,
+            conference_url: string
+        }
+    }
+}
+
 export type ServiceResponse = {
    id: string,
    name: string,
@@ -232,6 +250,11 @@ export type UserResponse = {
    html_url: string
 }
 
+export type PostIncidentNote = {
+    note: {
+        content: string
+    }
+};
 
 export type PostIncident = {
    incident: {
@@ -254,4 +277,15 @@ export type PostIncidentAssignee = {
       id: string,
       type: "user"
    }
+}
+
+export type Identifier = {
+    identifier: string;
+    identifierType: string;
+};
+
+export enum IdentifierType {
+    ID = 'id',
+    USERNAME = 'username',
+    NAME = 'name'
 }
