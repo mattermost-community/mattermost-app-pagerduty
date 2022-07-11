@@ -20,7 +20,7 @@ export async function subscriptionDeleteCall(call: AppCallRequest): Promise<void
     const kvProps: KVStoreProps = await kvStore.kvGet(StoreKeys.config);
 
     const host: string = new URL(kvProps.pagerduty_client_url).host;
-    const pdClient: PartialCall = api({ token: 'u+Xfr4svUs-Q5fVDSx_w', tokenType: 'token', server: host });
+    const pdClient: PartialCall = api({ token: 'u+A6-xHEHsaUDY6U4Wmw', tokenType: 'token', server: host });
 
     await tryPromisePagerDuty(pdClient.delete(
         replace(

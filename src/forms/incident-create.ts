@@ -1,6 +1,6 @@
 import { KVStoreProps, KVStoreClient, KVStoreOptions } from "../clients/kvstore";
 import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
-import { AppFieldTypes, Routes, PagerDutyIcon, StoreKeys, CreateIncidentForm, CreateIncidentFormModalType, CreateIncidentFormCommandType } from "../constant";
+import { AppFieldTypes, Routes, PagerDutyIcon, StoreKeys, CreateIncidentForm, CreateIncidentFormModalType, CreateIncidentFormCommandType, PDFailed } from "../constant";
 import { AppCallRequest, AppField, AppForm, AppSelectOption } from "../types";
 import { getServiceOptionList, getUsersOptionList } from "./pagerduty-options";
 import config from '../config';
@@ -144,5 +144,5 @@ async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: Pa
       ];
    }
 
-   await tryPromisePagerdutyWithMessage(pagerDutyClient.postNewIncident(incident), 'PagerDuty failed');
+   await tryPromisePagerdutyWithMessage(pagerDutyClient.postNewIncident(incident), PDFailed);
 }

@@ -28,9 +28,13 @@ const AppPaths = {
     OAuthConnectPath: '/oauth2/connect',
 
     CallPathIncidentCreate: '/incident/create',
-    CallPathIncidentAcknowledgedAction: '/alert/acknowledged/action',
-    CallPathIncidentResolveAction: '/alert/resolve/action',
-    CallPathIncidentOtherActions: '/alert/otheractions',
+    CallPathIncidentAcknowledgedAction: '/incident/acknowledged/action',
+    CallPathIncidentResolveAction: '/incident/resolve/action',
+    CallPathIncidentOtherActions: '/incident/otheractions',
+    CallPathNoteToIncidentAction: '/incident/note/action',
+    CallPathAssignIncidentAction: '/incident/assign/action',
+    CallPathIncidentCloseOptions: '/incident/closeoptions',
+    CallPathChangeIncidentPriorityAction: '/incident/priority/change/action',
     CallPathIncomingWebhookPath: '/webhook',
     CallPathSubmit: '/submit',
     CallPathForm: '/form',
@@ -43,6 +47,8 @@ const PagerDutyPaths = {
 
     IncidentsPathPrefix: '/incidents',
     IncidentPathPrefix: `/incidents/${PathsVariable.Identifier}`,
+
+    NotesPathPrefix: '/notes',
 
     ServicesPathPrefix: '/services',
     ServicePathPrefix: `/services/${PathsVariable.Identifier}`,

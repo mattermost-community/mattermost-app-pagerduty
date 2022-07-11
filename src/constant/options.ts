@@ -44,7 +44,7 @@ export const options_times: AttachmentOption[] = [
     }
 ];
 
-export const options_alert_time: AppSelectOption[] = [
+export const options_incident_time: AppSelectOption[] = [
     {
         label: '5 min.',
         value: option_time_5m
@@ -83,7 +83,7 @@ export const option_incident_reassign = 'reassign';
 export const option_incident_change_priority = 'change_priority';
 export const option_incident_add_note = 'add_note';
 
-export const options_alert: AttachmentOption[] = [
+export const options_incident: AttachmentOption[] = [
     {
         text: 'Add note',
         value: option_incident_add_note
@@ -104,7 +104,7 @@ export const option_alert_priority_p3 = 'P3';
 export const option_alert_priority_p4 = 'P4';
 export const option_alert_priority_p5 = 'P5';
 
-export const options_alert_priority: AppSelectOption[] = [
+export const options_incident_priority: AppSelectOption[] = [
     {
         label: 'P1-Critical',
         value: option_alert_priority_p1
