@@ -33,6 +33,7 @@ export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: s
 export function isConnected(oauth2user: any): boolean {
     return !!oauth2user?.token?.access_token;
 }
+
 export function encodeFormData(data: any): string {
     return Object.keys(data)
         .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))

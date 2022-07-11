@@ -17,7 +17,7 @@ export async function oauth2Connect(call: AppCallRequest): Promise<string> {
     const kvStoreClient = new KVStoreClient(kvOptions);
     const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
 
-    const url: string = `${kvStoreProps.pagerduty_client_url}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
+    const url: string = `https://identity.pagerduty.com${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
 
     const urlWithParams = new URL(url);
     urlWithParams.searchParams.append('client_id', kvStoreProps.pagerduty_client_id);
@@ -31,6 +31,7 @@ export async function oauth2Connect(call: AppCallRequest): Promise<string> {
 
 export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
+    const botAccessToken: string | undefined = call.context.bot_access_token;
     const accessToken: string | undefined = call.context.acting_user_access_token;
     const oauth2CompleteUrl: string = call.context.oauth2.complete_url;
     const values: AppCallValues | undefined = call.values;
@@ -41,7 +42,7 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
 
     const kvOptions: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>accessToken
+        accessToken: <string>botAccessToken
     };
     const kvStoreClient = new KVStoreClient(kvOptions);
     const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
@@ -65,11 +66,15 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
             response.error ? Promise.reject(new Error(response.error_description)) : response
         );
 
+    const kvOptionsOauth: KVStoreOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>accessToken
+    };
+    const kvStoreClientOauth = new KVStoreClient(kvOptionsOauth);
+
     const storedToken: any = {
         token: data.access_token,
         role: 'system_admin',
     };
-    console.log('data', data);
-    console.log('storedToken', storedToken);
-    await kvStoreClient.storeOauth2User(storedToken);
+    await kvStoreClientOauth.storeOauth2User(storedToken);
 }

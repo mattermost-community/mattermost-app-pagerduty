@@ -41,7 +41,6 @@ export const configureAdminAccountSubmit: CallResponseHandler = async (req: Requ
 export const connectAccountLoginSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     const call: AppCallRequest = req.body;
     const connectUrl: string = call.context.oauth2.connect_url;
-    console.log('oauth2', call.context.oauth2);
     const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(`Follow this ${hyperlink('link', connectUrl)} to connect Mattermost to your PagerDuty Account.`);
     res.json(callResponse);
 };
@@ -54,7 +53,6 @@ export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Re
         callResponse = newOKCallResponseWithData(url);
         res.json(callResponse);
     } catch (error: any) {
-        console.log('fOauth2Connect', error);
         callResponse = newErrorCallResponseWithMessage('Unable to open configuration form: ' + error.message);
         res.json(callResponse);
     }
