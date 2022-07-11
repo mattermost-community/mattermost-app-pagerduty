@@ -33,6 +33,14 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
             },
             {
                 type: AppFieldTypes.TEXT,
+                name: ConfigureForm.CLIENT_SECRET,
+                modal_label: 'Client Secret',
+                value: config.pagerduty_client_secret,
+                description: 'API integration PagerDuty client secret',
+                is_required: true,
+            },
+            {
+                type: AppFieldTypes.TEXT,
                 name: ConfigureForm.CLIENT_URL,
                 modal_label: 'Client url',
                 value: config.pagerduty_client_url,
@@ -54,6 +62,7 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void>
     const values: AppCallValues = <any>call.values;
 
     const pagerDutyClientID: string = values[ConfigureForm.CLIENT_ID];
+    const pagerDutyClientSecret: string = values[ConfigureForm.CLIENT_SECRET];
     const pagerDutyClientURL: string = values[ConfigureForm.CLIENT_URL];
 
     const options: KVStoreOptions = {
@@ -64,6 +73,7 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void>
 
     const config: KVStoreProps = {
         pagerduty_client_id: pagerDutyClientID,
+        pagerduty_client_secret: pagerDutyClientSecret,
         pagerduty_client_url: pagerDutyClientURL
     };
     await kvStoreClient.kvSet(StoreKeys.config, config);

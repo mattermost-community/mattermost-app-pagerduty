@@ -28,8 +28,9 @@ router.post(`${Routes.App.CallPathServiceSubmit}`, cService.listTeamsSubmit);
 router.post(`${Routes.App.CallPathIncidentSubmit}`, cIncident.listIncidentSubmit);
 
 router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
+router.post(`${Routes.App.CallPathDisconnectSubmit}`, cConfigure.fOauth2Disconnect);
 router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);
-router.get(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);
+router.post(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);
 
 router.post(`${Routes.App.CallPathIncomingWebhookPath}`, cWebhook.incomingWebhook);
 router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`, cIncident.createNewIncident);
