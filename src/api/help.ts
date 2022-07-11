@@ -40,11 +40,14 @@ async function getCommands(call: AppCallRequest): Promise<String> {
     }
     if (await existsKvTrelloConfig(kvClient)) {
         commands.push(addBulletSlashCommand(Commands.INCIDENT, 'Create a new incidence.'));
-        commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} add`, 'Subscribe channel to receive notifications from a PagerDuty board'));
-        commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} list`, 'Show all your current subscriptions'));
-        commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} remove`, 'Stop receiving PagerDuty board\'s notifications'));
-        commands.push(addBulletSlashCommand(`${Commands.CONNECT}`, 'Log in to your PagerDuty account'));
-        commands.push(addBulletSlashCommand(`${Commands.DISCONNECT}`, 'Log out from your PagerDuty account'));
+        commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} add [Pager Duty Service ID] [Mattermost Channel]`, 'Add subscription of service to channel'));
+        commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} list`, 'List subscriptions open'));
+        commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} remove [SubscriptionId]`, 'Delete subscription of channel'));
+        commands.push(addBulletSlashCommand(`${Commands.CONNECT}`, 'Connect your PagerDuty account'));
+        commands.push(addBulletSlashCommand(`${Commands.DISCONNECT}`, 'Logout from your PagerDuty account'));
+        commands.push(addBulletSlashCommand(`${Commands.ONCALL}`, 'Find out who is on call for a PagerDuty service.'));
+        commands.push(addBulletSlashCommand(`${Commands.LIST} service`, 'Show all services from PagerDuty'))
+        commands.push(addBulletSlashCommand(`${Commands.LIST} incident`, 'Show all incidents from PagerDuty'))
     }
 
     return `${joinLines(...commands)}`;

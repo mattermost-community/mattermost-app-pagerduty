@@ -9,4 +9,6 @@ export const Commands = {
     SERVICE: 'service',
     CONNECT: 'connect',
     DISCONNECT: 'disconnect',
+    ONCALL: 'oncall',
+    CREATE: 'create'
 }

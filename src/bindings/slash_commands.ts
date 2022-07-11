@@ -3,7 +3,7 @@ import {AppActingUser, AppBinding, AppCallRequest, AppsState} from '../types';
 import {
     accountLoginBinding,
     accountLogoutBinding,
-    createAlertBinding,
+    getIncidentsBinding,
     getConfigureBinding,
     getHelpBinding,
     listBinding,
@@ -57,15 +57,15 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
     }
     if (await existsKvTrelloConfig(kvClient)) {
         commands.push(Commands.CONNECT);
-        commands.push(Commands.CONNECT);
+        commands.push(Commands.DISCONNECT);
         commands.push(Commands.SUBSCRIPTION);
         commands.push(Commands.INCIDENT);
         commands.push(Commands.LIST);
         bindings.push(accountLoginBinding());
         bindings.push(accountLogoutBinding());
         bindings.push(subscriptionBinding())
-        bindings.push(createAlertBinding());
         bindings.push(listBinding());
+        bindings.push(getIncidentsBinding());
     }
 
     return newCommandBindings(bindings, commands);

@@ -53,7 +53,6 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
             expand: {}
         },
     };
-
     return form;
 }
 

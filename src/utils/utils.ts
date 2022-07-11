@@ -9,20 +9,40 @@ export function replace(value: string, searchValue: string, replaceValue: string
     return value.replace(searchValue, replaceValue);
 }
 
-export function isUserSystemAdmin(actingUser: AppActingUser): boolean {
-    return Boolean(actingUser.roles && actingUser.roles.includes('system_admin'));
+export function errorWithMessage(error: Error, message: string): string {
+    return `"${message}".  ${error.message}`;
+}
+
+export function errorPagerdutyWithMessage(error: Error | any, message: string): string {
+    const errorMessage: any = error?.data?.message || error?.response?.data?.message || error?.message || error?.data || error?.statusText || error;
+    return `"${message}".  ${errorMessage}`;
+}
+
+export async function tryPromiseWithMessage(p: Promise<any>, message: string): Promise<any> {
+    return p.catch((error) => {
+        throw new Error(errorWithMessage(error, message));
+    });
+}
+
+export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: string): Promise<any> {
+    return p.catch((error) => {
+        throw new Error(errorPagerdutyWithMessage(error, message));
+    });
+}
+
+export function isConnected(oauth2user: any): boolean {
+    return !!oauth2user?.token?.access_token;
+}
+export function encodeFormData(data: any): string {
+    return Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
 }
 
 export async function existsKvTrelloConfig(kvClient: KVStoreClient): Promise<boolean> {
     const trelloConfig: KVStoreProps = await kvClient.kvGet(StoreKeys.config);
 
     return Boolean(Object.keys(trelloConfig).length);
-}
-
-export function encodeFormData(data: any): string {
-    return Object.keys(data)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-        .join('&');
 }
 
 export function tryPromisePagerDuty(p: Promise<any>) {
@@ -69,4 +89,12 @@ export function toTitleCase(str: string): string {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
     );
+}
+
+export function isConfigured(oauth2: any): boolean {
+    return Boolean(oauth2.client_id && oauth2.client_secret);
+}
+
+export function isUserSystemAdmin(actingUser: AppActingUser): boolean {
+    return Boolean(actingUser.roles && actingUser.roles.includes('system_admin'));
 }

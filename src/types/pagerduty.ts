@@ -208,3 +208,50 @@ export type WebhookEvent<T> = {
         resource_type: string;
     }
 };
+export type GetResponse = {
+   services?: Array<ServiceResponse>,
+   users?: Array<UserResponse>,
+   limit: number,
+   offset: number,
+   total: number,
+   more: boolean,
+};
+
+export type ServiceResponse = {
+   id: string,
+   name: string,
+   description: string,
+   html_url: string
+}
+
+export type UserResponse = {
+   id: string,
+   type: 'user',
+   name: string,
+   email: string,
+   html_url: string
+}
+
+
+export type PostIncident = {
+   incident: {
+      type: 'incident',
+      title: string,
+      service: {
+         id: string,
+         type: "service_reference"
+      },
+      body?: {
+         type: "incident_body",
+         details: string
+      },
+      assignments?: Array<PostIncidentAssignee>
+   }
+}
+
+export type PostIncidentAssignee = {
+   assignee: {
+      id: string,
+      type: "user"
+   }
+}

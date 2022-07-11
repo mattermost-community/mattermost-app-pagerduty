@@ -1,4 +1,4 @@
-import {AppBinding} from '../types';
+import { AppBinding  } from '../types';
 import {
     AppExpandLevels,
     PagerDutyIcon,
@@ -6,7 +6,8 @@ import {
     Commands,
     SubscriptionCreateForm,
     AppFieldTypes,
-    SubscriptionDeleteForm
+    SubscriptionDeleteForm,
+    CreateIncidentForm,
 } from '../constant';
 
 export const getHelpBinding = (): any => {
@@ -19,33 +20,70 @@ export const getHelpBinding = (): any => {
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.BindingPathHelp,
-                expand: {}
+                expand: {
+                    acting_user: AppExpandLevels.EXPAND_ALL
+                }
             }
         }
     };
 };
 
-export const createAlertBinding = (): AppBinding => {
+export const getIncidentsBinding = () => {
     return {
+        icon: PagerDutyIcon,
         label: Commands.INCIDENT,
+        description: 'Trigger a PagerDuty incident',
+        hint: `[${Commands.CREATE}]`,
+        bindings: [
+            incidentCreateBinding(),
+        ]
+    }
+}
+
+const incidentCreateBinding = (): AppBinding => {
+    return {
+        label: Commands.CREATE,
         icon: PagerDutyIcon,
         description: 'Create incident in PagerDuty',
         form: {
             title: "Show PagerDuty Help Title",
             icon: PagerDutyIcon,
             submit: {
-                path: Routes.App.CallPathIncidentCreate,
+                path: `${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`,
                 expand: {
-                    channel: AppExpandLevels.EXPAND_ALL
+                    acting_user: AppExpandLevels.EXPAND_ALL,
+                    acting_user_access_token: AppExpandLevels.EXPAND_ALL,
+                    channel: AppExpandLevels.EXPAND_ALL,
+                    user: AppExpandLevels.EXPAND_ALL,
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
                 }
             },
             fields: [
                 {
-                    name: 'message',
-                    type: 'text',
-                    is_required: true,
-                    position: 1
-                }
+                    type: AppFieldTypes.TEXT,
+                    name: CreateIncidentForm.SERVICE,
+                    modal_label: 'Impacted Service',
+                    description: 'Impacted service name',
+                },
+                {
+                    type: AppFieldTypes.TEXT,
+                    name: CreateIncidentForm.TITLE,
+                    modal_label: 'Title',
+                    description: 'Incident title',
+                },
+                {
+                    type: AppFieldTypes.TEXT,
+                    name: CreateIncidentForm.DESCRIPTION,
+                    modal_label: 'Description (optional)',
+                    description: 'Incident description',
+                },
+                {
+                    type: AppFieldTypes.TEXT,
+                    name: CreateIncidentForm.ASSIGN_TO,
+                    modal_label: 'Assign to (optional)',
+                    description: 'To whom this incident will be assigned',
+                },
             ]
         }
     }
