@@ -48,6 +48,14 @@ export type AppCallValues = {
 
 export type AppCallType = string;
 
+export type Oauth2App = {
+    client_id: string;
+    client_secret: string;
+    connect_url?: string;
+    complete_url?: string;
+    user?: any,
+}
+
 export type AppCall = {
     path: string;
     expand?: AppExpand;

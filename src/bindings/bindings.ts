@@ -74,30 +74,10 @@ export const getConfigureBinding = (): any => {
     }
 };
 
-export const connectAccountBinding = (): any => {
-    const subCommands: string[] = [
-        Commands.LOGIN,
-        Commands.LOGOUT
-    ];
-
-    const bindings: AppBinding[] = [];
-
-    bindings.push(accountLoginBinding());
-    bindings.push(accountLogoutBinding());
-
-    return {
-        icon: PagerDutyIcon,
-        label: Commands.ACCOUNT,
-        description: 'Connect your PagerDuty account',
-        hint: `[${subCommands.join(' | ')}]`,
-        bindings
-    }
-};
-
 export const accountLoginBinding = (): any => {
     return {
         icon: PagerDutyIcon,
-        label: Commands.LOGIN,
+        label: Commands.CONNECT,
         description: 'Connect your PagerDuty account',
         form: {
             title: "Account login",
@@ -105,7 +85,8 @@ export const accountLoginBinding = (): any => {
             submit: {
                 path: Routes.App.CallPathConnectSubmit,
                 expand: {
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
                 }
             }
         }
@@ -115,14 +96,16 @@ export const accountLoginBinding = (): any => {
 export const accountLogoutBinding = (): any => {
     return {
         icon: PagerDutyIcon,
-        label: Commands.LOGIN,
-        description: 'Connect your PagerDuty account',
+        label: Commands.DISCONNECT,
+        description: 'Disconnect your PagerDuty account',
         form: {
             title: "Account logout",
             icon: PagerDutyIcon,
             submit: {
-                path: Routes.App.CallPathConnectSubmit,
+                path: Routes.App.CallPathDisconnectSubmit,
                 expand: {
+                    acting_user_access_token: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_SUMMARY
                 }
             }

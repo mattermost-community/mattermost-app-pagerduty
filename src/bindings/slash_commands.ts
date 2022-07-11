@@ -1,10 +1,13 @@
 import {AppBinding, AppsState} from '../types';
 
 import {
-    connectAccountBinding,
+    accountLoginBinding,
+    accountLogoutBinding,
     createAlertBinding,
     getConfigureBinding,
-    getHelpBinding, listBinding, subscriptionBinding
+    getHelpBinding,
+    listBinding,
+    subscriptionBinding
 } from './bindings';
 import {
     AppBindingLocations,
@@ -17,7 +20,8 @@ const newCommandBindings = (bindings: AppBinding[]): AppsState => {
     const commands: string[] = [
         Commands.HELP,
         Commands.CONFIGURE,
-        Commands.ACCOUNT,
+        Commands.CONNECT,
+        Commands.DISCONNECT,
         Commands.SUBSCRIPTION,
         Commands.INCIDENT,
         Commands.LIST
@@ -42,7 +46,8 @@ export const getCommandBindings = (): AppsState => {
 
     bindings.push(getHelpBinding());
     bindings.push(getConfigureBinding());
-    bindings.push(connectAccountBinding());
+    bindings.push(accountLoginBinding());
+    bindings.push(accountLogoutBinding());
     bindings.push(subscriptionBinding())
     bindings.push(createAlertBinding());
     bindings.push(listBinding());
