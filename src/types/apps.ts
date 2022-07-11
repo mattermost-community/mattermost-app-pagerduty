@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import {UserProfile} from "./mattermost";
+=======
 import { UserProfile } from "./mattermost";
+>>>>>>> b4ebd13bbd46fe3c5d33593191532840019120ac
 
 export type AppManifest = {
     app_id: string;
@@ -50,6 +54,14 @@ export type AppCallValues = {
 
 export type AppCallType = string;
 
+export type Oauth2App = {
+    client_id: string;
+    client_secret: string;
+    connect_url?: string;
+    complete_url?: string;
+    user?: any,
+}
+
 export type AppCall = {
     path: string;
     expand?: AppExpand;
@@ -63,6 +75,13 @@ export type AppCallRequest = AppCall & {
     selected_field?: string;
     query?: string;
 };
+
+export type ExpandedBotActingUser = AppContext & {
+    acting_user: UserProfile,
+    acting_user_access_token: string
+    bot_user_id: string,
+    bot_access_token: string,
+}
 
 export type AppCallDialog<T> = {
     callback_id: string;
@@ -86,6 +105,22 @@ export type AppCallAction<T> = {
     type: string;
     data_source: string;
     context: T;
+}
+
+export type AppActingUser = {
+    id: string,
+    delete_at: number,
+    username: string,
+    auth_service: string,
+    email: string,
+    nickname: string,
+    first_name: string,
+    last_name: string,
+    position: string,
+    roles: string,
+    locale: string,
+    timezone: any,
+    disable_welcome_email: boolean
 }
 
 export type AppCallResponseType = string;

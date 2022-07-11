@@ -2,6 +2,7 @@ import { AppSelectOption } from "../types"
 
 export const ConfigureForm = {
     CLIENT_ID: 'pagerduty_client_id',
+    CLIENT_SECRET: 'pagerduty_client_secret',
     CLIENT_URL: 'pagerduty_url'
 }
 
