@@ -3,6 +3,7 @@ import {AppCallRequest, AppCallResponse} from '../types';
 import {newOKCallResponseWithMarkdown} from '../utils/call-responses';
 import manifest from '../manifest.json';
 import {MattermostClient, MattermostOptions} from "../clients/mattermost";
+import {joinLines} from "../utils/markdown";
 
 export const getInstall = async (request: Request, response: Response) => {
     const call: AppCallRequest = request.body;
@@ -31,8 +32,4 @@ function getCommands(): string {
     return `${joinLines(
         `To finish configuring the PagerDuty app please read the [Quick Start](${homepageUrl}#quick-start) section of the README`
     )}\n`;
-}
-
-function joinLines(...lines: string[]): string {
-    return lines.join('\n');
 }

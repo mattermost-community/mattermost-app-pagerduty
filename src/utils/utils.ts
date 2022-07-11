@@ -1,11 +1,22 @@
 import {APIResponse} from '@pagerduty/pdjs/build/src/api';
 import {newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown} from './call-responses';
-import {ExceptionType} from "../constant";
-import {Exception} from "./exception";
-import {AppCallResponse} from "../types";
+import {ExceptionType, StoreKeys} from '../constant';
+import {Exception} from './exception';
+import {AppActingUser, AppCallResponse} from '../types';
+import {KVStoreClient, KVStoreProps} from '../clients/kvstore';
 
 export function replace(value: string, searchValue: string, replaceValue: string): string {
     return value.replace(searchValue, replaceValue);
+}
+
+export function isUserSystemAdmin(actingUser: AppActingUser): boolean {
+    return Boolean(actingUser.roles && actingUser.roles.includes('system_admin'));
+}
+
+export async function existsKvTrelloConfig(kvClient: KVStoreClient): Promise<boolean> {
+    const trelloConfig: KVStoreProps = await kvClient.kvGet(StoreKeys.config);
+
+    return Boolean(Object.keys(trelloConfig).length);
 }
 
 export function encodeFormData(data: any): string {
