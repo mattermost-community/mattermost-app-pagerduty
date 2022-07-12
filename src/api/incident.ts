@@ -20,30 +20,30 @@ import { closeIncidentAction } from '../forms/resolve-incident';
 
 
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
-    let callResponse: AppCallResponse;
+   let callResponse: AppCallResponse;
 
-    try {
-        const incidents: Incident[] = await getAllIncidentsCall(req.body);
-        const servicesText: string = [
-            getHeader(incidents.length),
-            getIncidents(incidents)
-        ].join('');
-        callResponse = newOKCallResponseWithMarkdown(servicesText);
-        res.json(callResponse);
-    } catch (error: any) {
-        callResponse = newErrorCallResponseWithMessage('Unable to open configuration form: ' + error.message);
-        res.json(callResponse);
-    }
+   try {
+      const incidents: Incident[] = await getAllIncidentsCall(req.body);
+      const servicesText: string = [
+         getHeader(incidents.length),
+         getIncidents(incidents)        
+      ].join('');
+      callResponse = newOKCallResponseWithMarkdown(servicesText);
+      res.json(callResponse);
+   } catch (error: any) {
+      callResponse = showMessageToMattermost(error);
+      res.json(callResponse);
+   }
 };
 
 function getHeader(serviceLength: number): string {
-    return h6(`Incident List: Found ${serviceLength} matching services.`);
+   return h6(`Incident List: Found ${serviceLength} matching services.`);
 }
 
 function getIncidents(services: Incident[]): string {
-    return `${joinLines(
-        services.map((incident: Incident) => `- ${incident.summary} - ${hyperlink('View detail.', incident.html_url)}`).join('\n')
-    )}\n`;
+   return `${joinLines(
+       services.map((incident: Incident) => `- ${incident.summary} - ${hyperlink('View detail.', incident.html_url)}`).join('\n')
+   )}\n`;
 }
 
 export const createNewIncident: CallResponseHandler = async (req: Request, res: Response) => {

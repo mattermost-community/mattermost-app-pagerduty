@@ -49,14 +49,14 @@ export function tryPromisePagerDuty(p: Promise<any>) {
 }
 
 export function errorDataMessage(error: Exception | Error | any): string {
-    const errorMessage: string = error?.data || error?.data?.message || error?.message || error;
+    const errorMessage: string = error?.data || error?.data?.message || error?.message || error?.response?.statusText || error;
     return `${errorMessage}`;
 }
 
 export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: ExceptionType, message: string) {
     return p.catch((error) => {
         const errorMessage: string = errorDataMessage(error);
-        throw new Exception(exceptionType, `${message} ${errorMessage}`);
+        throw new Exception(exceptionType, `"${message}".  ${errorMessage}`);
     });
 }
 
