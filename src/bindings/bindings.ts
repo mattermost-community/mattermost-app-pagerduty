@@ -260,13 +260,15 @@ export const subscriptionListBinding = (): any => {
 export const listBinding = (): AppBinding => {
     const subCommands: string[] = [
         Commands.SERVICE,
-        Commands.INCIDENT
+        Commands.INCIDENT,
+        Commands.ONCALL
     ];
 
     const bindings: AppBinding[] = [];
 
     bindings.push(serviceListBinding());
     bindings.push(incidentListBinding());
+    bindings.push(onCallListBinding());
 
     return {
         icon: PagerDutyIcon,
@@ -303,6 +305,22 @@ export const incidentListBinding = (): any => {
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathIncidentSubmit,
+                expand: {}
+            }
+        }
+    }
+};
+
+export const onCallListBinding = (): any => {
+    return {
+        icon: PagerDutyIcon,
+        label: Commands.ONCALL,
+        description: 'List of users on call',
+        form: {
+            title: 'List of users on call',
+            icon: PagerDutyIcon,
+            submit: {
+                path: Routes.App.CallPathOnCallSubmit,
                 expand: {}
             }
         }

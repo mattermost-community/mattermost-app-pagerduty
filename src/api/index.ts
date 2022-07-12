@@ -9,6 +9,7 @@ import * as cSubscription from './subscription';
 import * as cWebhook from './webhook';
 import * as cService from './service';
 import * as cIncident from './incident';
+import * as cOnCall from './on-call';
 
 const router: Router = express.Router();
 
@@ -26,6 +27,7 @@ router.post(`${Routes.App.CallPathSubscriptionListSubmit}`, cSubscription.subscr
 
 router.post(`${Routes.App.CallPathServiceSubmit}`, cService.listTeamsSubmit);
 router.post(`${Routes.App.CallPathIncidentSubmit}`, cIncident.listIncidentSubmit);
+router.post(`${Routes.App.CallPathOnCallSubmit}`, cOnCall.listOnCallSubmit);
 
 router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
 router.post(`${Routes.App.CallPathDisconnectSubmit}`, cConfigure.fOauth2Disconnect);

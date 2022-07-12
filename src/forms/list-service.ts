@@ -5,7 +5,7 @@ import {api} from "@pagerduty/pdjs";
 import { tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function getAllServicesCall(call: AppCallRequest): Promise<Service[]> {
-    const token = 'u+A6-xHEHsaUDY6U4Wmw';
+    const token = 'u+g8knycscxs-4dyk-Hw';
     const tokenType = 'token';
 
     const pdClient: PartialCall = api({ token, tokenType });
