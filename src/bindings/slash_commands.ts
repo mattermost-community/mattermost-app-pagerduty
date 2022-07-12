@@ -1,4 +1,4 @@
-import {AppActingUser, AppBinding, AppCallRequest, AppsState} from '../types';
+import {AppActingUser, AppBinding, AppCallRequest, AppsState, Oauth2App} from '../types';
 
 import {
     accountLoginBinding,
@@ -16,7 +16,7 @@ import {
     PagerDutyIcon
 } from '../constant';
 import {KVStoreClient, KVStoreOptions} from "../clients/kvstore";
-import {existsKvTrelloConfig, isUserSystemAdmin} from "../utils/utils";
+import {existsKvTrelloConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
 
 const newCommandBindings = (bindings: AppBinding[], commands: string[]): AppsState => {
     return {
@@ -36,6 +36,7 @@ const newCommandBindings = (bindings: AppBinding[], commands: string[]): AppsSta
 export const getCommandBindings = async (call: AppCallRequest): Promise<AppsState> => {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const botAccessToken: string | undefined = call.context.bot_access_token;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
     const actingUser: AppActingUser | undefined = call.context.acting_user;
 
     const options: KVStoreOptions = {
@@ -56,16 +57,19 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
         commands.push(Commands.CONFIGURE);
     }
     if (await existsKvTrelloConfig(kvClient)) {
+        if (isConnected(oauth2)) {
+            commands.push(Commands.SUBSCRIPTION);
+            commands.push(Commands.INCIDENT);
+            commands.push(Commands.LIST);
+            bindings.push(subscriptionBinding())
+            bindings.push(listBinding());
+            bindings.push(getIncidentsBinding());
+        }
+
         commands.push(Commands.CONNECT);
         commands.push(Commands.DISCONNECT);
-        commands.push(Commands.SUBSCRIPTION);
-        commands.push(Commands.INCIDENT);
-        commands.push(Commands.LIST);
         bindings.push(accountLoginBinding());
         bindings.push(accountLogoutBinding());
-        bindings.push(subscriptionBinding())
-        bindings.push(listBinding());
-        bindings.push(getIncidentsBinding());
     }
 
     return newCommandBindings(bindings, commands);

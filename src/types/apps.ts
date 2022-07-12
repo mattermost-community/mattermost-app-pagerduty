@@ -50,12 +50,22 @@ export type AppCallValues = {
 
 export type AppCallType = string;
 
+export type Oauth2CurrentUser = {
+    token: string;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+    }
+}
+
 export type Oauth2App = {
     client_id: string;
     client_secret: string;
     connect_url?: string;
     complete_url?: string;
-    user?: any,
+    user?: Oauth2CurrentUser;
 }
 
 export type AppCall = {
@@ -178,7 +188,7 @@ export type AppContext = {
     }
     acting_user?: AppActingUser;
     acting_user_access_token?: string;
-    oauth2: any;
+    oauth2: Oauth2App;
 };
 
 export type AppContextProps = {

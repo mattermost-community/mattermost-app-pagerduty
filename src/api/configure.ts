@@ -7,7 +7,7 @@ import {
     newOKCallResponseWithData,
     newOKCallResponseWithMarkdown
 } from '../utils/call-responses';
-import {AppCallRequest, AppCallResponse} from '../types';
+import {AppCallRequest, AppCallResponse, Oauth2CurrentUser} from '../types';
 import {hyperlink} from '../utils/markdown';
 import {pagerDutyConfigForm, pagerDutyConfigSubmit} from '../forms/configure-admin-account';
 import {oauth2Connect, oauth2Complete} from '../forms/oauth';
@@ -40,8 +40,12 @@ export const configureAdminAccountSubmit: CallResponseHandler = async (req: Requ
 
 export const connectAccountLoginSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     const call: AppCallRequest = req.body;
-    const connectUrl: string = call.context.oauth2.connect_url;
-    const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(`Follow this ${hyperlink('link', connectUrl)} to connect Mattermost to your PagerDuty Account.`);
+    const connectUrl: string | undefined = call.context.oauth2?.connect_url;
+    const currentUser: Oauth2CurrentUser | undefined = call.context.oauth2?.user;
+    const message: string = currentUser
+        ? `You are already logged into PagerDuty with user ${currentUser.user.name}`
+        : `Follow this ${hyperlink('link', <string>connectUrl)} to connect Mattermost to your PagerDuty Account.`;
+    const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(message);
     res.json(callResponse);
 };
 
@@ -66,7 +70,6 @@ export const fOauth2Complete: CallResponseHandler = async (req: Request, res: Re
         callResponse = newOKCallResponse();
         res.json(callResponse);
     } catch (error: any) {
-        console.log('fOauth2Complete', error);
         callResponse = newErrorCallResponseWithMessage(error.message);
         res.json(callResponse);
     }

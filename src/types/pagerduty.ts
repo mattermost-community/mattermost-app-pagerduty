@@ -1,5 +1,38 @@
 import {Channel} from './mattermost';
 
+export interface UserMe {
+    name: string;
+    email: string;
+    time_zone: string;
+    color: string;
+    avatar_url: string;
+    billed: boolean;
+    role: string;
+    description: string;
+    invitation_sent: boolean;
+    job_title: string;
+    teams: any[];
+    contact_methods: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    }[];
+    notification_rules: {
+        id: string;
+        type: string;
+        summary: string;
+        self: string;
+        html_url: string;
+    }[];
+    id: string;
+    type: string;
+    summary: string;
+    self: string;
+    html_url: string;
+}
+
 export interface OauthUserToken {
     client_info: string;
     id_token: string;

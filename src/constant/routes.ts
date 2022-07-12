@@ -54,6 +54,7 @@ const PagerDutyPaths = {
     ServicePathPrefix: `/services/${PathsVariable.Identifier}`,
 
     UsersPathPrefix: '/users',
+    CurrentUserPathPrefix: '/users/me',
     UserPathPrefix: `/users/${PathsVariable.Identifier}`,
 
     WebhookSubscriptionsPathPrefix: '/webhook_subscriptions',

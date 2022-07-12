@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {AppsPluginName, Routes} from '../constant';
-import {Manifest, Oauth2App} from '../types';
+import {Manifest, Oauth2App, Oauth2CurrentUser} from '../types';
 import manifest from '../manifest.json';
 
 export interface KVStoreOptions {
@@ -43,7 +43,7 @@ export class KVStoreClient {
         }).then((response: AxiosResponse<any>) => response.data);
     }
 
-    public storeOauth2User(token: any): Promise<any> {
+    public storeOauth2User(token: Oauth2CurrentUser): Promise<any> {
         const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathOAuth2User}`;
         return axios.post(url, token, {
             headers: {
