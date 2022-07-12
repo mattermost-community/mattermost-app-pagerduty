@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import {UserProfile} from "./mattermost";
-=======
-import { UserProfile } from "./mattermost";
->>>>>>> b4ebd13bbd46fe3c5d33593191532840019120ac
 
 export type AppManifest = {
     app_id: string;
@@ -136,13 +132,6 @@ export type AppCallResponse<Res = unknown> = {
     form?: AppForm;
 };
 
-export type ExpandedBotActingUser = AppContext & {
-    acting_user: UserProfile,
-    acting_user_access_token: string
-    bot_user_id: string,
-    bot_access_token: string,
-}
-
 export type AppContext = {
     app_id: string;
     location?: string;
@@ -197,22 +186,6 @@ export type AppContextProps = {
 };
 
 export type AppExpandLevel = string;
-
-export type AppActingUser = {
-    id: string,
-    delete_at: number,
-    username: string,
-    auth_service: string,
-    email: string,
-    nickname: string,
-    first_name: string,
-    last_name: string,
-    position: string,
-    roles: string,
-    locale: string,
-    timezone: any,
-    disable_welcome_email: boolean
-}
 
 export type AppExpand = {
     app?: AppExpandLevel;

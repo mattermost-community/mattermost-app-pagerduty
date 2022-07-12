@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {
-    Channel,
+    Channel, DialogProps,
     PostCreate,
     PostEphemeralCreate,
     PostResponse,
@@ -91,6 +91,15 @@ export class MattermostClient {
         const url: string = `${this.config.mattermostUrl}${Routes.Mattermost.ApiVersionV4}${Routes.Mattermost.UsersUpdateRolePath}`;
 
         return axios.put(replace(url, Routes.PathsVariable.Identifier, userId), { roles }, {
+            headers: {
+                Authorization: `Bearer ${this.config.accessToken}`
+            }
+        }).then((response: AxiosResponse<any>) => response.data);
+    }
+
+    public showDialog(dialog: DialogProps): Promise<any> {
+        const url: string = `${this.config.mattermostUrl}${Routes.Mattermost.ApiVersionV4}${Routes.Mattermost.DialogsOpenPath}`;
+        return axios.post(url, dialog, {
             headers: {
                 Authorization: `Bearer ${this.config.accessToken}`
             }
