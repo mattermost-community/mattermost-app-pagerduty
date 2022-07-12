@@ -30,10 +30,9 @@ export function encodeFormData(data: any): string {
         .join('&');
 }
 
-export async function existsKvTrelloConfig(kvClient: KVStoreClient): Promise<boolean> {
-    const trelloConfig: KVStoreProps = await kvClient.kvGet(StoreKeys.config);
-
-    return Boolean(Object.keys(trelloConfig).length);
+export async function existsKvPagerDutyConfig(kvClient: KVStoreClient): Promise<boolean> {
+    const pdConfig: KVStoreProps = await kvClient.kvGet(StoreKeys.config);
+    return Boolean(Object.keys(pdConfig).length);
 }
 
 export function tryPromisePagerDuty(p: Promise<any>) {

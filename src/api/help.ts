@@ -5,7 +5,7 @@ import {AppActingUser, AppCallRequest, AppCallResponse, ExpandedBotActingUser, O
 import {addBulletSlashCommand, h5, joinLines} from '../utils/markdown';
 import {KVStoreClient, KVStoreOptions} from "../clients/kvstore";
 import {Commands} from "../constant";
-import {existsKvTrelloConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
+import {existsKvPagerDutyConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
 
 export const getHelp = async (request: Request, response: Response) => {
     const helpText: string = [
@@ -39,7 +39,7 @@ async function getCommands(call: AppCallRequest): Promise<String> {
     if (isUserSystemAdmin(<AppActingUser>actingUser)) {
         commands.push(addBulletSlashCommand(Commands.CONFIGURE, `Configure PagerDuty`));
     }
-    if (await existsKvTrelloConfig(kvClient)) {
+    if (await existsKvPagerDutyConfig(kvClient)) {
         if (isConnected(oauth2)) {
             commands.push(addBulletSlashCommand(Commands.INCIDENT, 'Create a new incidence.'));
             commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} add [Pager Duty Service ID] [Mattermost Channel]`, 'Add subscription of service to channel'));
