@@ -23,7 +23,8 @@ export class PagerDutyClient {
          headers: {
             'Authorization': `Token token=${this.options?.api_token}`,
             'From': `${this.options?.user_email}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.pagerduty+json;version=2'
          }
       };
    }
@@ -56,10 +57,10 @@ export class PagerDutyClient {
       const url: string = `${config.PAGERDUTY.URL}${path}`;
       var configMethod = this.headersFrom;
 
-      return axios.get(url, configMethod)
-         .then((response: AxiosResponse<any>) => response.data)
-         .catch(function (error) {
-            console.log(error);
+      return axios.put(url, incident,  configMethod)
+         .then((response: AxiosResponse<any>) =>{
+            console.log(response.data);
+            return response.data
          });
    }
 
@@ -77,7 +78,8 @@ export class PagerDutyClient {
       var configMethod = this.headersFrom;
 
       return axios.post(url, body, configMethod)
-         .then((response: AxiosResponse<any>) => response.data);
+         .then((response: AxiosResponse<any>) => response.data)
+         .catch(err => console.log(err))
    }
 
    public getUsers(): Promise<GetResponse> {

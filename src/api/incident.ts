@@ -17,6 +17,7 @@ import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 import { addNoteToIncidentAction } from '../forms/add-note-incident';
 import { deletePostCall } from '../forms/delete-post';
 import { closeIncidentAction } from '../forms/resolve-incident';
+import { ackAlertAction } from '../forms/ack-incident';
 
 
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
@@ -78,41 +79,33 @@ export const submitCreateNewIncident = async (req: Request, res: Response) => {
 }
 
 export const ackIncidentAction = async (request: Request, response: Response) => {
-   /*
    const call: AppCallAction<AppContextAction> = request.body;
    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
    const botAccessToken: string | undefined = call.context.bot_access_token;
    const channelId: string | undefined = call.channel_id;
-   let post: PostEphemeralCreate;
+   let message: string = '';
 
    const mattermostOptions: MattermostOptions = {
       mattermostUrl: <string>mattermostUrl,
       accessToken: <string>botAccessToken
    };
    const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
-   console.log(call);
+
    try {
-      const message = await ackAlertAction(request.body);
-      post = {
-         post: {
-            message: message,
-            channel_id: channelId,
-         },
-         user_id: call.user_id,
-      };
+      message = await ackAlertAction(request.body);
    } catch (error: any) {
-      post = {
-         post: {
-            message: 'Unexpected error: ' + error.message,
-            channel_id: channelId,
-         },
-         user_id: call.user_id,
-      };
+      message = 'Unexpected error: ' + error.message;
    }
 
+   const post: PostEphemeralCreate = {
+      post: {
+         message: message,
+         channel_id: channelId,
+      },
+      user_id: call.user_id,
+   };
    await mattermostClient.createEphemeralPost(post);
    response.json();
-   */
 };
 
 export const resolveIncidentAction = async (request: Request, response: Response) => {

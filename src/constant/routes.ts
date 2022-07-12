@@ -30,6 +30,7 @@ const AppPaths = {
 
     CallPathIncidentCreate: '/incident/create',
     CallPathIncidentAcknowledgedAction: '/incident/acknowledged/action',
+    CallPathIncidentUnAcknowledgedAction: '/incident/unacknowledged/action',
     CallPathIncidentResolveAction: '/incident/resolve/action',
     CallPathIncidentOtherActions: '/incident/otheractions',
     CallPathNoteToIncidentAction: '/incident/note/action',
