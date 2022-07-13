@@ -1,15 +1,15 @@
 import {AppCallRequest, Service} from '../types';
-import {Routes} from '../constant';
+import {ExceptionType, PDFailed, Routes} from '../constant';
 import {APIResponse, PartialCall} from "@pagerduty/pdjs/build/src/api";
 import {api} from "@pagerduty/pdjs";
+import { tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function getAllServicesCall(call: AppCallRequest): Promise<Service[]> {
-    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-    const botAccessToken: string | undefined = call.context.bot_access_token;
+    const token = 'u+g8knycscxs-4dyk-Hw';
+    const tokenType = 'token';
 
-    const pdClient: PartialCall = api({ token: 'u+A6-xHEHsaUDY6U4Wmw', tokenType: 'token' });
-    const responseServices: APIResponse = await pdClient.get(Routes.PagerDuty.ServicesPathPrefix);
-    const services: Service[] = responseServices.data['services'];
-
+    const pdClient: PartialCall = api({ token, tokenType });
+    const responseServices: APIResponse = await tryPromiseForGenerateMessage(pdClient.get(Routes.PagerDuty.ServicesPathPrefix), ExceptionType.MARKDOWN, PDFailed);
+    const services: Service[] = responseServices?.data['services'];
     return services;
 }

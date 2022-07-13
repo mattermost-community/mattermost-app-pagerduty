@@ -5,6 +5,7 @@ import {AppCallRequest, AppCallValues, Oauth2CurrentUser, OauthUserToken, UserMe
 import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
 import {Routes, StoreKeys} from '../constant';
 import {encodeFormData} from '../utils/utils';
+import config from '../config';
 
 export async function oauth2Connect(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
@@ -19,7 +20,7 @@ export async function oauth2Connect(call: AppCallRequest): Promise<string> {
     const kvStoreClient = new KVStoreClient(kvOptions);
     const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
 
-    const url: string = `https://identity.pagerduty.com${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
+    const url: string = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
 
     const urlWithParams = new URL(url);
     urlWithParams.searchParams.append('client_id', kvStoreProps.pagerduty_client_id);

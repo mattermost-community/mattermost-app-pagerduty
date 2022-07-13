@@ -17,6 +17,7 @@ const AppPaths = {
 
     CallPathServiceSubmit: '/service/list/submit',
     CallPathIncidentSubmit: '/incident/list/submit',
+    CallPathOnCallSubmit: '/oncall/list/submit',
 
     CallPathSubscriptionAddSubmit: '/subscription/add/submit',
     CallPathSubscriptionDeleteSubmit: '/subscription/delete/submit',
@@ -29,6 +30,7 @@ const AppPaths = {
 
     CallPathIncidentCreate: '/incident/create',
     CallPathIncidentAcknowledgedAction: '/incident/acknowledged/action',
+    CallPathIncidentUnAcknowledgedAction: '/incident/unacknowledged/action',
     CallPathIncidentResolveAction: '/incident/resolve/action',
     CallPathIncidentOtherActions: '/incident/otheractions',
     CallPathNoteToIncidentAction: '/incident/note/action',
@@ -52,6 +54,8 @@ const PagerDutyPaths = {
 
     ServicesPathPrefix: '/services',
     ServicePathPrefix: `/services/${PathsVariable.Identifier}`,
+
+    OnCallPathPrefix: '/oncalls',
 
     UsersPathPrefix: '/users',
     CurrentUserPathPrefix: '/users/me',

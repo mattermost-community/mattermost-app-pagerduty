@@ -155,6 +155,27 @@ export type Incident = {
     html_url: string;
 };
 
+export type OnCallRecord = {
+    escalation_policy: {
+        id: string,
+        type: 'escalation_policy_reference',
+        summary: string,
+        self: string,
+        html_url: string,
+    },
+    escalation_level: number,
+    schedule: any,
+    user: {
+        id: string,
+        type: string,
+        summary: string,
+        self: string,
+        html_url: string,
+    },
+    start: null,
+    end: null
+}
+
 export type Service = {
     id: string;
     name: string;

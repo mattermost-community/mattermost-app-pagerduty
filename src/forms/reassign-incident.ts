@@ -1,12 +1,12 @@
 import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
 import config from "../config";
-import { ExceptionType } from "../constant";
-import { AppCallDialog, AppContextAction, Identifier, IdentifierType, Incident, PostIncidentNote } from "../types";
+import { ExceptionType, PDFailed } from "../constant";
+import { AppCallAction, AppCallDialog, AppContextAction, Identifier, IdentifierType, Incident, PostIncidentNote, UpdateIncident } from "../types";
 import { tryPromiseForGenerateMessage } from "../utils/utils";
 
-export async function reassignIncidentAction(call: AppCallDialog<{ incident_message: string }>): Promise<any> {
-   const context: AppContextAction = JSON.parse(call.state);
-   const incidentMessage: string = call.submission.incident_message;
+export async function reassignIncidentAction(call: AppCallAction<AppContextAction>): Promise<string> {
+   const context: AppContextAction = call.context;
+   const selectedOpt: string = <string>context.selected_option;
    const incidentId: string = context.incident.id;
    const oauthToken = config.PAGERDUTY.TOKEN;
 
@@ -21,13 +21,26 @@ export async function reassignIncidentAction(call: AppCallDialog<{ incident_mess
       identifierType: IdentifierType.ID
    };
 
-   const resIncident: { incident: Incident } = await tryPromiseForGenerateMessage(pagerDutyClient.getIncidentByID(identifier), ExceptionType.MARKDOWN, PDFailed);
+   const userIdentifier: Identifier = {
+      identifier: selectedOpt,
+      identifierType: IdentifierType.ID
+   };
+   
+   const user: { user: any } = await tryPromiseForGenerateMessage(pagerDutyClient.getUserByID(userIdentifier), ExceptionType.MARKDOWN, PDFailed);
 
-   const data: PostIncidentNote = {
-      note: {
-         content: incidentMessage
+   const data: UpdateIncident = {
+      incident: {
+         type: 'incident',
+         assignments: [
+            {
+               assignee: {
+                  id: selectedOpt,
+                  type: 'user'
+               }
+            }
+         ]
       }
    };
-   await tryPromiseForGenerateMessage(pagerDutyClient.postNewIncidentNote(identifier, data), ExceptionType.MARKDOWN, PDFailed);
-   return resIncident.incident;
+   await tryPromiseForGenerateMessage(pagerDutyClient.updateIncidentByID(identifier, data), ExceptionType.MARKDOWN, PDFailed);
+   return `You have reassigned incident #${incidentId} to ${user?.user?.name}`;
 }
