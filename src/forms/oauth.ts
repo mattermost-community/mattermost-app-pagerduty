@@ -53,7 +53,7 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const values: AppCallValues | undefined = call.values;
 
     if (!values?.code) {
-        throw new Error('Bad Request: code param not provided');
+        throw new Error(values?.error_description || 'Bad Request: code param not provided');
     }
 
     const kvOptions: KVStoreOptions = {
