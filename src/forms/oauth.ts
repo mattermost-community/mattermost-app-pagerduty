@@ -1,12 +1,22 @@
 import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
 import {api} from '@pagerduty/pdjs';
 import fetch from 'node-fetch';
-import {AppCallRequest, AppCallValues, Oauth2App, Oauth2CurrentUser, OauthUserToken, UserMe} from '../types';
+import {
+    AppCallRequest,
+    AppCallValues,
+    Channel,
+    Oauth2App,
+    Oauth2CurrentUser,
+    OauthUserToken,
+    PostCreate,
+    UserMe
+} from '../types';
 import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
 import {ExceptionType, Routes, StoreKeys} from '../constant';
 import {encodeFormData, isConnected} from '../utils/utils';
 import {Exception} from "../utils/exception";
 import config from '../config';
+import {MattermostClient, MattermostOptions} from "../clients/mattermost";
 
 export async function oauth2Connect(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
@@ -37,6 +47,8 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const botAccessToken: string | undefined = call.context.bot_access_token;
     const accessToken: string | undefined = call.context.acting_user_access_token;
+    const botUserID: string | undefined = call.context.bot_user_id;
+    const actingUserID: string | undefined = call.context.acting_user?.id;
     const oauth2CompleteUrl: string | undefined = call.context.oauth2?.complete_url;
     const values: AppCallValues | undefined = call.values;
 
@@ -92,6 +104,20 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
         }
     };
     await kvStoreClientOauth.storeOauth2User(storedToken);
+
+    const mattermostOption: MattermostOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>accessToken
+    };
+    const mattermostClient: MattermostClient = new MattermostClient(mattermostOption);
+    const channel: Channel = await mattermostClient.createDirectChannel([<string>botUserID, <string>actingUserID]);
+    const post: PostCreate = {
+        message: 'You have successfully connected your PagerDuty account!',
+        user_id: botUserID,
+        channel_id: channel.id,
+        root_id: '',
+    };
+    await mattermostClient.createPost(post);
 }
 
 export async function oauth2Disconnect(call: AppCallRequest): Promise<void> {

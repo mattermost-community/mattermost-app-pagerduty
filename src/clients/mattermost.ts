@@ -105,4 +105,13 @@ export class MattermostClient {
             }
         }).then((response: AxiosResponse<any>) => response.data);
     }
+
+    public createDirectChannel(ids: string[]): Promise<any> {
+        const url: string = `${this.config.mattermostUrl}${Routes.Mattermost.ApiVersionV4}${Routes.Mattermost.ChannelDirectPath}`;
+        return axios.post(url, ids, {
+            headers: {
+                Authorization: `Bearer ${this.config.accessToken}`
+            }
+        }).then((response: AxiosResponse<any>) => response.data);
+    }
 }

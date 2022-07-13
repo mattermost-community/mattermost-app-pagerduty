@@ -125,6 +125,7 @@ export type PostCreate = {
     channel_id: string;
     message: string;
     root_id?: string;
+    user_id?: string;
     file_ids?: string[];
     props?: {
         attachments: Attachment[];

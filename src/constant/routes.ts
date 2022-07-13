@@ -75,6 +75,7 @@ const MattermostPaths = {
     PostPath: `/posts/${PathsVariable.Identifier}`,
     UserPath: `/users/${PathsVariable.Identifier}`,
     ChannelPath: `/channels/${PathsVariable.Identifier}`,
+    ChannelDirectPath: `/channels/direct`,
     DialogsOpenPath: '/actions/dialogs/open',
     ApiVersionV4: '/api/v4',
     ApiVersionV1: '/api/v1',
