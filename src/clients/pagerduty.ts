@@ -9,6 +9,11 @@ export type PagerDutyOptions = {
    user_email?: string
 }
 
+export type PagerDutyOpts = {
+   token: string,
+   tokenType: string
+}
+
 export class PagerDutyClient {
    private readonly options: PagerDutyOptions;
 
@@ -29,15 +34,6 @@ export class PagerDutyClient {
       };
    }
 
-   public getServices(): Promise<GetResponse> {
-      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.ServicesPathPrefix}`;
-      var configMethod = this.headersFrom;
-
-      return axios.get(url, configMethod)
-         .then((response: AxiosResponse<any>) => response.data)
-         .catch(function (error) {
-         });
-   }
 
    public getIncidentByID(identifier: Identifier): Promise<{ incident: Incident }> {
       const path: string = `${replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, identifier.identifier)}`;
@@ -57,17 +53,8 @@ export class PagerDutyClient {
 
       return axios.put(url, incident,  configMethod)
          .then((response: AxiosResponse<any>) =>{
-            console.log(response.data);
             return response.data
          });
-   }
-
-   public postNewIncident(body: PostIncident): Promise<any> {
-      const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.IncidentsPathPrefix}`;
-      var configMethod = this.headersFrom;
-
-      return axios.post(url, body, configMethod)
-         .then((response: AxiosResponse<any>) => response.data);
    }
 
    public postNewIncidentNote(identifier: Identifier, body: PostIncidentNote): Promise<any> {
