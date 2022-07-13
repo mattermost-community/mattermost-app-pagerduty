@@ -53,11 +53,22 @@ export function errorDataMessage(error: Exception | Error | any): string {
     return `${errorMessage}`;
 }
 
+export function errorDataPagerduty(data: any): string {
+    const errorMessage: string = data?.data?.errors?.detail || data?.data?.error?.message;
+    return errorMessage;
+}
+
 export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: ExceptionType, message: string) {
-    return p.catch((error) => {
-        const errorMessage: string = errorDataMessage(error);
-        throw new Exception(exceptionType, `"${message}".  ${errorMessage}`);
-    });
+    return p
+        .then((response) =>
+            !!errorDataPagerduty(response)
+                ? Promise.reject(new Error(errorDataPagerduty(response)))
+                : response
+        )
+        .catch((error) => {
+            const errorMessage: string = errorDataMessage(error);
+            throw new Exception(exceptionType, `"${message}".  ${errorMessage}`);
+        });
 }
 
 export function showMessageToMattermost(exception: Exception | Error): AppCallResponse {

@@ -1,6 +1,13 @@
-import { KVStoreProps, KVStoreClient, KVStoreOptions } from "../clients/kvstore";
 import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
-import { AppFieldTypes, Routes, PagerDutyIcon, StoreKeys, CreateIncidentForm, CreateIncidentFormModalType, CreateIncidentFormCommandType, PDFailed } from "../constant";
+import {
+   AppFieldTypes,
+   Routes,
+   PagerDutyIcon,
+   CreateIncidentForm,
+   CreateIncidentFormModalType,
+   CreateIncidentFormCommandType,
+   PDFailed
+} from "../constant";
 import { AppCallRequest, AppField, AppForm, AppSelectOption } from "../types";
 import { getServiceOptionList, getUsersOptionList } from "./pagerduty-options";
 import config from '../config';
@@ -8,9 +15,8 @@ import { PostIncident } from "../types/pagerduty";
 import { tryPromisePagerdutyWithMessage } from "../utils/utils";
 
 export async function createIncidentFormModal(call: AppCallRequest): Promise<AppForm> {
-   const oauthToken = config.PAGERDUTY.TOKEN;
    const pdOpt: PagerDutyOptions = {
-      api_token: oauthToken,
+      api_token: '',
       user_email: 'lizeth.garcia@ancient.mx'
    }
    
@@ -64,9 +70,9 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
 
 export async function addIncidentFromCommand(call: AppCallRequest) {
    const values = call.values as CreateIncidentFormCommandType;
-   const oauthToken = config.PAGERDUTY.TOKEN;
+
    const pdOpt: PagerDutyOptions = {
-      api_token: oauthToken,
+      api_token: '',
       user_email: 'lizeth.garcia@ancient.mx'
    }
    const serviceOpts: AppSelectOption[] = await getServiceOptionList(pdOpt);
@@ -92,9 +98,9 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
 
 export async function submitCreateIncident(call: AppCallRequest): Promise<any> {
    const values = call.values as CreateIncidentFormModalType;
-   const oauthToken = config.PAGERDUTY.TOKEN;
+
    const pdOpt: PagerDutyOptions = {
-      api_token: oauthToken,
+      api_token: '',
       user_email: 'lizeth.garcia@ancient.mx'
    }
 

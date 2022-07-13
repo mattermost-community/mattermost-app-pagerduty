@@ -21,7 +21,9 @@ export const getHelpBinding = (): any => {
             submit: {
                 path: Routes.App.BindingPathHelp,
                 expand: {
-                    acting_user: AppExpandLevels.EXPAND_ALL
+                    acting_user: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
                 }
             }
         }
@@ -221,7 +223,9 @@ export const subscriptionDeleteBinding = (): any => {
             submit: {
                 path: Routes.App.CallPathSubscriptionDeleteSubmit,
                 expand: {
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
                 },
             },
             fields: [
@@ -250,7 +254,10 @@ export const subscriptionListBinding = (): any => {
             submit: {
                 path: Routes.App.CallPathSubscriptionListSubmit,
                 expand: {
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                    acting_user_access_token: AppExpandLevels.EXPAND_ALL,
+                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
                 }
             }
         }
@@ -289,7 +296,11 @@ export const serviceListBinding = (): any => {
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathServiceSubmit,
-                expand: {}
+                expand: {
+                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                }
             }
         }
     }
@@ -305,7 +316,11 @@ export const incidentListBinding = (): any => {
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathIncidentSubmit,
-                expand: {}
+                expand: {
+                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                }
             }
         }
     }
@@ -321,7 +336,11 @@ export const onCallListBinding = (): any => {
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathOnCallSubmit,
-                expand: {}
+                expand: {
+                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                }
             }
         }
     }

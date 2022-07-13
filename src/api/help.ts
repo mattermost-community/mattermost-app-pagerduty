@@ -3,9 +3,9 @@ import manifest from '../manifest.json';
 import {newOKCallResponseWithMarkdown} from '../utils/call-responses';
 import {AppActingUser, AppCallRequest, AppCallResponse, ExpandedBotActingUser, Oauth2App} from '../types';
 import {addBulletSlashCommand, h5, joinLines} from '../utils/markdown';
-import {KVStoreClient, KVStoreOptions} from "../clients/kvstore";
-import {Commands} from "../constant";
-import {existsKvPagerDutyConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
+import {KVStoreClient, KVStoreOptions} from '../clients/kvstore';
+import {Commands} from '../constant';
+import {existsKvPagerDutyConfig, isConnected, isUserSystemAdmin} from '../utils/utils';
 
 export const getHelp = async (request: Request, response: Response) => {
     const helpText: string = [
@@ -41,7 +41,7 @@ async function getCommands(call: AppCallRequest): Promise<String> {
     }
     if (await existsKvPagerDutyConfig(kvClient)) {
         if (isConnected(oauth2)) {
-            commands.push(addBulletSlashCommand(Commands.INCIDENT, 'Create a new incidence.'));
+            commands.push(addBulletSlashCommand(`${Commands.INCIDENT}`, 'Create a new incidence.'));
             commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} add [Pager Duty Service ID] [Mattermost Channel]`, 'Add subscription of service to channel'));
             commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} list`, 'List subscriptions open'));
             commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} remove [SubscriptionId]`, 'Delete subscription of channel'));

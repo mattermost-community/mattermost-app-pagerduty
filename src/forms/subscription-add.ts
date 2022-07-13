@@ -1,37 +1,35 @@
 import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
 import {api} from '@pagerduty/pdjs';
-import {
-    AppCallRequest,
-    AppCallValues, Service,
-    WebhookSubscription
-} from '../types';
-import {
-    ExceptionType,
-    PDFailed,
-    Routes,
-    SubscriptionCreateForm
-} from '../constant';
+import {AppCallRequest, AppCallValues, Oauth2App, Service, WebhookSubscription} from '../types';
+import {ExceptionType, PDFailed, Routes, SubscriptionCreateForm} from '../constant';
 import {Exception} from '../utils/exception';
 import {replace, tryPromiseForGenerateMessage} from '../utils/utils';
 
 export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
+    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const appPath: string | undefined = call.context.app_path;
     const whSecret: string | undefined = call.context.app?.webhook_secret;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
     const values: AppCallValues | undefined  = call.values;
 
     const channelId: string = values?.[SubscriptionCreateForm.CHANNEL_ID].value;
     const channelName: string = values?.[SubscriptionCreateForm.CHANNEL_ID].label;
     const serviceId: string = values?.[SubscriptionCreateForm.SERVICE_ID];
 
-    const token = 'u+g8knycscxs-4dyk-Hw';
-    const tokenType = 'token';
+    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
-    const pdClient: PartialCall = api({ token, tokenType });
-
-    const responseSubscriptions: APIResponse = await pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix)
+    const responseSubscriptions: APIResponse = await tryPromiseForGenerateMessage(
+        pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix),
+        ExceptionType.MARKDOWN,
+        'PagerDuty webhook failed'
+    );
     const subscriptions: WebhookSubscription[] = responseSubscriptions.data['webhook_subscriptions'];
 
-    const responseServices: APIResponse = await pdClient.get(replace(Routes.PagerDuty.ServicePathPrefix, Routes.PathsVariable.Identifier, serviceId));
+    const responseServices: APIResponse = await tryPromiseForGenerateMessage(
+        pdClient.get(replace(Routes.PagerDuty.ServicePathPrefix, Routes.PathsVariable.Identifier, serviceId)),
+        ExceptionType.MARKDOWN,
+        'PagerDuty service failed'
+    );
     const service: Service = responseServices.data['service'];
 
     for (let subscription of subscriptions) {
@@ -41,7 +39,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
         }
     }
 
-    const urlWithParams = new URL(`https://0395-201-160-204-2.ngrok.io${appPath}${Routes.App.CallPathIncomingWebhookPath}`);
+    const urlWithParams = new URL(`https://b92b-201-160-205-161.ngrok.io${appPath}${Routes.App.CallPathIncomingWebhookPath}`);
     urlWithParams.searchParams.append('secret', <string>whSecret);
     urlWithParams.searchParams.append('channelId', channelId);
 
@@ -79,5 +77,5 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
                 type: 'webhook_subscription'
             }
         }
-    }), ExceptionType.MARKDOWN, PDFailed);
+    }), ExceptionType.MARKDOWN, 'PagerDuty webhook failed');
 }

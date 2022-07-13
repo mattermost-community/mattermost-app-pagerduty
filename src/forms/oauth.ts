@@ -51,7 +51,7 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const kvStoreClient = new KVStoreClient(kvOptions);
     const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
 
-    const url: string = `https://identity.pagerduty.com${Routes.PagerDuty.OAuthTokenPathPrefix}`;
+    const url: string = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthTokenPathPrefix}`;
     const oauthData: any = {
         grant_type: 'authorization_code',
         client_id: kvStoreProps.pagerduty_client_id,

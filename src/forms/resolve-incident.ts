@@ -20,9 +20,8 @@ export async function closeIncidentAction(call: AppCallAction<AppContextAction>)
 
    const incidentId: string = incident?.id;
 
-   const oauthToken = config.PAGERDUTY.TOKEN;
    const pdOpt: PagerDutyOptions = {
-      api_token: oauthToken,
+      api_token: '',
       user_email: 'lizeth.garcia@ancient.mx'
    }
    const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);

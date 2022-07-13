@@ -124,9 +124,8 @@ async function showPostOfListUsers(call: AppCallAction<AppContextAction>): Promi
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
 
-    const oauthToken = config.PAGERDUTY.TOKEN;
     const pdOpt: PagerDutyOptions = {
-        api_token: oauthToken,
+        api_token: '',
         user_email: 'lizeth.garcia@ancient.mx'
     }
 

@@ -1,7 +1,6 @@
 import {Request, Response} from 'express';
 import {
     CallResponseHandler,
-    newErrorCallResponseWithMessage,
     newOKCallResponseWithMarkdown
 } from '../utils/call-responses';
 import {AppCallResponse, WebhookSubscription} from '../types';
@@ -9,7 +8,7 @@ import {subscriptionAddCall} from '../forms/subscription-add';
 import {subscriptionListCall} from '../forms/subscription-list';
 import {h6, joinLines} from '../utils/markdown';
 import {subscriptionDeleteCall} from '../forms/subscription-delete';
-import { showMessageToMattermost } from '../utils/utils';
+import {showMessageToMattermost} from '../utils/utils';
 
 export const subscriptionAddSubmit: CallResponseHandler = async (request: Request, response: Response) => {
     let callResponse: AppCallResponse;

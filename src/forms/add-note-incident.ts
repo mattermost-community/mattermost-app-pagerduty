@@ -8,10 +8,9 @@ export async function addNoteToIncidentAction(call: AppCallDialog<{ incident_mes
    const context: AppContextAction = JSON.parse(call.state);
    const incidentMessage: string = call.submission.incident_message;
    const incidentId: string = context.incident.id;
-   const oauthToken = config.PAGERDUTY.TOKEN;
 
    const pdOpt: PagerDutyOptions = {
-      api_token: oauthToken,
+      api_token: '',
       user_email: 'lizeth.garcia@ancient.mx'
    }
    const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);

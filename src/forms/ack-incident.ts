@@ -35,10 +35,9 @@ export async function ackAlertAction(call: AppCallAction<AppContextAction>): Pro
          mattermostUrl: <string>mattermostUrl,
          accessToken: <string>botAccessToken,
       };
-      const oauthToken = config.PAGERDUTY.TOKEN;
 
       const pdOpt: PagerDutyOptions = {
-         api_token: oauthToken,
+         api_token: '',
          user_email: 'lizeth.garcia@ancient.mx'
       }
       const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);

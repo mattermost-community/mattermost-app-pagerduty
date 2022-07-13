@@ -8,10 +8,9 @@ export async function reassignIncidentAction(call: AppCallAction<AppContextActio
    const context: AppContextAction = call.context;
    const selectedOpt: string = <string>context.selected_option;
    const incidentId: string = context.incident.id;
-   const oauthToken = config.PAGERDUTY.TOKEN;
 
    const pdOpt: PagerDutyOptions = {
-      api_token: oauthToken,
+      api_token: '',
       user_email: 'lizeth.garcia@ancient.mx'
    }
    const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);

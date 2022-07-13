@@ -7,9 +7,17 @@ import {
    newOKCallResponseWithMarkdown
 } from '../utils/call-responses';
 import { getAllIncidentsCall } from '../forms/list-incident';
-import { AppCallAction, AppCallDialog, AppCallRequest, AppCallResponse, AppContextAction, Incident, PostEphemeralCreate } from '../types';
+import {
+   AppCallAction,
+   AppCallDialog,
+   AppCallRequest,
+   AppCallResponse,
+   AppContextAction,
+   Incident,
+   PostEphemeralCreate
+} from '../types';
 import { addIncidentFromCommand, createIncidentFormModal, submitCreateIncident } from '../forms/incident-create';
-import { CreateIncidentFormCommandType, CreateIncidentFormModalType } from '../constant';
+import { CreateIncidentFormCommandType } from '../constant';
 import { h6, hyperlink, joinLines } from '../utils/markdown';
 import { showMessageToMattermost } from '../utils/utils';
 import { otherActionsIncidentCall } from '../forms/other-actions-incident';
