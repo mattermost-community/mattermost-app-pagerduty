@@ -36,7 +36,6 @@ export class PagerDutyClient {
       return axios.get(url, configMethod)
          .then((response: AxiosResponse<any>) => response.data)
          .catch(function (error) {
-            console.log(error);
          });
    }
 
@@ -48,7 +47,6 @@ export class PagerDutyClient {
       return axios.get(url, configMethod)
          .then((response: AxiosResponse<any>) => response.data)
          .catch(function (error) {
-            console.log(error);
          });
    }
 
@@ -84,6 +82,15 @@ export class PagerDutyClient {
 
    public getUsers(): Promise<GetResponse> {
       const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.UsersPathPrefix}`;
+      var configMethod = this.headersFrom;
+
+      return axios.get(url, configMethod)
+         .then((response: AxiosResponse<any>) => response.data);
+   }
+
+   public getUserByID(identifier: Identifier): Promise<GetResponse> {
+      const path: string = `${replace(Routes.PagerDuty.UserPathPrefix, Routes.PathsVariable.Identifier, identifier.identifier)}`;
+      const url: string = `${config.PAGERDUTY.URL}${path}`;
       var configMethod = this.headersFrom;
 
       return axios.get(url, configMethod)

@@ -18,6 +18,7 @@ import { addNoteToIncidentAction } from '../forms/add-note-incident';
 import { deletePostCall } from '../forms/delete-post';
 import { closeIncidentAction } from '../forms/resolve-incident';
 import { ackAlertAction } from '../forms/ack-incident';
+import { reassignIncidentAction } from '../forms/reassign-incident';
 
 
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
@@ -192,9 +193,8 @@ export const reassignIncidentPost = async (request: Request, response: Response)
    const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
 
    try {
-      //const incident: Incident = await addNoteToIncidentAction(request.body);
-      //await deletePostCall(request.body);
-      //message = `Incident #${incident.id} to reassigned ${}`;
+      message = await reassignIncidentAction(request.body);
+      await deletePostCall(request.body);
    } catch (error: any) {
       message = 'Unexpected error: ' + error.message;
    }
