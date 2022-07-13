@@ -7,6 +7,7 @@ export default {
     },
     PAGERDUTY: {
         URL: 'https://api.pagerduty.com',
-        TOKEN: 'u+A6-xHEHsaUDY6U4Wmw'
+        TOKEN: 'u+g8knycscxs-4dyk-Hw',
+        IDENTITY: 'https://identity.pagerduty.com'
     }
 }

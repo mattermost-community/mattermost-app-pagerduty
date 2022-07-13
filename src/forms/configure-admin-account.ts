@@ -28,7 +28,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
                 name: ConfigureForm.CLIENT_ID,
                 modal_label: 'Client ID',
                 value: config.pagerduty_client_id,
-                description: 'API integration PagerDuty client id',
+                description: 'API integration PagerDuty Client ID',
                 is_required: true,
             },
             {
@@ -36,15 +36,15 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
                 name: ConfigureForm.CLIENT_SECRET,
                 modal_label: 'Client Secret',
                 value: config.pagerduty_client_secret,
-                description: 'API integration PagerDuty client secret',
+                description: 'API integration PagerDuty Client Secret',
                 is_required: true,
             },
             {
                 type: AppFieldTypes.TEXT,
                 name: ConfigureForm.CLIENT_URL,
-                modal_label: 'Client url',
+                modal_label: 'Client URL',
                 value: config.pagerduty_client_url,
-                description: 'API integration PagerDuty client url',
+                description: 'API integration PagerDuty Client URL',
                 is_required: true,
             }
         ],

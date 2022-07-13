@@ -16,7 +16,7 @@ import {
     PagerDutyIcon
 } from '../constant';
 import {KVStoreClient, KVStoreOptions} from "../clients/kvstore";
-import {existsKvTrelloConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
+import {existsKvPagerDutyConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
 
 const newCommandBindings = (bindings: AppBinding[], commands: string[]): AppsState => {
     return {
@@ -56,7 +56,8 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
         bindings.push(getConfigureBinding());
         commands.push(Commands.CONFIGURE);
     }
-    if (await existsKvTrelloConfig(kvClient)) {
+    
+    if (await existsKvPagerDutyConfig(kvClient)) {
         if (isConnected(oauth2)) {
             commands.push(Commands.SUBSCRIPTION);
             commands.push(Commands.INCIDENT);

@@ -9,6 +9,7 @@ import {subscriptionAddCall} from '../forms/subscription-add';
 import {subscriptionListCall} from '../forms/subscription-list';
 import {h6, joinLines} from '../utils/markdown';
 import {subscriptionDeleteCall} from '../forms/subscription-delete';
+import { showMessageToMattermost } from '../utils/utils';
 
 export const subscriptionAddSubmit: CallResponseHandler = async (request: Request, response: Response) => {
     let callResponse: AppCallResponse;
@@ -18,7 +19,7 @@ export const subscriptionAddSubmit: CallResponseHandler = async (request: Reques
         callResponse = newOKCallResponseWithMarkdown("Subscription will be created");
         response.json(callResponse);
     } catch (error: any) {
-        callResponse = newErrorCallResponseWithMessage('Unable to open configuration form: ' + error.message);
+        callResponse = showMessageToMattermost(error);
         response.json(callResponse);
     }
 };
@@ -31,7 +32,7 @@ export const subscriptionDeleteSubmit: CallResponseHandler = async (request: Req
         callResponse = newOKCallResponseWithMarkdown("Subscription will be deleted");
         response.json(callResponse);
     } catch (error: any) {
-        callResponse = newErrorCallResponseWithMessage('Unable to open configuration form: ' + error.message);
+        callResponse = showMessageToMattermost(error);
         response.json(callResponse);
     }
 };
@@ -53,8 +54,7 @@ export const subscriptionListSubmit: CallResponseHandler = async (request: Reque
         callResponse = newOKCallResponseWithMarkdown(subscriptionsText);
         response.json(callResponse);
     } catch (error: any) {
-        console.log('error', error);
-        callResponse = newErrorCallResponseWithMessage('Unable to open configuration form: ' + error.message);
+        callResponse = showMessageToMattermost(error);
         response.json(callResponse);
     }
 };
