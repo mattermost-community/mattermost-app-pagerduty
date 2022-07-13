@@ -1,10 +1,11 @@
 import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
 import {api} from '@pagerduty/pdjs';
 import fetch from 'node-fetch';
-import {AppCallRequest, AppCallValues, Oauth2CurrentUser, OauthUserToken, UserMe} from '../types';
+import {AppCallRequest, AppCallValues, Oauth2App, Oauth2CurrentUser, OauthUserToken, UserMe} from '../types';
 import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
-import {Routes, StoreKeys} from '../constant';
-import {encodeFormData} from '../utils/utils';
+import {ExceptionType, Routes, StoreKeys} from '../constant';
+import {encodeFormData, isConnected} from '../utils/utils';
+import {Exception} from "../utils/exception";
 
 export async function oauth2Connect(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
@@ -90,4 +91,23 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
         }
     };
     await kvStoreClientOauth.storeOauth2User(storedToken);
+}
+
+export async function oauth2Disconnect(call: AppCallRequest): Promise<void> {
+    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
+    const accessToken: string | undefined = call.context.acting_user_access_token;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+
+    if (!isConnected(oauth2)) {
+        throw new Exception(ExceptionType.MARKDOWN, 'You still do not have connected your PagerDuty account');
+    }
+
+    const kvOptionsOauth: KVStoreOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>accessToken
+    };
+    const kvStoreClientOauth = new KVStoreClient(kvOptionsOauth);
+
+    // delete user of mattermost context
+    await kvStoreClientOauth.storeOauth2User({});
 }

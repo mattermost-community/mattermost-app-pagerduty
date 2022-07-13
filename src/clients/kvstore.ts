@@ -43,9 +43,9 @@ export class KVStoreClient {
         }).then((response: AxiosResponse<any>) => response.data);
     }
 
-    public storeOauth2User(token: Oauth2CurrentUser): Promise<any> {
+    public storeOauth2User(currentUser: Oauth2CurrentUser | {}): Promise<any> {
         const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathOAuth2User}`;
-        return axios.post(url, token, {
+        return axios.post(url, currentUser, {
             headers: {
                 Authorization: `BEARER ${this.config.accessToken}`,
                 'content-type': 'application/json; charset=UTF-8',

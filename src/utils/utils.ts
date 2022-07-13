@@ -21,7 +21,7 @@ export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: s
 }
 
 export function isConnected(oauth2: Oauth2App): boolean {
-    return !!oauth2?.user;
+    return !!oauth2?.user && !!Object.keys(oauth2.user).length;
 }
 
 export function encodeFormData(data: any): string {

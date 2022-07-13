@@ -7,11 +7,11 @@ import {
     newOKCallResponseWithData,
     newOKCallResponseWithMarkdown
 } from '../utils/call-responses';
-import {AppCallRequest, AppCallResponse, Oauth2App, Oauth2CurrentUser} from '../types';
+import {AppCallRequest, AppCallResponse, Oauth2App} from '../types';
 import {hyperlink} from '../utils/markdown';
 import {pagerDutyConfigForm, pagerDutyConfigSubmit} from '../forms/configure-admin-account';
-import {oauth2Connect, oauth2Complete} from '../forms/oauth';
-import {isConnected} from "../utils/utils";
+import {oauth2Connect, oauth2Complete, oauth2Disconnect} from '../forms/oauth';
+import {isConnected, showMessageToMattermost} from "../utils/utils";
 
 export const configureAdminAccountForm: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
@@ -76,9 +76,17 @@ export const fOauth2Complete: CallResponseHandler = async (req: Request, res: Re
     }
 }
 
-export const fOauth2Disconnect: CallResponseHandler = async (req, res) => {
-    const call: AppCallRequest = req.body;
-    console.log('call', call);
+export const fOauth2Disconnect: CallResponseHandler = async (req: Request, res: Response) => {
+    let callResponse: AppCallResponse;
+
+    try {
+        await oauth2Disconnect(req.body);
+        callResponse = newOKCallResponseWithMarkdown('You have disconnected your PagerDuty account');
+        res.json(callResponse);
+    } catch (error: any) {
+        callResponse = showMessageToMattermost(error);
+        res.json(callResponse);
+    }
 }
 
 
