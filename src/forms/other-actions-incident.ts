@@ -1,8 +1,6 @@
 import {
     AppCallAction,
-    AppCallResponse,
     AppContextAction,
-    AppSelectOption,
     AttachmentOption,
     DialogProps,
     PostCreate,
@@ -18,8 +16,8 @@ import {
     PagerDutyIconRoute
 } from '../constant';
 import config from '../config';
-import { PagerDutyClient, PagerDutyOptions } from '../clients/pagerduty';
-import { getUsersAttachmentOptionList, getUsersOptionList } from './pagerduty-options';
+import { PagerDutyOptions } from '../clients/pagerduty';
+import { getUsersAttachmentOptionList } from './pagerduty-options';
 
 const ACTIONS_EVENT: { [key: string]: Function | { [key: string]: Function } } = {
     [ActionsEvents.OTHER_OPTIONS_SELECT_EVENT]: {

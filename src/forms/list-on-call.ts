@@ -2,7 +2,7 @@ import {api} from '@pagerduty/pdjs';
 import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
 import queryString from 'query-string';
 import {AppCallRequest, Oauth2App, OnCallRecord} from '../types';
-import {ExceptionType, PDFailed, Routes} from '../constant';
+import {ExceptionType, Routes} from '../constant';
 import {tryPromiseForGenerateMessage} from '../utils/utils';
 
 export async function getAllOnCall(call: AppCallRequest): Promise<OnCallRecord[]> {

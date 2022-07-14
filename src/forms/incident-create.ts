@@ -1,4 +1,4 @@
-import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
+import { PagerDutyClient, PagerDutyOptions, PagerDutyOpts } from "../clients/pagerduty";
 import {
    AppFieldTypes,
    Routes,
@@ -6,22 +6,23 @@ import {
    CreateIncidentForm,
    CreateIncidentFormModalType,
    CreateIncidentFormCommandType,
-   PDFailed
+   PDFailed,
+   ExceptionType,
+   AppExpandLevels
 } from "../constant";
-import { AppCallRequest, AppField, AppForm, AppSelectOption } from "../types";
+import { AppCallRequest, AppField, AppForm, AppSelectOption, Oauth2App } from "../types";
 import { getServiceOptionList, getUsersOptionList } from "./pagerduty-options";
 import config from '../config';
 import { PostIncident } from "../types/pagerduty";
-import { tryPromisePagerdutyWithMessage } from "../utils/utils";
+import { tryPromiseForGenerateMessage, tryPromisePagerdutyWithMessage } from "../utils/utils";
+import { api, PartialCall } from "@pagerduty/pdjs/build/src/api";
 
 export async function createIncidentFormModal(call: AppCallRequest): Promise<AppForm> {
-   const pdOpt: PagerDutyOptions = {
-      api_token: '',
-      user_email: 'lizeth.garcia@ancient.mx'
-   }
+   const oauth2: Oauth2App | undefined = call.context.oauth2;
+   const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
    
-   const serviceOpts: AppSelectOption[] = await getServiceOptionList(pdOpt);
-   const assignToOpts: AppSelectOption[] = await getUsersOptionList(pdOpt);
+   const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts);
+   const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts);
 
    const fields: AppField[] = [
       {
@@ -63,6 +64,9 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
       submit: {
          path: `${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`,
          expand: {
+            app: AppExpandLevels.EXPAND_SUMMARY,
+            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
          }
       }
    } as AppForm;
@@ -71,20 +75,18 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
 export async function addIncidentFromCommand(call: AppCallRequest) {
    const values = call.values as CreateIncidentFormCommandType;
 
-   const pdOpt: PagerDutyOptions = {
-      api_token: '',
-      user_email: 'lizeth.garcia@ancient.mx'
-   }
-   const serviceOpts: AppSelectOption[] = await getServiceOptionList(pdOpt);
-   const assignToOpts: AppSelectOption[] = await getUsersOptionList(pdOpt);
-
-   const service = serviceOpts.find((b) => b.label == values.incident_impacted_service);
-   const assign = assignToOpts.find((b) => b.label == values.incident_assign_to);
-
    if (!values?.incident_impacted_service && !values?.incident_title) {
       throw new Error("Required data not sended [Impacted service and title]");
    }
 
+   const oauth2: Oauth2App | undefined = call?.context?.oauth2;
+   const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+
+   const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts);
+   const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts);
+
+   const service = serviceOpts.find((b) => b.value == values.incident_impacted_service || b.label == values.incident_impacted_service );
+   const assign = assignToOpts.find((b) => b.value == values.incident_assign_to || b.label == values.incident_assign_to );
 
    const valuesData: CreateIncidentFormModalType = {
       incident_impacted_service: <AppSelectOption>service,
@@ -92,28 +94,26 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
       incident_description: values.incident_description,
       incident_assign_to: <AppSelectOption>assign
    } 
-   await postIncidentMethod(valuesData, pdOpt);
-}
 
+   await postIncidentMethod(valuesData, tokenOpts);
+}
 
 export async function submitCreateIncident(call: AppCallRequest): Promise<any> {
    const values = call.values as CreateIncidentFormModalType;
 
-   const pdOpt: PagerDutyOptions = {
-      api_token: '',
-      user_email: 'lizeth.garcia@ancient.mx'
-   }
+   const oauth2: Oauth2App | undefined = call?.context?.oauth2;
+   const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 
    if (!values?.incident_impacted_service && !values?.incident_title) {
       throw new Error("Required data not sended [Impacted service and title]");
    }
 
-   await postIncidentMethod(values, pdOpt);
+   await postIncidentMethod(values, tokenOpts);
 }
 
 
-async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: PagerDutyOptions) {
-   const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);
+async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: PagerDutyOpts) {
+   const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
 
    const incident: PostIncident = {
       incident: {
@@ -150,5 +150,9 @@ async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: Pa
       ];
    }
 
-   await tryPromisePagerdutyWithMessage(pagerDutyClient.postNewIncident(incident), PDFailed);
+   await tryPromiseForGenerateMessage(
+      pdClient.post(Routes.PagerDuty.IncidentsPathPrefix, { data: incident }),
+      ExceptionType.MARKDOWN,
+      'PagerDuty service failed'
+   );
 }
