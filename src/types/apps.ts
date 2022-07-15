@@ -68,6 +68,11 @@ export type Oauth2App = {
     user?: Oauth2CurrentUser;
 }
 
+export type PostApp = {
+    id: string,
+    channel_id: string     
+}
+
 export type AppCall = {
     path: string;
     expand?: AppExpand;
@@ -189,6 +194,7 @@ export type AppContext = {
     acting_user?: AppActingUser;
     acting_user_access_token?: string;
     oauth2: Oauth2App;
+    post?: PostApp
 };
 
 export type AppContextProps = {

@@ -11,7 +11,7 @@ import {
     WebhookRequest
 } from '../types';
 import {newErrorCallResponseWithMessage, newOKCallResponse} from '../utils/call-responses';
-import {ActionsEvents, options_incident} from '../constant';
+import {ActionsEvents, AppExpandLevels, options_incident} from '../constant';
 import {MattermostClient, MattermostOptions} from '../clients/mattermost';
 import config from '../config';
 import {Routes} from '../constant'
