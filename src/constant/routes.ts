@@ -31,12 +31,24 @@ const AppPaths = {
     CallPathIncidentCreate: '/incident/create',
     CallPathIncidentAcknowledgedAction: '/incident/acknowledged/action',
     CallPathIncidentUnAcknowledgedAction: '/incident/unacknowledged/action',
+
+    CallPathIncidentResolveSubmit: '/incident/resolve/submit',
     CallPathIncidentResolveAction: '/incident/resolve/action',
     CallPathIncidentOtherActions: '/incident/otheractions',
+
+    CallPathNoteToIncidentSubmit: '/incident/note/submit',
     CallPathNoteToIncidentAction: '/incident/note/action',
+
+    CallPathAssignIncidentSubmit: '/incident/assign/submit',
     CallPathAssignIncidentAction: '/incident/assign/action',
-    CallPathIncidentCloseOptions: '/incident/closeoptions',
+
+    CallPathChangeIncidentPrioritySubmit: '/incident/priority/change/submit',
     CallPathChangeIncidentPriorityAction: '/incident/priority/change/action',
+
+    CallPathDetailViewIncidentSubmit: '/incident/detail/submit',
+    CallPathDetailViewIncidentAction: '/incident/detail/action',
+
+    CallPathIncidentCloseOptions: '/incident/closeoptions',
     CallPathIncomingWebhookPath: '/webhook',
     CallPathSubmit: '/submit',
     CallPathForm: '/form',

@@ -88,42 +88,25 @@ export const submitCreateNewIncident = async (req: Request, res: Response) => {
 }
 
 export const ackIncidentAction = async (request: Request, response: Response) => {
-   const call: AppCallAction<AppContextAction> = request.body;
-   const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-   const botAccessToken: string | undefined = call.context.bot_access_token;
-   const channelId: string | undefined = call.channel_id;
-   let message: string = '';
-
-   const mattermostOptions: MattermostOptions = {
-      mattermostUrl: <string>mattermostUrl,
-      accessToken: <string>botAccessToken
-   };
-   const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
+   let callResponse: AppCallResponse;
 
    try {
-      message = await ackAlertAction(request.body);
+      const message = await ackAlertAction(request.body);
+      callResponse = newOKCallResponseWithMarkdown(message);
    } catch (error: any) {
-      message = 'Unexpected error: ' + error.message;
+      callResponse = showMessageToMattermost(error);
    }
-
-   const post: PostEphemeralCreate = {
-      post: {
-         message: message,
-         channel_id: channelId,
-      },
-      user_id: call.user_id,
-   };
-   await mattermostClient.createEphemeralPost(post);
-   response.json();
+   response.json(callResponse);
 };
 
 export const resolveIncidentAction = async (request: Request, response: Response) => {
    let callResponse: AppCallResponse = newOKCallResponse();
 
    try {
-      await closeIncidentAction(request.body);
+      const message = await closeIncidentAction(request.body);
+      callResponse = newOKCallResponseWithMarkdown(message);
    } catch (error: any) {
-      callResponse = newErrorCallResponseWithMessage('Unexpected error: ' + error.message);
+      callResponse = showMessageToMattermost(error);
    }
 
    response.json(callResponse);

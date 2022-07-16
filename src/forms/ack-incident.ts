@@ -20,8 +20,7 @@ import { api, APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
 export async function ackAlertAction(call: AppCallRequest): Promise<string> {
    let message: string;
    const oauth2: Oauth2App | undefined = call.context.oauth2;
-   //const incident: AppCallValues | undefined = call.context.incident;
-   const incident: AppCallValues | undefined = { id: 'Q3A87KJCZJCMUC' };
+   const incident: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incident?.id;
    
    try {

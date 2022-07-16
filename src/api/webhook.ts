@@ -8,105 +8,143 @@ import {
     AppContextAction, Incident,
     PostCreate,
     WebhookEvent,
-    WebhookRequest
+    WebhookRequest,
+    Manifest
 } from '../types';
 import {newErrorCallResponseWithMessage, newOKCallResponse} from '../utils/call-responses';
 import {ActionsEvents, AppExpandLevels, options_incident} from '../constant';
 import {MattermostClient, MattermostOptions} from '../clients/mattermost';
 import config from '../config';
 import {Routes} from '../constant'
-import {hyperlink} from '../utils/markdown';
+import {h6, hyperlink} from '../utils/markdown';
 import {replace, toTitleCase} from '../utils/utils';
 import {APIResponse, PartialCall} from "@pagerduty/pdjs/build/src/api";
 import {api} from "@pagerduty/pdjs";
+import manifest from '../manifest.json';
 
 async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
     const eventData: EventWebhook = event.data;
-
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
+    const m: Manifest = manifest;
 
-    const assignees: string[] = eventData.assignees.map((assignee) => hyperlink(assignee.summary, assignee.html_url));
+    const incident = {
+        id: eventData.id
+    }
+    
     const payload: PostCreate = {
-        message: '',
+        message: "",
         channel_id: channelId,
         props: {
-            attachments: [
+            app_bindings: [
                 {
-                    title: `Triggered: ${hyperlink(`#${eventData.number} ${eventData.title}`, eventData.html_url)}`,
-                    text: `${toTitleCase(eventData.urgency)} Urgency`,
-                    title_link: '',
-                    fields: [
+                    location: "embedded",
+                    app_id: m.app_id,
+                    description: h6(`Triggered: ${hyperlink(`#${eventData.number} ${eventData.title}`, eventData.html_url)}`),
+                    bindings: [
                         {
-                            short: true,
-                            title: 'Assigned',
-                            value: assignees.join(', ')
-                        },
-                        {
-                            short: true,
-                            title: 'Service',
-                            value: hyperlink(eventData.service.summary, eventData.service.html_url)
-                        }
-                    ],
-                    actions: [
-                        {
-                            id: ActionsEvents.ACKNOWLEDGED_ALERT_BUTTON_EVENT,
-                            name: 'Acknowledged',
-                            type: 'button',
-                            style: 'default',
-                            integration: {
-                                url: `${config.APP.HOST}${Routes.App.CallPathIncidentAcknowledgedAction}`,
-                                context: {
-                                    action: ActionsEvents.ACKNOWLEDGED_ALERT_BUTTON_EVENT,
-                                    incident: {
-                                        id: eventData.id
-                                    },
-                                    bot_access_token: botAccessToken,
-                                    mattermost_site_url: mattermostUrl
-                                } as AppContextAction
+                            location: ActionsEvents.ACKNOWLEDGED_ALERT_BUTTON_EVENT,
+                            label: 'Acknowledged',
+                            submit: {
+                                path: Routes.App.CallPathIncidentAcknowledgedAction,
+                                expand: {
+                                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                    post: AppExpandLevels.EXPAND_SUMMARY
+                                },
+                                state: {
+                                    incident
+                                }
                             }
                         },
                         {
-                            id: ActionsEvents.CLOSE_ALERT_BUTTON_EVENT,
-                            name: 'Resolve',
-                            type: 'button',
-                            style: 'success',
-                            integration: {
-                                url: `${config.APP.HOST}${Routes.App.CallPathIncidentResolveAction}`,
-                                context: {
-                                    action: ActionsEvents.CLOSE_ALERT_BUTTON_EVENT,
-                                    incident: {
-                                        id: eventData.id
-                                    },
-                                    bot_access_token: botAccessToken,
-                                    mattermost_site_url: mattermostUrl
-                                } as AppContextAction
+                            location: ActionsEvents.CLOSE_ALERT_BUTTON_EVENT,
+                            label: 'Resolve',
+                            submit: {
+                                path: Routes.App.CallPathIncidentResolveSubmit,
+                                expand: {
+                                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                    post: AppExpandLevels.EXPAND_SUMMARY
+                                },
+                                state: {
+                                    incident
+                                }
                             }
                         },
                         {
-                            id: ActionsEvents.OTHER_OPTIONS_SELECT_EVENT,
-                            name: 'Other actions...',
-                            integration: {
-                                url: `${config.APP.HOST}${Routes.App.CallPathIncidentOtherActions}`,
-                                context: {
-                                    action: ActionsEvents.OTHER_OPTIONS_SELECT_EVENT,
-                                    incident: {
-                                        id: eventData.id
-                                    },
-                                    bot_access_token: botAccessToken,
-                                    mattermost_site_url: mattermostUrl
-                                } as AppContextAction
-                            },
-                            type: 'select',
-                            options: options_incident
+                            location: ActionsEvents.OTHER_OPTIONS_SELECT_EVENT,
+                            label: "Other actions...",
+                            bindings: [
+                                {
+                                    location: ActionsEvents.OTHER_INCIDENT_VIEW_DETAIL,
+                                    label: "View details",
+                                    submit: {
+                                        path: Routes.App.CallPathDetailViewIncidentSubmit,
+                                        expand: {
+                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                        },
+                                        state: {
+                                            incident
+                                        }
+                                    }
+                                },
+                                {
+                                    location: ActionsEvents.OTHER_INCIDENT_ADD_NOTE,
+                                    label: "Add note",
+                                    submit: {
+                                        path: Routes.App.CallPathNoteToIncidentSubmit,
+                                        expand: {
+                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                        },
+                                        state: {
+                                            incident
+                                        }
+                                    }
+                                },
+                                {
+                                    location: ActionsEvents.OTHER_INCIDENT_CHANGE_PRIORITY,
+                                    label: "Change Priority",
+                                    submit: {
+                                        path: Routes.App.CallPathChangeIncidentPrioritySubmit,
+                                        expand: {
+                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                        },
+                                        state: {
+                                            incident
+                                        }
+                                    }
+                                },
+                                {
+                                    location: ActionsEvents.OTHER_INCIDENT_REASSIGN,
+                                    label: "Reassign",
+                                    submit: {
+                                        path: Routes.App.CallPathAssignIncidentSubmit,
+                                        expand: {
+                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                        },
+                                        state: {
+                                            incident
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             ]
         }
-    };
+    }
 
     const mattermostOptions: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,

@@ -121,6 +121,25 @@ export type Attachment = {
     actions?: AttachmentAction[]
 };
 
+export type PostEmbeddedBindings = {
+    location: string,
+    label: string,
+    bindings?: any,
+    submit?: {
+        path: string,
+        expand: any,
+        state: any,
+    }
+}
+
+export type PostBindings = {
+    location: 'embedded',
+    app_id: string,
+    description: string,
+    bindings: PostEmbeddedBindings[]
+}
+
+
 export type PostCreate = {
     channel_id: string;
     message: string;
@@ -128,7 +147,8 @@ export type PostCreate = {
     user_id?: string;
     file_ids?: string[];
     props?: {
-        attachments: Attachment[];
+        attachments?: Attachment[];
+        app_bindings?: PostBindings[]
     }
 }
 
