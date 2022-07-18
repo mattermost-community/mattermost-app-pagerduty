@@ -57,15 +57,6 @@ export class PagerDutyClient {
          });
    }
 
-   public postNewIncidentNote(identifier: Identifier, body: PostIncidentNote): Promise<any> {
-      const path: string = `${replace(Routes.PagerDuty.IncidentPathPrefix , Routes.PathsVariable.Identifier, identifier.identifier)}`;
-      const url: string = `${config.PAGERDUTY.URL}${path}${Routes.PagerDuty.NotesPathPrefix}`;
-      var configMethod = this.headersFrom;
-
-      return axios.post(url, body, configMethod)
-         .then((response: AxiosResponse<any>) => response.data)
-         .catch(err => console.log(err))
-   }
 
    public getUsers(): Promise<GetResponse> {
       const url: string = `${config.PAGERDUTY.URL}${Routes.PagerDuty.UsersPathPrefix}`;

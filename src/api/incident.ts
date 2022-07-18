@@ -22,7 +22,7 @@ import { h6, hyperlink, joinLines } from '../utils/markdown';
 import { showMessageToMattermost } from '../utils/utils';
 import { otherActionsIncidentCall } from '../forms/other-actions-incident';
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
-import { addNoteToIncidentAction } from '../forms/add-note-incident';
+import { addNoteOpenModal, addNoteSubmitDialog } from '../forms/add-note-incident';
 import { deletePostCall } from '../forms/delete-post';
 import { closeIncidentAction } from '../forms/resolve-incident';
 import { ackAlertAction } from '../forms/ack-incident';
@@ -126,36 +126,29 @@ export const otherActionsIncident = async (request: Request, response: Response)
 };
 
 export const addNoteToIncidentModal = async (request: Request, response: Response) => {
-   const call: AppCallDialog<{ incident_message: string }> = request.body;
-   const context: AppContextAction = JSON.parse(call.state);
-   const mattermostUrl: string | undefined = context.mattermost_site_url;
-   const botAccessToken: string | undefined = context.bot_access_token;
-   const channelId: string | undefined = call.channel_id;
-   let message: string = '';
-
-   const mattermostOptions: MattermostOptions = {
-      mattermostUrl: <string>mattermostUrl,
-      accessToken: <string>botAccessToken
-   };
-   const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
+   let callResponse: AppCallResponse;
 
    try {
-      const incident: Incident = await addNoteToIncidentAction(request.body);
-      message = `Note will be added for #${incident.id}`;
+      const form = await addNoteOpenModal(request.body);
+      callResponse = newFormCallResponse(form);
    } catch (error: any) {
-      message = 'Unexpected error: ' + error.message;
+      callResponse = showMessageToMattermost(error);
+   }
+   response.json(callResponse);
+};
+
+export const addNoteToIncidentSubmit = async (request: Request, response: Response) => {
+   let callResponse: AppCallResponse;
+
+   try {
+      const message = await addNoteSubmitDialog(request.body);
+      callResponse = newOKCallResponseWithMarkdown(message);
+   } catch (error: any) {
+      callResponse = showMessageToMattermost(error);
    }
 
-   const post: PostEphemeralCreate = {
-      post: {
-         message: message,
-         channel_id: channelId,
-      },
-      user_id: call.user_id,
-   };
-   await mattermostClient.createEphemeralPost(post);
-   response.json();
-}
+   response.json(callResponse);
+};
 
 export const closePostActions = async (request: Request, response: Response) => {
    let callResponse: AppCallResponse = newOKCallResponse();
