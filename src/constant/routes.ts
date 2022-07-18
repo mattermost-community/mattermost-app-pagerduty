@@ -34,6 +34,7 @@ const AppPaths = {
 
     CallPathIncidentResolveSubmit: '/incident/resolve/submit',
     CallPathIncidentResolveAction: '/incident/resolve/action',
+    
     CallPathIncidentOtherActions: '/incident/otheractions',
 
     CallPathNoteToIncidentSubmit: '/incident/note/submit',

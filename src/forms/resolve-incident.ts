@@ -6,7 +6,7 @@ import { AppCallAction, AppCallValues, AppContextAction, Identifier, IdentifierT
 import { tryPromiseForGenerateMessage } from "../utils/utils";
 import * as _ from 'lodash';
 
-export async function closeIncidentAction(call: AppCallAction<AppContextAction>): Promise<Incident> {
+export async function closeIncidentAction(call: AppCallAction<AppContextAction>): Promise<string> {
    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
    const botAccessToken: string | undefined = call.context.bot_access_token;
    const incident: AppCallValues | undefined = call.context.incident;
@@ -46,7 +46,7 @@ export async function closeIncidentAction(call: AppCallAction<AppContextAction>)
    }
    await tryPromiseForGenerateMessage(pagerDutyClient.updateIncidentByID(identifier, data), ExceptionType.MARKDOWN, PDFailed);
    await updatePostResolveIncident(mattermostClient, postId);
-   return resIncident.incident;
+   return resIncident.incident.id;
 }
 
 async function updatePostResolveIncident(mattermostClient: MattermostClient, postId: string) {

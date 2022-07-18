@@ -36,7 +36,7 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
       const incident: Incident = responseSubscriptions.data['incident'];
    
       if (incident.status === 'acknowledged') {
-         throw new Error(`You already have acknowledged ${incident.summary}`);
+         throw new Error(`You already have acknowledged "${incident.summary}"`);
       }
       
       const data: UpdateIncident = {
@@ -55,7 +55,7 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
          'PagerDuty incident update failed'
       );
 
-      message = `You have acknowledged incident: ${incident.summary}`;
+      message = `You have acknowledged incident "${incident.summary}"`;
    } catch (error: any) {
       message = error.message;
    }

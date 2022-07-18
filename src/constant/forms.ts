@@ -38,3 +38,7 @@ export type CreateIncidentFormCommandType = {
 export const NoteModalForm = Object.freeze({
     NOTE_MESSAGE: 'incident_message'
 });
+
+export const ReassignIncidentForm = {
+    ASSIGN_TO: 'incident_assign_to'
+}

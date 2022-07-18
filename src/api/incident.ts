@@ -26,7 +26,7 @@ import { addNoteOpenModal, addNoteSubmitDialog } from '../forms/add-note-inciden
 import { deletePostCall } from '../forms/delete-post';
 import { closeIncidentAction } from '../forms/resolve-incident';
 import { ackAlertAction } from '../forms/ack-incident';
-import { reassignIncidentAction } from '../forms/reassign-incident';
+import { reassignIncidentActionForm, reassignIncidentSubmitForm } from '../forms/reassign-incident';
 
 
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
@@ -162,34 +162,27 @@ export const closePostActions = async (request: Request, response: Response) => 
    response.json(callResponse);
 };
 
-export const reassignIncidentPost = async (request: Request, response: Response) => {
-   const call: AppCallAction<AppContextAction> = request.body;
-   const context: AppContextAction = call.context;
-   const mattermostUrl: string | undefined = context.mattermost_site_url;
-   const botAccessToken: string | undefined = context.bot_access_token;
-   const channelId: string | undefined = call.channel_id;
-   let message: string = '';
-
-   const mattermostOptions: MattermostOptions = {
-      mattermostUrl: <string>mattermostUrl,
-      accessToken: <string>botAccessToken
-   };
-   const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
+export const reassignIncidentModal = async (request: Request, response: Response) => {
+   let callResponse: AppCallResponse;
 
    try {
-      message = await reassignIncidentAction(request.body);
-      await deletePostCall(request.body);
+      const form = await reassignIncidentActionForm(request.body);
+      callResponse = newFormCallResponse(form);
    } catch (error: any) {
-      message = 'Unexpected error: ' + error.message;
+      callResponse = showMessageToMattermost(error);
+   }
+   response.json(callResponse);
+};
+
+export const reassignIncidentSubmit = async (request: Request, response: Response) => {
+   let callResponse: AppCallResponse;
+
+   try {
+      const message = await reassignIncidentSubmitForm(request.body);
+      callResponse = newOKCallResponseWithMarkdown(message);
+   } catch (error: any) {
+      callResponse = showMessageToMattermost(error);
    }
 
-   const post: PostEphemeralCreate = {
-      post: {
-         message: message,
-         channel_id: <string>channelId,
-      },
-      user_id: call.user_id,
-   };
-   await mattermostClient.createEphemeralPost(post);
-   response.json();
-}
+   response.json(callResponse);
+};

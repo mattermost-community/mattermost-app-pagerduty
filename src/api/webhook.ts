@@ -63,7 +63,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                             location: ActionsEvents.CLOSE_ALERT_BUTTON_EVENT,
                             label: 'Resolve',
                             submit: {
-                                path: Routes.App.CallPathIncidentResolveSubmit,
+                                path: Routes.App.CallPathIncidentResolveAction,
                                 expand: {
                                     oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
                                     oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
@@ -82,7 +82,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     location: ActionsEvents.OTHER_INCIDENT_VIEW_DETAIL,
                                     label: "View details",
                                     submit: {
-                                        path: Routes.App.CallPathDetailViewIncidentSubmit,
+                                        path: Routes.App.CallPathDetailViewIncidentAction,
                                         expand: {
                                             oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
                                             oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
@@ -97,7 +97,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     location: ActionsEvents.OTHER_INCIDENT_ADD_NOTE,
                                     label: "Add note",
                                     submit: {
-                                        path: Routes.App.CallPathNoteToIncidentSubmit,
+                                        path: Routes.App.CallPathNoteToIncidentAction,
                                         expand: {
                                             oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
                                             oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
@@ -112,7 +112,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     location: ActionsEvents.OTHER_INCIDENT_CHANGE_PRIORITY,
                                     label: "Change Priority",
                                     submit: {
-                                        path: Routes.App.CallPathChangeIncidentPrioritySubmit,
+                                        path: Routes.App.CallPathChangeIncidentPriorityAction,
                                         expand: {
                                             oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
                                             oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
@@ -127,7 +127,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     location: ActionsEvents.OTHER_INCIDENT_REASSIGN,
                                     label: "Reassign",
                                     submit: {
-                                        path: Routes.App.CallPathAssignIncidentSubmit,
+                                        path: Routes.App.CallPathAssignIncidentAction,
                                         expand: {
                                             oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
                                             oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
@@ -162,17 +162,13 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
 
-    const pdClient: PartialCall = api({ token: 'u+A6-xHEHsaUDY6U4Wmw', tokenType: 'token' });
-    const responseIncident: APIResponse = await pdClient.get(replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, eventData.incident.id));
-    const incident: Incident = responseIncident.data['incident'];
-
     const payload: PostCreate = {
         message: '',
         channel_id: channelId,
         props: {
             attachments: [
                 {
-                    text: `Note added to ${hyperlink(incident.summary, incident.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)} \n "${eventData.content}"`
+                    text: `Note added to ${hyperlink(eventData.incident.summary, eventData.incident.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)} \n "${eventData.content}"`
                 }
             ]
         }

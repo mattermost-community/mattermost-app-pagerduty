@@ -297,11 +297,12 @@ export type ServiceResponse = {
 }
 
 export type UserResponse = {
-   id: string,
-   type: 'user',
-   name: string,
-   email: string,
-   html_url: string
+    summary: string,
+    id: string,
+    type: 'user',
+    name: string,
+    email: string,
+    html_url: string,
 }
 
 export type PostIncidentNote = {

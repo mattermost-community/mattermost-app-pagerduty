@@ -1,31 +1,84 @@
-import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
-import config from "../config";
-import { ExceptionType, PDFailed } from "../constant";
-import { AppCallAction, AppCallDialog, AppContextAction, Identifier, IdentifierType, Incident, PostIncidentNote, UpdateIncident } from "../types";
-import { tryPromiseForGenerateMessage } from "../utils/utils";
+import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
+import { PagerDutyClient, PagerDutyOptions, PagerDutyOpts } from "../clients/pagerduty";
+import { AppExpandLevels, AppFieldTypes, ExceptionType, NoteModalForm, PagerDutyIcon, PDFailed, ReassignIncidentForm, Routes } from "../constant";
+import { AppCallAction, AppCallRequest, AppCallValues, AppContextAction, AppField, AppForm, AppSelectOption, Identifier, IdentifierType, Incident, Oauth2App, UpdateIncident, UserResponse } from "../types";
+import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
+import { getUsersOptionList } from "./pagerduty-options";
 
-export async function reassignIncidentAction(call: AppCallAction<AppContextAction>): Promise<string> {
-   const context: AppContextAction = call.context;
-   const selectedOpt: string = <string>context.selected_option;
-   const incidentId: string = context.incident.id;
+export async function reassignIncidentActionForm(call: AppCallRequest): Promise<AppForm> {
+   const oauth2: Oauth2App | undefined = call.context.oauth2;
+   const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 
-   const pdOpt: PagerDutyOptions = {
-      api_token: '',
-      user_email: 'lizeth.garcia@ancient.mx'
-   }
-   const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);
-
-   const identifier: Identifier = {
-      identifier: incidentId,
-      identifierType: IdentifierType.ID
-   };
-
-   const userIdentifier: Identifier = {
-      identifier: selectedOpt,
-      identifierType: IdentifierType.ID
-   };
+   const incidentValues: AppCallValues | undefined = call.state.incident;
+   const incidentId: string = incidentValues?.id;
    
-   const user: { user: any } = await tryPromiseForGenerateMessage(pagerDutyClient.getUserByID(userIdentifier), ExceptionType.MARKDOWN, PDFailed);
+   const pdClient: PartialCall = api(tokenOpts);
+
+   const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
+      pdClient.get(
+         replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty get incident failed'
+   );
+   const incident: Incident = responseIncident.data['incident'];
+
+   const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts);
+   const fields: AppField[] = [
+      {
+         modal_label: 'User',
+         type: AppFieldTypes.STATIC_SELECT,
+         name: ReassignIncidentForm.ASSIGN_TO,
+         is_required: true, 
+         options: assignToOpts,
+      },
+   ];
+
+   return {
+      title: 'Assign incident',
+      header: `Choose a user to assign the incident "${incident.summary}" to:`,
+      icon: PagerDutyIcon,
+      fields: fields,
+      submit: {
+         path: `${Routes.App.CallPathAssignIncidentSubmit}`,
+         expand: {
+            app: AppExpandLevels.EXPAND_SUMMARY,
+            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+         },
+         state: call.state
+      }
+   } as AppForm;
+}
+
+export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<string> {
+   const oauth2: Oauth2App | undefined = call.context.oauth2;
+   const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+
+   const incidentValues: AppCallValues | undefined = call.state.incident;
+   const incidentId: string = incidentValues?.id;
+
+   const values: AppCallValues | undefined = call.values;
+   const assignTo: AppSelectOption = values?.[ReassignIncidentForm.ASSIGN_TO];
+   const pdClient: PartialCall = api(tokenOpts);
+
+   const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
+      pdClient.get(
+         replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty get incident failed'
+   );
+   const incident: Incident = responseIncident.data['incident'];
+
+   const responseUser: APIResponse = await tryPromiseForGenerateMessage(
+      pdClient.get(
+         replace(Routes.PagerDuty.UserPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty get user failed'
+   );
+   const user: UserResponse = responseUser.data['user'];
 
    const data: UpdateIncident = {
       incident: {
@@ -33,13 +86,21 @@ export async function reassignIncidentAction(call: AppCallAction<AppContextActio
          assignments: [
             {
                assignee: {
-                  id: selectedOpt,
+                  id: assignTo.value,
                   type: 'user'
                }
             }
          ]
       }
    };
-   await tryPromiseForGenerateMessage(pagerDutyClient.updateIncidentByID(identifier, data), ExceptionType.MARKDOWN, PDFailed);
-   return `You have reassigned incident #${incidentId} to ${user?.user?.name}`;
+
+   await tryPromiseForGenerateMessage(
+      pdClient.put(
+         replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId),
+         { data }
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty incident update failed'
+   );
+   return `You have reassigned incident "${incident.summary}" to ${user?.name}`;
 }
