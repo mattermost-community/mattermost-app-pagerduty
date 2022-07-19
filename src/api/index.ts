@@ -52,6 +52,9 @@ router.post(`${Routes.App.CallPathNoteToIncidentSubmit}`, cIncident.addNoteToInc
 router.post(`${Routes.App.CallPathAssignIncidentAction}`, cIncident.reassignIncidentModal);
 router.post(`${Routes.App.CallPathAssignIncidentSubmit}`, cIncident.reassignIncidentSubmit);
 
+router.post(`${Routes.App.CallPathChangeIncidentPriorityAction}`, cIncident.changePriorityIncidentModal);
+router.post(`${Routes.App.CallPathChangeIncidentPrioritySubmit}`, cIncident.changePriorityIncidentSubmit);
+
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));

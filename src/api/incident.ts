@@ -22,6 +22,7 @@ import { confirmResolveOpenModal, callResolveIncidentSubmit } from '../forms/res
 import { ackAlertAction } from '../forms/ack-incident';
 import { reassignIncidentActionForm, reassignIncidentSubmitForm } from '../forms/reassign-incident';
 import { showIncidentDetailPost } from '../forms/incident-detail';
+import { changeIncidentPriorityActionForm, changeIncidentPrioritySubmitForm } from '../forms/change-incident-priority';
 
 
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
@@ -186,6 +187,31 @@ export const reassignIncidentSubmit = async (request: Request, response: Respons
 
    try {
       const message = await reassignIncidentSubmitForm(request.body);
+      callResponse = newOKCallResponseWithMarkdown(message);
+   } catch (error: any) {
+      callResponse = showMessageToMattermost(error);
+   }
+
+   response.json(callResponse);
+};
+
+export const changePriorityIncidentModal = async (request: Request, response: Response) => {
+   let callResponse: AppCallResponse;
+
+   try {
+      const form = await changeIncidentPriorityActionForm(request.body);
+      callResponse = newFormCallResponse(form);
+   } catch (error: any) {
+      callResponse = showMessageToMattermost(error);
+   }
+   response.json(callResponse);
+};
+
+export const changePriorityIncidentSubmit = async (request: Request, response: Response) => {
+   let callResponse: AppCallResponse;
+
+   try {
+      const message = await changeIncidentPrioritySubmitForm(request.body);
       callResponse = newOKCallResponseWithMarkdown(message);
    } catch (error: any) {
       callResponse = showMessageToMattermost(error);

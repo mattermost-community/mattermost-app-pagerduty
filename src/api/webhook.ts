@@ -267,12 +267,41 @@ async function notifyIncidentResolved({ data: { event }, rawQuery }: WebhookRequ
     await mattermostClient.createPost(payload);
 }
 
+async function notifyChangeIncidentPriority({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
+    const mattermostUrl: string | undefined = context.mattermost_site_url;
+    const botAccessToken: string | undefined = context.bot_access_token;
+    const eventData: EventWebhook = event.data;
+
+    const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
+    const channelId: string = <string>parsedQuery['channelId'];
+
+    const payload: PostCreate = {
+        message: '',
+        channel_id: channelId,
+        props: {
+            attachments: [
+                {
+                    text: `Updated ${hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url)} priority to ${hyperlink(`${eventData.priority.summary}`, eventData.priority.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)}`
+                }
+            ]
+        }
+    };
+
+    const mattermostOptions: MattermostOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>botAccessToken
+    };
+    const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
+    await mattermostClient.createPost(payload);
+}
+
 const WEBHOOKS_ACTIONS: { [key: string]: Function } = {
     'incident.triggered': notifyIncidentTriggered,
     'incident.annotated': notifyIncidentAnnotated,
     'incident.acknowledged': notifyIncidentAcknowledged,
     'incident.reassigned': notifyIncidentReassigned,
-    'incident.resolved': notifyIncidentResolved
+    'incident.resolved': notifyIncidentResolved,
+    'incident.priority_updated': notifyChangeIncidentPriority
 };
 
 export const incomingWebhook = async (request: Request, response: Response) => {

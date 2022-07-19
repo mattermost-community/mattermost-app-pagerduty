@@ -42,3 +42,7 @@ export const NoteModalForm = Object.freeze({
 export const ReassignIncidentForm = {
     ASSIGN_TO: 'incident_assign_to'
 }
+
+export const ChangeIncidentPriorityForm = {
+    PRIORITY: 'incident_priority'
+}

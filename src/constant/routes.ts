@@ -34,8 +34,6 @@ const AppPaths = {
 
     CallPathIncidentResolveSubmit: '/incident/resolve/submit',
     CallPathIncidentResolveAction: '/incident/resolve/action',
-    
-    CallPathIncidentOtherActions: '/incident/otheractions',
 
     CallPathNoteToIncidentSubmit: '/incident/note/submit',
     CallPathNoteToIncidentAction: '/incident/note/action',
@@ -73,6 +71,9 @@ const PagerDutyPaths = {
     UsersPathPrefix: '/users',
     CurrentUserPathPrefix: '/users/me',
     UserPathPrefix: `/users/${PathsVariable.Identifier}`,
+
+    PrioritiesPathPrefix: 'priorities',
+    PriorityPathPrefix: `/priorities/${PathsVariable.Identifier}`,
 
     WebhookSubscriptionsPathPrefix: '/webhook_subscriptions',
     WebhookSubscriptionPathPrefix: `/webhook_subscriptions/${PathsVariable.Identifier}`,

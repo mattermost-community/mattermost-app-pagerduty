@@ -22,7 +22,6 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
    );
 
    const incident: Incident = responseIncident.data['incident'];
-   console.log(incident);
    
    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
    const botAccessToken: string | undefined = call.context.bot_access_token;
@@ -43,13 +42,27 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
          short: true,
          title: 'Escalation Policy',
          value: h6(`${hyperlink(`${incident.escalation_policy.summary}`, incident.escalation_policy.html_url)}`),
-      },
-      {
-         short: true,
-         title: 'Urgency',
-         value: `${incident.urgency}`.toUpperCase(),
       }
    ]
+
+   const priority = incident?.priority;
+   if (!!priority) {
+      fields.push(
+         {
+            short: true,
+            title: 'Priority',
+            value: `${priority.summary} (${`${incident.urgency}`.toUpperCase()})`,
+         }
+      );
+   } else {
+      fields.push(
+         {
+            short: true,   
+            title: 'Urgency',
+            value: `${incident.urgency}`.toUpperCase(),
+         }
+      );
+   }
 
    const assignee = incident?.assignments[0]?.assignee;
    if (!!assignee) {
