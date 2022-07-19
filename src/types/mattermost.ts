@@ -109,16 +109,18 @@ export type AttachmentAction = {
     options?: AttachmentOption[];
 }
 
+export type AppAttachmentField = {
+    short: boolean;
+    title: string;
+    value: string;
+}
+
 export type Attachment = {
     text?: string;
     title?: string;
     title_link?: string;
     color?: string;
-    fields?: {
-        short: boolean;
-        title: string;
-        value: string;
-    }[];
+    fields?: AppAttachmentField[];
     actions?: AttachmentAction[]
 };
 

@@ -1,4 +1,3 @@
-import { PagerDutyClient, PagerDutyOptions, PagerDutyOpts } from "../clients/pagerduty";
 import {
    AppFieldTypes,
    Routes,
@@ -6,14 +5,12 @@ import {
    CreateIncidentForm,
    CreateIncidentFormModalType,
    CreateIncidentFormCommandType,
-   PDFailed,
    ExceptionType,
    AppExpandLevels
 } from "../constant";
 import { AppCallRequest, AppField, AppForm, AppSelectOption, Oauth2App } from "../types";
 import { getServiceOptionList, getUsersOptionList } from "./pagerduty-options";
-import config from '../config';
-import { PostIncident } from "../types/pagerduty";
+import { PagerDutyOpts, PostIncident } from "../types/pagerduty";
 import { tryPromiseForGenerateMessage, tryPromisePagerdutyWithMessage } from "../utils/utils";
 import { api, PartialCall } from "@pagerduty/pdjs/build/src/api";
 

@@ -1,5 +1,9 @@
 import {Channel} from './mattermost';
 
+export type PagerDutyOpts = {
+    token: string,
+    tokenType: string
+}
 export interface UserMe {
     name: string;
     email: string;

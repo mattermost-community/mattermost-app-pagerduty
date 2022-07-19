@@ -1,8 +1,7 @@
 import { api } from "@pagerduty/pdjs";
 import { APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
-import { PagerDutyClient, PagerDutyOptions, PagerDutyOpts } from "../clients/pagerduty";
 import { ExceptionType, Routes } from "../constant";
-import { AppSelectOption, AttachmentOption, Service } from "../types";
+import { AppSelectOption, PagerDutyOpts, Service } from "../types";
 import { tryPromiseForGenerateMessage } from "../utils/utils";
 
 export async function getServiceOptionList(pdOpt: PagerDutyOpts): Promise<AppSelectOption[]> {

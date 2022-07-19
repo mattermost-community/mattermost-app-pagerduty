@@ -1,7 +1,6 @@
 import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
-import { PagerDutyClient, PagerDutyOptions, PagerDutyOpts } from "../clients/pagerduty";
-import { AppExpandLevels, AppFieldTypes, ExceptionType, NoteModalForm, PagerDutyIcon, PDFailed, ReassignIncidentForm, Routes } from "../constant";
-import { AppCallAction, AppCallRequest, AppCallValues, AppContextAction, AppField, AppForm, AppSelectOption, Identifier, IdentifierType, Incident, Oauth2App, UpdateIncident, UserResponse } from "../types";
+import { AppExpandLevels, AppFieldTypes, ExceptionType, PagerDutyIcon, ReassignIncidentForm, Routes } from "../constant";
+import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Incident, Oauth2App, PagerDutyOpts, UpdateIncident, UserResponse } from "../types";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
 import { getUsersOptionList } from "./pagerduty-options";
 

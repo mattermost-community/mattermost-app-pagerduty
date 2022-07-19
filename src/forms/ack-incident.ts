@@ -1,20 +1,12 @@
 import {
-   AppCallAction,
    AppCallRequest,
    AppCallValues,
-   AppContextAction,
-   Identifier,
-   IdentifierType,
    Incident,
    Oauth2App,
    UpdateIncident,
 } from '../types';
-import {  ExceptionType,  PDFailed, Routes,  } from '../constant';
-import {  KVStoreOptions } from '../clients/kvstore';
+import {  ExceptionType,  Routes,  } from '../constant';
 import {  replace, tryPromiseForGenerateMessage } from '../utils/utils';
-import { MattermostClient, MattermostOptions } from '../clients/mattermost';
-import config from '../config';
-import { PagerDutyClient, PagerDutyOptions } from '../clients/pagerduty';
 import { api, APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
 
 export async function ackAlertAction(call: AppCallRequest): Promise<string> {

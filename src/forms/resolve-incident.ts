@@ -1,5 +1,4 @@
 import { MattermostClient, MattermostOptions } from "../clients/mattermost";
-import { PagerDutyOpts } from "../clients/pagerduty";
 import { AppExpandLevels, ExceptionType, PagerDutyIcon, Routes } from "../constant";
 import { 
    AppCallRequest, 
@@ -7,6 +6,7 @@ import {
    AppForm, 
    Incident, 
    Oauth2App, 
+   PagerDutyOpts, 
    PostUpdate, 
    UpdateIncident 
 } from "../types";

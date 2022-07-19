@@ -1,8 +1,7 @@
 import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
-import { AppExpandLevels, AppFieldTypes, ExceptionType, NoteModalForm, PagerDutyIcon, PDFailed, Routes } from "../constant";
+import { AppExpandLevels, AppFieldTypes, ExceptionType, NoteModalForm, PagerDutyIcon, Routes } from "../constant";
 import { AppCallRequest, AppCallValues, AppField, AppForm, Incident, Oauth2App, PostIncidentNote } from "../types";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
-
 
 export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
 
