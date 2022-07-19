@@ -8,23 +8,18 @@ import {
 } from '../utils/call-responses';
 import { getAllIncidentsCall } from '../forms/list-incident';
 import {
-   AppCallAction,
-   AppCallDialog,
    AppCallRequest,
    AppCallResponse,
-   AppContextAction,
    Incident,
-   PostEphemeralCreate
 } from '../types';
 import { addIncidentFromCommand, createIncidentFormModal, submitCreateIncident } from '../forms/incident-create';
 import { CreateIncidentFormCommandType } from '../constant';
 import { h6, hyperlink, joinLines } from '../utils/markdown';
 import { showMessageToMattermost } from '../utils/utils';
 import { otherActionsIncidentCall } from '../forms/other-actions-incident';
-import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 import { addNoteOpenModal, addNoteSubmitDialog } from '../forms/add-note-incident';
 import { deletePostCall } from '../forms/delete-post';
-import { closeIncidentAction } from '../forms/resolve-incident';
+import { confirmResolveOpenModal, callResolveIncidentSubmit } from '../forms/resolve-incident';
 import { ackAlertAction } from '../forms/ack-incident';
 import { reassignIncidentActionForm, reassignIncidentSubmitForm } from '../forms/reassign-incident';
 
@@ -99,11 +94,24 @@ export const ackIncidentAction = async (request: Request, response: Response) =>
    response.json(callResponse);
 };
 
-export const resolveIncidentAction = async (request: Request, response: Response) => {
+export const resolveIncidentModal = async (request: Request, response: Response) => {
    let callResponse: AppCallResponse = newOKCallResponse();
 
    try {
-      const message = await closeIncidentAction(request.body);
+      const form = await confirmResolveOpenModal(request.body);
+      callResponse = newFormCallResponse(form);
+   } catch (error: any) {
+      callResponse = showMessageToMattermost(error);
+   }
+
+   response.json(callResponse);
+};
+
+export const resolveIncidentSubmit = async (request: Request, response: Response) => {
+   let callResponse: AppCallResponse = newOKCallResponse();
+
+   try {
+      const message = await callResolveIncidentSubmit(request.body);
       callResponse = newOKCallResponseWithMarkdown(message);
    } catch (error: any) {
       callResponse = showMessageToMattermost(error);
@@ -123,6 +131,18 @@ export const otherActionsIncident = async (request: Request, response: Response)
       callResponse = showMessageToMattermost(error);
       response.json(callResponse);
    }
+};
+
+export const showIncidentDetail = async (request: Request, response: Response) => {
+   let callResponse: AppCallResponse;
+
+   try {
+      const form = await addNoteOpenModal(request.body);
+      callResponse = newFormCallResponse(form);
+   } catch (error: any) {
+      callResponse = showMessageToMattermost(error);
+   }
+   response.json(callResponse);
 };
 
 export const addNoteToIncidentModal = async (request: Request, response: Response) => {

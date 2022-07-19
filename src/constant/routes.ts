@@ -1,4 +1,3 @@
-import {fOauth2Disconnect} from "../api/configure";
 
 const PathsVariable = {
     Identifier: ':IDENTIFIER'
@@ -29,6 +28,7 @@ const AppPaths = {
     OAuthConnectPath: '/oauth2/connect',
 
     CallPathIncidentCreate: '/incident/create',
+    
     CallPathIncidentAcknowledgedAction: '/incident/acknowledged/action',
     CallPathIncidentUnAcknowledgedAction: '/incident/unacknowledged/action',
 
@@ -46,10 +46,10 @@ const AppPaths = {
     CallPathChangeIncidentPrioritySubmit: '/incident/priority/change/submit',
     CallPathChangeIncidentPriorityAction: '/incident/priority/change/action',
 
-    CallPathDetailViewIncidentSubmit: '/incident/detail/submit',
     CallPathDetailViewIncidentAction: '/incident/detail/action',
 
     CallPathIncidentCloseOptions: '/incident/closeoptions',
+
     CallPathIncomingWebhookPath: '/webhook',
     CallPathSubmit: '/submit',
     CallPathForm: '/form',

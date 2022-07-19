@@ -54,7 +54,7 @@ export function errorDataMessage(error: Exception | Error | any): string {
 }
 
 export function errorDataPagerduty(data: any): string {
-    const errorMessage: string = data?.data?.errors?.detail || data?.data?.error?.message;
+    const errorMessage: string = data?.data?.errors?.detail || data?.data?.error?.errors?.join() || data?.data?.error?.message;
     return errorMessage;
 }
 

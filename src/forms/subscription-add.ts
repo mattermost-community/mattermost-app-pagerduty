@@ -6,8 +6,8 @@ import {Exception} from '../utils/exception';
 import {replace, tryPromiseForGenerateMessage} from '../utils/utils';
 
 export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
-    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-    //const mattermostUrl: string | undefined = "https://0395-201-160-204-2.ngrok.io";
+    //const mattermostUrl: string | undefined = call.context.mattermost_site_url;
+    const mattermostUrl: string | undefined = "https://0395-201-160-204-2.ngrok.io";
     const appPath: string | undefined = call.context.app_path;
     const whSecret: string | undefined = call.context.app?.webhook_secret;
     const oauth2: Oauth2App | undefined = call.context.oauth2;

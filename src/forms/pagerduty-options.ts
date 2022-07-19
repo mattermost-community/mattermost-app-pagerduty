@@ -37,15 +37,3 @@ export async function getUsersOptionList(pdOpt: PagerDutyOpts): Promise<AppSelec
 
    return [];
 }
-
-export async function getUsersAttachmentOptionList(pdOpt: PagerDutyOptions): Promise<AttachmentOption[]> {
-   const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);
-   const response = await pagerDutyClient.getUsers();
-   const users = response?.users;
-   if (!!users) {
-      const options: AttachmentOption[] = [...users.map((b: any) => { return { text: b.email, value: b.id } })];
-      return options;
-   }
-
-   return [];
-}
