@@ -1,13 +1,26 @@
 import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
 import { AppExpandLevels, AppFieldTypes, ExceptionType, NoteModalForm, PagerDutyIcon, Routes } from "../constant";
-import { AppCallRequest, AppCallValues, AppField, AppForm, Incident, Oauth2App, PostIncidentNote } from "../types";
+import { AppCallRequest, AppCallValues, AppField, AppForm, Incident, Oauth2App, PagerDutyOpts, PostIncidentNote } from "../types";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
 
 export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
+   const oauth2: Oauth2App | undefined = call.context.oauth2;
+   const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+   const pdClient: PartialCall = api(tokenOpts);
+   const incidentValues: AppCallValues | undefined = call.state.incident;
+   const incidentId: string = incidentValues?.id;
 
+   const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
+      pdClient.get(
+         replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty get incident failed'
+   );
+   const incident: Incident = responseIncident.data['incident'];
    const fields: AppField[] = [
       {
-         modal_label: 'Note',
+         modal_label: `Note for incident "${incident.summary}"`,
          type: AppFieldTypes.TEXT,
          name: NoteModalForm.NOTE_MESSAGE,
          description: 'Your note here...',
