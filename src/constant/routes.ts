@@ -1,4 +1,3 @@
-import {fOauth2Disconnect} from "../api/configure";
 
 const PathsVariable = {
     Identifier: ':IDENTIFIER'
@@ -29,14 +28,26 @@ const AppPaths = {
     OAuthConnectPath: '/oauth2/connect',
 
     CallPathIncidentCreate: '/incident/create',
+    
     CallPathIncidentAcknowledgedAction: '/incident/acknowledged/action',
     CallPathIncidentUnAcknowledgedAction: '/incident/unacknowledged/action',
+
+    CallPathIncidentResolveSubmit: '/incident/resolve/submit',
     CallPathIncidentResolveAction: '/incident/resolve/action',
-    CallPathIncidentOtherActions: '/incident/otheractions',
+
+    CallPathNoteToIncidentSubmit: '/incident/note/submit',
     CallPathNoteToIncidentAction: '/incident/note/action',
+
+    CallPathAssignIncidentSubmit: '/incident/assign/submit',
     CallPathAssignIncidentAction: '/incident/assign/action',
-    CallPathIncidentCloseOptions: '/incident/closeoptions',
+
+    CallPathChangeIncidentPrioritySubmit: '/incident/priority/change/submit',
     CallPathChangeIncidentPriorityAction: '/incident/priority/change/action',
+
+    CallPathDetailViewIncidentAction: '/incident/detail/action',
+
+    CallPathIncidentCloseOptions: '/incident/closeoptions',
+
     CallPathIncomingWebhookPath: '/webhook',
     CallPathSubmit: '/submit',
     CallPathForm: '/form',
@@ -60,6 +71,9 @@ const PagerDutyPaths = {
     UsersPathPrefix: '/users',
     CurrentUserPathPrefix: '/users/me',
     UserPathPrefix: `/users/${PathsVariable.Identifier}`,
+
+    PrioritiesPathPrefix: 'priorities',
+    PriorityPathPrefix: `/priorities/${PathsVariable.Identifier}`,
 
     WebhookSubscriptionsPathPrefix: '/webhook_subscriptions',
     WebhookSubscriptionPathPrefix: `/webhook_subscriptions/${PathsVariable.Identifier}`,

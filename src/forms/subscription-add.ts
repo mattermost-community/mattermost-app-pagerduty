@@ -39,7 +39,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
         }
     }
 
-    const urlWithParams = new URL(`https://b92b-201-160-205-161.ngrok.io${appPath}${Routes.App.CallPathIncomingWebhookPath}`);
+    const urlWithParams = new URL(`${mattermostUrl}${appPath}${Routes.App.CallPathIncomingWebhookPath}`);
     urlWithParams.searchParams.append('secret', <string>whSecret);
     urlWithParams.searchParams.append('channelId', channelId);
 

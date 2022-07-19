@@ -109,17 +109,39 @@ export type AttachmentAction = {
     options?: AttachmentOption[];
 }
 
+export type AppAttachmentField = {
+    short: boolean;
+    title: string;
+    value: string;
+}
+
 export type Attachment = {
     text?: string;
     title?: string;
     title_link?: string;
-    fields?: {
-        short: boolean;
-        title: string;
-        value: string;
-    }[];
+    color?: string;
+    fields?: AppAttachmentField[];
     actions?: AttachmentAction[]
 };
+
+export type PostEmbeddedBindings = {
+    location: string,
+    label: string,
+    bindings?: any,
+    submit?: {
+        path: string,
+        expand: any,
+        state: any,
+    }
+}
+
+export type PostBindings = {
+    location: 'embedded',
+    app_id: string,
+    description: string,
+    bindings: PostEmbeddedBindings[]
+}
+
 
 export type PostCreate = {
     channel_id: string;
@@ -128,7 +150,8 @@ export type PostCreate = {
     user_id?: string;
     file_ids?: string[];
     props?: {
-        attachments: Attachment[];
+        attachments?: Attachment[];
+        app_bindings?: PostBindings[]
     }
 }
 

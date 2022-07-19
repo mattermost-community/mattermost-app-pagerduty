@@ -1,10 +1,10 @@
 import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
-import { AppExpandLevels, AppFieldTypes, ExceptionType, PagerDutyIcon, ReassignIncidentForm, Routes } from "../constant";
-import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Incident, Oauth2App, PagerDutyOpts, UpdateIncident, UserResponse } from "../types";
+import { AppExpandLevels, AppFieldTypes, ChangeIncidentPriorityForm, ExceptionType, PagerDutyIcon, ReassignIncidentForm, Routes } from "../constant";
+import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Incident, Oauth2App, PagerDutyOpts, Priority, UpdateIncident, UserResponse } from "../types";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
-import { getUsersOptionList } from "./pagerduty-options";
+import { getPrioritiesOptionList, getUsersOptionList } from "./pagerduty-options";
 
-export async function reassignIncidentActionForm(call: AppCallRequest): Promise<AppForm> {
+export async function changeIncidentPriorityActionForm(call: AppCallRequest): Promise<AppForm> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 
@@ -22,24 +22,24 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
    );
    const incident: Incident = responseIncident.data['incident'];
 
-   const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts);
+   const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(tokenOpts);
    const fields: AppField[] = [
       {
-         modal_label: 'User',
+         modal_label: 'Priorities',
          type: AppFieldTypes.STATIC_SELECT,
-         name: ReassignIncidentForm.ASSIGN_TO,
+         name: ChangeIncidentPriorityForm.PRIORITY,
          is_required: true, 
-         options: assignToOpts,
+         options: prioritiesOpts,
       },
    ];
 
    return {
-      title: 'Assign incident',
-      header: `Choose a user to assign the incident "${incident.summary}" to:`,
+      title: 'Change incident priority',
+      header: `Choose a new priority level to the incident "${incident.summary}":`,
       icon: PagerDutyIcon,
       fields: fields,
       submit: {
-         path: `${Routes.App.CallPathAssignIncidentSubmit}`,
+         path: `${Routes.App.CallPathChangeIncidentPrioritySubmit}`,
          expand: {
             app: AppExpandLevels.EXPAND_SUMMARY,
             oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
@@ -50,7 +50,7 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
    } as AppForm;
 }
 
-export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<string> {
+export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Promise<string> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 
@@ -58,7 +58,7 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
    const incidentId: string = incidentValues?.id;
 
    const values: AppCallValues | undefined = call.values;
-   const assignTo: AppSelectOption = values?.[ReassignIncidentForm.ASSIGN_TO];
+   const assignTo: AppSelectOption = values?.[ChangeIncidentPriorityForm.PRIORITY];
    const pdClient: PartialCall = api(tokenOpts);
 
    const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
@@ -70,26 +70,19 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
    );
    const incident: Incident = responseIncident.data['incident'];
 
-   const responseUser: APIResponse = await tryPromiseForGenerateMessage(
+   const responsePriority: APIResponse = await tryPromiseForGenerateMessage(
       pdClient.get(
-         replace(Routes.PagerDuty.UserPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
+         replace(Routes.PagerDuty.PriorityPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get user failed'
+      'PagerDuty get priority failed'
    );
-   const user: UserResponse = responseUser.data['user'];
+   const priority: Priority = responsePriority.data['priority'];
 
    const data: UpdateIncident = {
       incident: {
          type: 'incident',
-         assignments: [
-            {
-               assignee: {
-                  id: assignTo.value,
-                  type: 'user'
-               }
-            }
-         ]
+         priority: priority
       }
    };
 
@@ -101,5 +94,5 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
       ExceptionType.MARKDOWN,
       'PagerDuty incident update failed'
    );
-   return `You have reassigned incident "${incident.summary}" to ${user?.name}`;
+   return `You have updated incident "${incident.summary}" priority to ${priority.name}`;
 }

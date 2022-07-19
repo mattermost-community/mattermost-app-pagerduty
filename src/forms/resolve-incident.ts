@@ -1,41 +1,83 @@
 import { MattermostClient, MattermostOptions } from "../clients/mattermost";
-import { PagerDutyClient, PagerDutyOptions } from "../clients/pagerduty";
-import config from "../config";
-import { ExceptionType, PDFailed } from "../constant";
-import { AppCallAction, AppCallValues, AppContextAction, Identifier, IdentifierType, Incident, PostUpdate, UpdateIncident } from "../types";
-import { tryPromiseForGenerateMessage } from "../utils/utils";
+import { AppExpandLevels, ExceptionType, PagerDutyIcon, Routes } from "../constant";
+import { 
+   AppCallRequest, 
+   AppCallValues, 
+   AppForm, 
+   Incident, 
+   Oauth2App, 
+   PagerDutyOpts, 
+   PostUpdate, 
+   UpdateIncident 
+} from "../types";
+import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
 import * as _ from 'lodash';
+import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
+import { Exception } from "../utils/exception";
+import { h6, hyperlink } from "../utils/markdown";
 
-export async function closeIncidentAction(call: AppCallAction<AppContextAction>): Promise<Incident> {
-   const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-   const botAccessToken: string | undefined = call.context.bot_access_token;
-   const incident: AppCallValues | undefined = call.context.incident;
-   const postId: string = call.post_id;
+export async function confirmResolveOpenModal(call: AppCallRequest): Promise<AppForm> {
+   const oauth2: Oauth2App | undefined = call.context.oauth2;
+   const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+   const pdClient: PartialCall = api(tokenOpts);
+   const incidentValues: AppCallValues | undefined = call.state.incident;
+   const incidentId: string = incidentValues?.id;
+   const postId: string = <string>call.context.post?.id;
 
-   const mattermostOptions: MattermostOptions = {
-      mattermostUrl: <string>mattermostUrl,
-      accessToken: <string>botAccessToken
-   };
-   const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
-
-   const incidentId: string = incident?.id;
-
-   const pdOpt: PagerDutyOptions = {
-      api_token: '',
-      user_email: 'lizeth.garcia@ancient.mx'
+   const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
+      pdClient.get(
+         replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty get incident failed'
+   );
+   const incident: Incident = responseIncident.data['incident'];
+   if (incident.status === 'resolved') {
+      await updatePostResolveIncident(call, postId, incident);
+      throw new Exception(ExceptionType.MARKDOWN, `"PagerDuty incident update failed". You already have resolved incident "${incident.summary}"`)
    }
-   const pagerDutyClient: PagerDutyClient = new PagerDutyClient(pdOpt);
 
-   const identifier: Identifier = {
-      identifier: incidentId,
-      identifierType: IdentifierType.ID
-   };
-   const resIncident: { incident: Incident } = await tryPromiseForGenerateMessage(pagerDutyClient.getIncidentByID(identifier), ExceptionType.MARKDOWN, PDFailed);
+   return {
+      title: 'Resolve incident',
+      header: `Are you sure you want to resolve incident "${incident.summary}"?`,
+      icon: PagerDutyIcon,
+      fields: [],
+      submit: {
+         path: `${Routes.App.CallPathIncidentResolveSubmit}`,
+         expand: {
+            app: AppExpandLevels.EXPAND_SUMMARY,
+            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+         },
+         state: {
+            ...call.state,
+            post: call.context.post
+         }
+      }
+   } as AppForm;
+}
 
+export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<string> {
+   const oauth2: Oauth2App | undefined = call.context.oauth2;
+   const incidentValues: AppCallValues | undefined = call.state.incident;
+   const incidentId: string = incidentValues?.id;
+   const postId: string = <string>call.state.post?.id;
 
-   if (resIncident.incident.status === 'closed') {
-      await updatePostResolveIncident(mattermostClient, postId);
-      throw new Error(`You have resolved #${incidentId}`);
+   const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
+
+   const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
+      pdClient.get(
+         replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty get incident failed'
+   );
+
+   const incident: Incident = responseIncident.data['incident'];
+  
+   if (incident.status === 'resolved') {
+      await updatePostResolveIncident(call, postId, incident);
+      throw new Exception(ExceptionType.MARKDOWN, `"PagerDuty incident update failed". You already have resolved incident "${incident.summary}"`)
    }
 
    const data: UpdateIncident = {
@@ -44,20 +86,57 @@ export async function closeIncidentAction(call: AppCallAction<AppContextAction>)
          status: 'resolved'
       }
    }
-   await tryPromiseForGenerateMessage(pagerDutyClient.updateIncidentByID(identifier, data), ExceptionType.MARKDOWN, PDFailed);
-   await updatePostResolveIncident(mattermostClient, postId);
-   return resIncident.incident;
+   
+   await tryPromiseForGenerateMessage(
+      pdClient.put(
+         replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId),
+         { data }
+      ),
+      ExceptionType.MARKDOWN,
+      'PagerDuty incident update failed'
+   );
+
+   await updatePostResolveIncident(call, postId, incident);
+   return `You have succesfully resolved incident "${incident.summary}"!`;
+
 }
 
-async function updatePostResolveIncident(mattermostClient: MattermostClient, postId: string) {
-   const currentPost = await tryPromiseForGenerateMessage(mattermostClient.getPost(postId), ExceptionType.MARKDOWN, 'Mattermost failed');
+async function updatePostResolveIncident(call: AppCallRequest, postId: string, incident: Incident) {
+   const mattermostUrl: string | undefined = call.context.mattermost_site_url;
+   const botAccessToken: string | undefined = call.context.bot_access_token;
 
-   const newProps = _.cloneDeep(currentPost.props);
-   newProps.attachments[0].actions = [];
-   newProps.attachments[0].color = "#AD251C";
+   const mattermostOptions: MattermostOptions = {
+      mattermostUrl: <string>mattermostUrl,
+      accessToken: <string>botAccessToken
+   };
+
+   const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
+   await tryPromiseForGenerateMessage(mattermostClient.getPost(postId), ExceptionType.MARKDOWN, 'Mattermost failed');
+
    const updatePost: PostUpdate = {
       id: postId,
-      props: newProps
+      props: {
+         attachments: [
+            {
+               title: h6(`Triggered: ${hyperlink(`${incident.summary}`, incident.html_url)}`), 
+               title_link: '',
+               color: "#AD251C",
+               fields: [
+                  {
+                     short: true,
+                     title: 'Status',
+                     value: 'Resolved'
+                  },
+                  {
+                     short: true,
+                     title: 'Escalation policy',
+                     value: `${incident.escalation_policy.summary}`
+                  }
+               ]
+            }
+
+         ]
+      }
    }
-   await mattermostClient.updatePost(postId, updatePost);
+   await mattermostClient.updatePost(<string>postId, updatePost);
 }

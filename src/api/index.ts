@@ -40,12 +40,21 @@ router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Ro
 
 // FROM WEBHOOK ACTIONS
 router.post(`${Routes.App.CallPathIncidentAcknowledgedAction}`, cIncident.ackIncidentAction);
-router.post(`${Routes.App.CallPathIncidentResolveAction}`, cIncident.resolveIncidentAction);
-router.post(`${Routes.App.CallPathIncidentOtherActions}`, cIncident.otherActionsIncident);
+
+router.post(`${Routes.App.CallPathIncidentResolveAction}`, cIncident.resolveIncidentModal);
+router.post(`${Routes.App.CallPathIncidentResolveSubmit}`, cIncident.resolveIncidentSubmit);
+
+router.post(`${Routes.App.CallPathDetailViewIncidentAction}`, cIncident.showIncidentDetail);
 
 router.post(`${Routes.App.CallPathNoteToIncidentAction}`, cIncident.addNoteToIncidentModal);
-router.post(`${Routes.App.CallPathIncidentCloseOptions}`, cIncident.closePostActions);
-router.post(`${Routes.App.CallPathAssignIncidentAction}`, cIncident.reassignIncidentPost);
+router.post(`${Routes.App.CallPathNoteToIncidentSubmit}`, cIncident.addNoteToIncidentSubmit);
+
+router.post(`${Routes.App.CallPathAssignIncidentAction}`, cIncident.reassignIncidentModal);
+router.post(`${Routes.App.CallPathAssignIncidentSubmit}`, cIncident.reassignIncidentSubmit);
+
+router.post(`${Routes.App.CallPathChangeIncidentPriorityAction}`, cIncident.changePriorityIncidentModal);
+router.post(`${Routes.App.CallPathChangeIncidentPrioritySubmit}`, cIncident.changePriorityIncidentSubmit);
+
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));

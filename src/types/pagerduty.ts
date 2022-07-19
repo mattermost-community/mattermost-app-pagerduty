@@ -1,5 +1,9 @@
 import {Channel} from './mattermost';
 
+export type PagerDutyOpts = {
+    token: string,
+    tokenType: string
+}
 export interface UserMe {
     name: string;
     email: string;
@@ -78,7 +82,13 @@ export type EventWebhook = {
     id: string;
     incident_key: string;
     number: number;
-    priority: string;
+    priority: {
+        html_url: string;
+        id: string;
+        self: string;
+        summary: string;
+        type: 'priority_reference'
+    };
     resolve_reason: any;
     self: string;
     service: {
@@ -144,6 +154,21 @@ export type Incident = {
         self: string;
         html_url: string;
     };
+    priority?: {
+        id: string,
+        type: 'priority',
+        summary: string,
+        self: string,
+        html_url: null,
+        account_id: string,
+        color: string,
+        created_at: string,
+        description: string,
+        name: string,
+        order: number,
+        schema_version: number,
+        updated_at: string,
+    },
     incidents_responders: any[];
     responder_requests: any[];
     subscriber_requests: any[];
@@ -222,6 +247,22 @@ export type Service = {
     html_url: string;
 };
 
+export type Priority = {
+    id: string,
+    type: 'priority',
+    summary: string,
+    self: string,
+    html_url: null,
+    account_id: string,
+    color: string,
+    created_at: string | Date,
+    description: string,
+    name: string,
+    order: number,
+    schema_version: number,
+    updated_at: string | Date,
+}
+
 export type WebhookSubscription = {
     active: boolean;
     delivery_method: {
@@ -297,11 +338,12 @@ export type ServiceResponse = {
 }
 
 export type UserResponse = {
-   id: string,
-   type: 'user',
-   name: string,
-   email: string,
-   html_url: string
+    summary: string,
+    id: string,
+    type: 'user',
+    name: string,
+    email: string,
+    html_url: string,
 }
 
 export type PostIncidentNote = {
