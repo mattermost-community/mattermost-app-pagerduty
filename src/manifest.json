@@ -1,7 +1,7 @@
 {
     "app_id": "PagerDuty",
     "version": "v1.0.0",
-    "homepage_url": "https://bitbucket.org/dominion-ancient/mattermost-app-opsgenie",
+    "homepage_url": "https://github.com/development-ancient/mattermost-app-pagerduty",
     "display_name": "PagerDuty",
     "description": "PagerDuty cloud app for Mattermost",
     "icon": "pagerduty.png",
