@@ -1,6 +1,12 @@
+require('dotenv').config('../');
+
 export default {
     APP: {
-        PORT: 3000,
-        HOST: 'https://c2c0-189-203-193-1.ngrok.io'
+        PORT: Number(process.env.PORT),
+        HOST: process.env.HOST
+    },
+    PAGERDUTY: {
+        URL: 'https://api.pagerduty.com',
+        IDENTITY: 'https://identity.pagerduty.com'
     }
 }

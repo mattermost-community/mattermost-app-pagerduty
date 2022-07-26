@@ -1,3 +1,5 @@
+import {UserProfile} from "./mattermost";
+
 export type AppManifest = {
     app_id: string;
     display_name: string;
@@ -48,6 +50,29 @@ export type AppCallValues = {
 
 export type AppCallType = string;
 
+export type Oauth2CurrentUser = {
+    token: string;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+    }
+}
+
+export type Oauth2App = {
+    client_id: string;
+    client_secret: string;
+    connect_url?: string;
+    complete_url?: string;
+    user?: Oauth2CurrentUser;
+}
+
+export type PostApp = {
+    id: string,
+    channel_id: string     
+}
+
 export type AppCall = {
     path: string;
     expand?: AppExpand;
@@ -61,6 +86,13 @@ export type AppCallRequest = AppCall & {
     selected_field?: string;
     query?: string;
 };
+
+export type ExpandedBotActingUser = AppContext & {
+    acting_user: UserProfile,
+    acting_user_access_token: string
+    bot_user_id: string,
+    bot_access_token: string,
+}
 
 export type AppCallDialog<T> = {
     callback_id: string;
@@ -86,6 +118,22 @@ export type AppCallAction<T> = {
     context: T;
 }
 
+export type AppActingUser = {
+    id: string,
+    delete_at: number,
+    username: string,
+    auth_service: string,
+    email: string,
+    nickname: string,
+    first_name: string,
+    last_name: string,
+    position: string,
+    roles: string,
+    locale: string,
+    timezone: any,
+    disable_welcome_email: boolean
+}
+
 export type AppCallResponseType = string;
 
 export type AppCallResponse<Res = unknown> = {
@@ -109,6 +157,17 @@ export type AppContext = {
     app_path?: string;
     bot_user_id?: string;
     bot_access_token?: string;
+    app?: {
+        SchemaVersion: string;
+        app_id: string;
+        version: string;
+        homepage_url: string;
+        deploy_type: string;
+        webhook_secret: string;
+        bot_user_id: string;
+        bot_username: string;
+        remote_oauth2: any;
+    },
     channel: {
         id: string;
         create_at: number;
@@ -132,23 +191,10 @@ export type AppContext = {
         policy_id: any;
         last_root_post_at: number;
     }
-    acting_user?: {
-        id?: string;
-        delete_at?: number;
-        username?: string;
-        auth_service?: string;
-        email?: string;
-        nickname?: string;
-        first_name?: string;
-        last_name?: string;
-        position?: string;
-        roles?: string;
-        locale?: string;
-        timezone?: string;
-        disable_welcome_email?: string;
-    };
+    acting_user?: AppActingUser;
     acting_user_access_token?: string;
-    oauth2: any;
+    oauth2: Oauth2App;
+    post?: PostApp
 };
 
 export type AppContextProps = {
@@ -186,9 +232,10 @@ export type AppForm = {
     fields: AppField[];
     call?: AppCall;
     depends_on?: string[];
+    source?: any;
 };
 
-export type AppFormValue = string | AppSelectOption | boolean | null;
+export type AppFormValue = string | AppSelectOption[] | boolean | null;
 export type AppFormValues = {[name: string]: AppFormValue};
 
 export type AppSelectOption = {
@@ -260,4 +307,12 @@ export type FormResponseData = {
 
 export type AppLookupResponse = {
     items: AppSelectOption[];
+}
+
+export type AppContextAction = {
+    action: string;
+    incident: any;
+    mattermost_site_url: string;
+    bot_access_token: string;
+    selected_option?: string;
 }
