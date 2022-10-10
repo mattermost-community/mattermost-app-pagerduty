@@ -1,4 +1,4 @@
-import {AppActingUser, AppBinding, AppCallRequest, AppsState, Oauth2App} from '../types';
+import {AppActingUser, AppBinding, AppCallRequest, AppContext, AppsState, Oauth2App} from '../types';
 
 import {
     accountLoginBinding,
@@ -17,8 +17,10 @@ import {
 } from '../constant';
 import {KVStoreClient, KVStoreOptions} from "../clients/kvstore";
 import {existsKvPagerDutyConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
+import { configureI18n } from '../utils/translations';
 
-const newCommandBindings = (bindings: AppBinding[], commands: string[]): AppsState => {
+const newCommandBindings = (context: AppContext, bindings: AppBinding[], commands: string[]): AppsState => {
+    const i18nObj = configureI18n(context);
     return {
         location: AppBindingLocations.COMMAND,
         bindings: [
@@ -26,7 +28,7 @@ const newCommandBindings = (bindings: AppBinding[], commands: string[]): AppsSta
                 icon: PagerDutyIcon,
                 label: CommandTrigger,
                 hint: `[${commands.join(' | ')}]`,
-                description: 'Manage PagerDuty',
+                description: i18nObj.__('bindings-descriptions.bindings'),
                 bindings,
             },
         ],
@@ -38,6 +40,7 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
     const botAccessToken: string | undefined = call.context.bot_access_token;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
     const actingUser: AppActingUser | undefined = call.context.acting_user;
+    const context = call.context as AppContext;
 
     const options: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
@@ -73,6 +76,6 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
         bindings.push(accountLogoutBinding());
     }
 
-    return newCommandBindings(bindings, commands);
+    return newCommandBindings(context, bindings, commands);
 };
 
