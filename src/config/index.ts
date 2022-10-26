@@ -2,7 +2,7 @@ require('dotenv').config('../');
 
 export default {
     APP: {
-        PORT: Number(process.env.PORT) || 4503,
+        PORT: Number(process.env.PORT) || 4003,
         HOST: process.env.HOST || ''
     },
     PAGERDUTY: {
