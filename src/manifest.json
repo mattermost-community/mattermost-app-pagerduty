@@ -1,5 +1,5 @@
 {
-    "app_id": "PagerDuty",
+    "app_id": "pagerduty",
     "version": "v1.0.0",
     "homepage_url": "https://github.com/development-ancient/mattermost-app-pagerduty",
     "display_name": "PagerDuty",
@@ -32,6 +32,16 @@
         "/command"
     ],
     "http": {
-        "root_url": ""
+        "root_url": "https://mattermost-pagerduty-dev.ancient.mx"
+    },
+    "aws_lambda": {
+        "functions": [
+            {
+                "path": "/",
+                "name": "pagerduty",
+                "handler": "pagerduty/index.handler",
+                "runtime": "nodejs16.x"
+            }
+        ]
     }
 }
