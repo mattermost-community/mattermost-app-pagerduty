@@ -50,8 +50,8 @@ export const connectAccountLoginSubmit: CallResponseHandler = async (req: Reques
     const connectUrl: string | undefined = call.context.oauth2?.connect_url;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
     const message: string = isConnected(oauth2)
-        ? i18nObj.__('api.configure.connect_account_login', { user: oauth2.user!.user.name.toString() }).toString()
-        : i18nObj.__('api.configure.follow_account_login', { url: hyperlink('link', <string>connectUrl) }).toString()
+        ? i18nObj.__('api.configure.connect_account_login', { user: oauth2.user!.user.name.toString() })
+        : i18nObj.__('api.configure.follow_account_login', { url: hyperlink('link', <string>connectUrl) })
     const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(message);
     res.json(callResponse);
 };
