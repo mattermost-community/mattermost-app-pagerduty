@@ -1,9 +1,10 @@
 import {Request, Response} from 'express';
-import {AppCallRequest, AppCallResponse} from '../types';
+import {AppCallRequest, AppCallResponse, AppContext} from '../types';
 import {newOKCallResponseWithMarkdown} from '../utils/call-responses';
 import manifest from '../manifest.json';
 import {MattermostClient, MattermostOptions} from "../clients/mattermost";
 import {joinLines} from "../utils/markdown";
+import {configureI18n} from "../utils/translations";
 
 export const getInstall = async (request: Request, response: Response) => {
     const call: AppCallRequest = request.body;
@@ -20,16 +21,16 @@ export const getInstall = async (request: Request, response: Response) => {
     await mattermostClient.updateRolesByUser(<string>userId, 'system_user system_post_all');
 
     const helpText: string = [
-        getCommands()
+        getCommands(call.context)
     ].join('');
     const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(helpText);
 
     response.json(callResponse);
 };
 
-function getCommands(): string {
+function getCommands(context: AppContext): string {
+		const i18nObj = configureI18n(context);
+
     const homepageUrl: string = manifest.homepage_url;
-    return `${joinLines(
-        `To finish configuring the PagerDuty app please read the [Quick Start](${homepageUrl}#quick-start) section of the README`
-    )}\n`;
+    return `${joinLines(i18nObj.__('api.install.text', { url: homepageUrl }))}\n`;
 }

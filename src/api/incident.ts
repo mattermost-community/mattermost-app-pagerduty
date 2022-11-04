@@ -8,13 +8,14 @@ import {
 } from '../utils/call-responses';
 import { getAllIncidentsCall } from '../forms/list-incident';
 import {
-   AppCallRequest,
-   AppCallResponse,
-   Incident,
+		AppCallRequest,
+		AppCallResponse, AppContext,
+		Incident,
 } from '../types';
 import { addIncidentFromCommand, createIncidentFormModal, submitCreateIncident } from '../forms/incident-create';
 import { CreateIncidentFormCommandType } from '../constant';
 import { h6, hyperlink, joinLines } from '../utils/markdown';
+import {configureI18n} from "../utils/translations";
 import { showMessageToMattermost } from '../utils/utils';
 import { addNoteOpenModal, addNoteSubmitDialog } from '../forms/add-note-incident';
 import { deletePostCall } from '../forms/delete-post';
@@ -24,15 +25,15 @@ import { reassignIncidentActionForm, reassignIncidentSubmitForm } from '../forms
 import { showIncidentDetailPost } from '../forms/incident-detail';
 import { changeIncidentPriorityActionForm, changeIncidentPrioritySubmitForm } from '../forms/change-incident-priority';
 
-
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
    let callResponse: AppCallResponse;
+	 const call: AppCallRequest = req.body;
 
    try {
       const incidents: Incident[] = await getAllIncidentsCall(req.body);
       const servicesText: string = [
-         getHeader(incidents.length),
-         getIncidents(incidents)        
+         getHeader(incidents.length, call.context),
+         getIncidents(incidents, call.context)
       ].join('');
       callResponse = newOKCallResponseWithMarkdown(servicesText);
       res.json(callResponse);
@@ -42,13 +43,17 @@ export const listIncidentSubmit: CallResponseHandler = async (req: Request, res:
    }
 };
 
-function getHeader(serviceLength: number): string {
-   return h6(`Incident List: Found ${serviceLength} matching services.`);
+function getHeader(serviceLength: number, context: AppContext): string {
+	 const i18nObj = configureI18n(context);
+
+   return h6(i18nObj.__('api.incident.text', { length: serviceLength.toString() }));
 }
 
-function getIncidents(services: Incident[]): string {
+function getIncidents(services: Incident[], context: AppContext): string {
+	 const i18nObj = configureI18n(context);
+
    return `${joinLines(
-       services.map((incident: Incident) => `- ${incident.summary} - ${hyperlink('View detail.', incident.html_url)}`).join('\n')
+       services.map((incident: Incident) => `- ${incident.summary} - ${hyperlink(i18nObj.__('api.incident.detail'), incident.html_url)}`).join('\n')
    )}\n`;
 }
 
@@ -56,17 +61,18 @@ export const createNewIncident: CallResponseHandler = async (req: Request, res: 
    const call: AppCallRequest = req.body;
    let callResponse: AppCallResponse;
    const values = call.values as CreateIncidentFormCommandType;
+	 const i18nObj = configureI18n(call.context);
 
    try {
       if (values?.incident_impacted_service && values?.incident_title) {
          await addIncidentFromCommand(call);
-         callResponse = newOKCallResponseWithMarkdown('Incident created')
+         callResponse = newOKCallResponseWithMarkdown(i18nObj.__('api.incident.created'))
       } else {
          const form = await createIncidentFormModal(call);
          callResponse = newFormCallResponse(form);
       }
    } catch (error: any) {
-      callResponse = newErrorCallResponseWithMessage('Unable to create a new incident' + error.message);
+      callResponse = newErrorCallResponseWithMessage(i18nObj.__('api.incident.created_error', { messaage: error.message }));
    }
    res.json(callResponse);
 };
@@ -74,11 +80,13 @@ export const createNewIncident: CallResponseHandler = async (req: Request, res: 
 export const submitCreateNewIncident = async (req: Request, res: Response) => {
    const call: AppCallRequest = req.body;
    let callResponse: AppCallResponse;
+	 const i18nObj = configureI18n(call.context);
+
    try {
       await submitCreateIncident(call);
-      callResponse = newOKCallResponseWithMarkdown('Incident created')
+      callResponse = newOKCallResponseWithMarkdown(i18nObj.__('api.incident.created'))
    } catch (error: any) {
-      callResponse = newErrorCallResponseWithMessage('Unable to create a new incident: ' + error.message);
+      callResponse = newErrorCallResponseWithMessage(i18nObj.__('api.incident.created_error', { messaage: error.message }));
    }
    res.json(callResponse);
 }

@@ -1,5 +1,76 @@
-{ 
-   "bindings-descriptions": {
-      "bindings": "Manage PagerDuty App"
-   }
+{
+  "api": {
+    "configure": {
+      "error_admin_account": "Unable to open configuration form: {{ message }}",
+      "configure_admin_account_response": "Successfully updated PagerDuty configuration",
+      "configure_admin_account_error": "Error processing form request: {{ message }}",
+      "connect_account_login": "You are already logged into PagerDuty with user {{ message }}",
+      "follow_account_login": "Follow this {{ url }} to connect Mattermost to your PagerDuty Account.",
+      "error_connect": "Unable to open configuration form: {{ message }}",
+      "disconnect": "You have disconnected your PagerDuty account"
+    },
+    "help": {
+      "text": "Mattermost PagerDuty Plugin - Slash Command Help",
+      "command_help": "Launch the PagerDuty plugin command line help syntax, check out the [documentation]( {{ url }}).",
+      "command_configure": "Configure PagerDuty",
+      "command_incident": "Create a new incidence.",
+      "command_subcription": "{{ command }} add [Pager Duty Service ID] [Mattermost Channel]",
+      "command_subcription_description": "Add subscription of service to channel",
+      "command_subcription_list": "{{ command }} list",
+      "command_subcription_list_description": "List subscriptions open",
+      "command_subcription_remove": "{{ command }} remove [SubscriptionId]",
+      "command_subcription_remove_description": "Delete subscription of channel",
+      "command_oncall": "Find out who is on call for a PagerDuty service.",
+      "command_service": "{{ command }} service",
+      "command_service_description": "Show all services from PagerDuty",
+      "command_list": "{{ command }} incident",
+      "command_list_description": "Show all incidents from PagerDuty",
+      "command_connect": "Connect your PagerDuty account",
+      "command_disconnect": "Logout from your PagerDuty account"
+    },
+    "incident": {
+      "text": "Incident List: Found ${serviceLength} matching services.",
+      "detail": "View detail.",
+      "created": "Incident created",
+      "created_error": "Unable to create a new incident {{ messaage }}"
+    },
+    "install": {
+      "text": "To finish configuring the PagerDuty app please read the [Quick Start]( {{ url }}#quick-start) section of the README"
+    },
+    "on_call": {
+      "text": "Policy List: Found {{ length }} matching policies.",
+      "call": "- {{ policy_summary }} ({{ level }}) - By {{ user_summary }} {{ hyperlink }}"
+    },
+    "service": {
+      "text": "Service List: Found {{ length }} matching services.",
+      "service": "- Service ID \"{{ id }}\" - Service Name \"{{ name }}\""
+    },
+    "subcription": {
+      "created": "Subscription will be created",
+      "deleted": "Subscription will be deleted",
+      "list": "Subscription List: Found {{ length }} open subscriptions.",
+      "subcription_description": "- Subscription ID: \"{{ id }}\" - Service Name \"{{ service_name }}\" - Channel Name \"{{ channel_name }}\""
+    },
+    "webhook": {
+      "error": "Error webhook: {{ message }}",
+      "binding": {
+        "label": "Acknowledged",
+        "description": "Triggered: {{ link }}"
+      },
+      "button_event": "Resolve",
+      "select_event": "Other actions...",
+      "select_event_details": "View details",
+      "add_note": "Add note",
+      "priority": "Change Priority",
+      "reassign": "Reassign",
+      "text_incident": "Note added to {{ link }} by {{ html_url }} \\n \"{{ content }}\"",
+      "text_binding": "Acknowledged {{ link }} by {{ html_url }}",
+      "text_reassigned": "Reassigned {{ link }} to {{ assignees }} by {{ html_url }}",
+      "text_resolved": "Resolved {{ link }} by {{ html_url }}",
+      "text_updated": "Updated {{ link }} priority to {{ html_url }} by {{ agent_summary }}"
+    }
+  },
+  "bindings-descriptions": {
+    "bindings": "Manage PagerDuty App"
+  }
 }

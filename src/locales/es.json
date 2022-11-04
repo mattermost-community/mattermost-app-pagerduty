@@ -1,5 +1,76 @@
 {
-   "bindings-descriptions": {
-      "bindings": "Administrar la App de PagerDuty"
-   }
+  "api": {
+    "configure": {
+      "error_admin_account": "No se puede abrir el formulario de configuración: {{ message }}",
+      "configure_admin_account_response": "Configuración de PagerDuty actualizada con éxito",
+      "configure_admin_account_error": "Error al procesar la solicitud del formulario: {{ message }}",
+      "connect_account_login": "Ya has iniciado sesión en PagerDuty con el usuario {{ user }}",
+      "follow_account_login": "Siga esta {{ url }} para conectar Mattermost a su cuenta de PagerDuty.",
+      "error_connect": "No se puede abrir el formulario de configuración: {{ message }}",
+      "disconnect": "Has desconectado tu cuenta de PagerDuty"
+    },
+    "help": {
+      "text": "Complemento Mattermost PagerDuty - Ayuda con el comando Slash",
+      "command_help": "Inicie la sintaxis de ayuda de la línea de comandos del complemento PagerDuty, consulte la [documentación]( {{ url }}).",
+      "command_configure": "Configurar PagerDuty",
+      "command_incident": "Crear una nueva incidencia.",
+      "command_subcription": "{{ command }} agregue [ID de servicio de buscapersonas] [Canal más importante]",
+      "command_subcription_description": "Agregar suscripción de servicio al canal",
+      "command_subcription_list": "{{ command }} lista",
+      "command_subcription_list_description": "Lista de suscripciones abiertas",
+      "command_subcription_remove": "{{ command }} eliminar [Id de suscripción]",
+      "command_subcription_remove_description": "Eliminar suscripción de canal",
+      "command_oncall": "Descubra quién está de guardia para un servicio PagerDuty.",
+      "command_service": "{{ command }} servicio",
+      "command_service_description": "Mostrar todos los servicios de PagerDuty",
+      "command_list": "{{ commands }} incidente",
+      "command_list_description": "Mostrar todos los incidentes de PagerDuty",
+      "command_connect": "Conecte su cuenta de PagerDuty",
+      "command_disconnect": "Salga de su cuenta de PagerDuty"
+    },
+    "incident": {
+      "text": "Lista de incidentes: se encontraron {{ length }} servicios coincidentes.",
+      "detail": "Ver Detalle.",
+      "created": "Incidente creado",
+      "created_error": "No se puede crear un nuevo incidente {{ messaage }}"
+    },
+    "install": {
+      "text": "Para terminar de configurar la aplicación PagerDuty, lea la sección [Inicio rápido]( {{ url }}#inicio rápido) del LÉAME"
+    },
+    "on_call": {
+      "text": "Lista de políticas: se encontraron {{ length }} políticas coincidentes.",
+      "call": "- {{ policy_summary }} ({{ level }}) - Por {{ user_summary }} {{ hyperlink }}"
+    },
+    "service": {
+      "text": "Lista de servicios: se encontraron {{ length }} servicios coincidentes.",
+      "service": "- ID de servicio \"{{ id }}\" - Nombre de servicio \"{{ name }}\""
+    },
+    "subcription": {
+      "created": "Se creará la suscripción",
+      "deleted": "Se eliminará la suscripción.",
+      "list": "Lista de suscripciones: se encontraron {{ length }} suscripciones abiertas.",
+      "subcription_description": "- ID de suscripción: \"{{ id }}\" - Nombre del servicio \"{{ service_name }}\" - Nombre del canal \"{{ channel_name }}\""
+    },
+    "webhook": {
+      "error": "Error webhook: {{ message }}",
+      "binding": {
+        "label": "Admitido",
+        "description": "Motivado: {{ link }}"
+      },
+      "button_event": "Resolver",
+      "select_event": "Otras acciones...",
+      "select_event_details": "Ver detalles",
+      "add_note": "Añadir la nota",
+      "priority": "Cambiar prioridad",
+      "reassign": "Reasignar",
+      "text_incident": "Nota añadida a {{ link }} por {{ html_url }} \\n \"{{ content }}\"",
+      "text_binding": "Admitido {{ link }} por {{ html_url }}",
+      "text_reassigned": "Reasignado {{ link }} a {{ assignees }} por {{ html_url }}",
+      "text_resolved": "Resuelto {{ link }} por {{ html_url }}",
+      "text_updated": "Actualizado {{ link }} prioridad a {{ html_url }} por {{ agent_summary }}"
+    }
+  },
+  "bindings-descriptions": {
+    "bindings": "Administrar la App de PagerDuty"
+  }
 }
