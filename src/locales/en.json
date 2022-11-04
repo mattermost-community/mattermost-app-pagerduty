@@ -70,7 +70,69 @@
       "text_updated": "Updated {{ link }} priority to {{ html_url }} by {{ agent_summary }}"
     }
   },
-  "bindings-descriptions": {
-    "bindings": "Manage PagerDuty App"
-  }
+  "bindings": {
+    "bindings": {
+      "help": {
+        "description": "Show PagerDuty Help",
+        "title": "Show PagerDuty Help Title"
+      },
+      "incident": {
+        "description": "Trigger a PagerDuty incident"
+      },
+      "create_incident": {
+        "description": "Create incident in PagerDuty",
+        "title": "Show PagerDuty Help Title",
+        "modal_impacted_label": "Impacted Service",
+        "modal_impacted_description": "Impacted service name",
+        "modal_title_label": "Title",
+        "modal_title_description": "Incident title",
+        "modal_description_label": "Description (optional)",
+        "modal_description_description": "Incident description",
+        "modal_assign_label": "Assign to (optional)",
+        "modal_assign_description": "To whom this incident will be assigned"
+      },
+      "configure": {
+        "description": "Setup PagerDuty Admin Account",
+        "title": "Setup PagerDuty"
+      },
+      "account_login": {
+        "description": "Connect your PagerDuty account",
+        "title": "Account login"
+      },
+      "account_logout": {
+        "description": "Disconnect your PagerDuty account",
+        "title": "Account logout"
+      },
+      "subcription": {
+        "description": "Subscription teams of PagerDuty to Mattermost channel",
+        "add": {
+          "description": "Add a service subscription to a channel",
+          "title": "Add a service subscription to a channel",
+          "modal_service": "Service id",
+          "modal_channel": "Channel"
+        },
+        "delete": {
+          "description": "Unsubscribe service from channel",
+          "title": "Unsubscribe service from channel",
+          "label": "Subscription ID"
+        },
+        "list": {
+          "description": "List of service subscribed to channels",
+          "binding": "List PagerDuty"
+        },
+        "service": {
+          "title": "List of services"
+        },
+        "incidents": {
+          "title": "List of incidents"
+        },
+        "on_call": {
+          "title": "List of users on call"
+        }
+      }
+    },
+    "slash": {
+      "bindings": "Manage PagerDuty App"
+    }
+  },
 }

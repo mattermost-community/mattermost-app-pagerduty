@@ -28,7 +28,7 @@ const newCommandBindings = (context: AppContext, bindings: AppBinding[], command
                 icon: PagerDutyIcon,
                 label: CommandTrigger,
                 hint: `[${commands.join(' | ')}]`,
-                description: i18nObj.__('bindings-descriptions.bindings'),
+                description: i18nObj.__('bindings.slash.bindings'),
                 bindings,
             },
         ],
@@ -53,10 +53,10 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
         Commands.HELP
     ];
 
-    bindings.push(getHelpBinding());
+    bindings.push(getHelpBinding(context));
 
     if (isUserSystemAdmin(<AppActingUser>actingUser)) {
-        bindings.push(getConfigureBinding());
+        bindings.push(getConfigureBinding(context));
         commands.push(Commands.CONFIGURE);
     }
     
@@ -65,15 +65,15 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
             commands.push(Commands.SUBSCRIPTION);
             commands.push(Commands.INCIDENT);
             commands.push(Commands.LIST);
-            bindings.push(subscriptionBinding())
-            bindings.push(listBinding());
-            bindings.push(getIncidentsBinding());
+            bindings.push(subscriptionBinding(context))
+            bindings.push(listBinding(context));
+            bindings.push(getIncidentsBinding(context));
         }
 
         commands.push(Commands.CONNECT);
         commands.push(Commands.DISCONNECT);
-        bindings.push(accountLoginBinding());
-        bindings.push(accountLogoutBinding());
+        bindings.push(accountLoginBinding(context));
+        bindings.push(accountLogoutBinding(context));
     }
 
     return newCommandBindings(context, bindings, commands);

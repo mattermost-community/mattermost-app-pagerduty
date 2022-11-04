@@ -70,7 +70,69 @@
       "text_updated": "Actualizado {{ link }} prioridad a {{ html_url }} por {{ agent_summary }}"
     }
   },
-  "bindings-descriptions": {
-    "bindings": "Administrar la App de PagerDuty"
+  "bindings": {
+    "bindings": {
+      "help": {
+        "description": "Mostrar ayuda de PagerDuty",
+        "title": "Mostrar título de ayuda de PagerDuty"
+      },
+      "incident": {
+        "description": "Activar un incidente de PagerDuty"
+      },
+      "create_incident": {
+        "description": "Create incident in PagerDuty",
+        "title": "Show PagerDuty Help Title",
+        "modal_impacted_label": "Servicio afectado",
+        "modal_impacted_description": "Nombre del servicio afectado",
+        "modal_title_label": "Título",
+        "modal_title_description": "Título del incidente",
+        "modal_description_label": "Descripción (opcional)",
+        "modal_description_description": "Descripción del incidente",
+        "modal_assign_label": "Asignar a (opcional)",
+        "modal_assign_description": "A quién se asignará este incidente"
+      },
+      "configure": {
+        "description": "Configurar la cuenta de administrador de PagerDuty",
+        "title": "Configuración PagerDuty"
+      },
+      "account_login": {
+        "description": "Conecte su cuenta de PagerDuty",
+        "title": "Cuenta de Ingreso"
+      },
+      "account_logout": {
+        "description": "Desconecta tu cuenta de PagerDuty",
+        "title": "Cierre de sesión de la cuenta"
+      },
+      "subcription": {
+        "description": "Equipos de suscripción de PagerDuty al canal Mattermost",
+        "add": {
+          "description": "Agregar una suscripción de servicio a un canal",
+          "title": "Agregar una suscripción de servicio a un canal",
+          "modal_service": "ID de servicio",
+          "modal_channel": "Canal"
+        },
+        "delete": {
+          "description": "Darse de baja del servicio del canal",
+          "title": "Darse de baja del servicio del canal",
+          "label": "ID de suscripción"
+        },
+        "list": {
+          "description": "Lista de servicios suscritos a canales",
+          "binding": "Lista PagerDuty"
+        },
+        "service": {
+          "title": "Lista de servicios"
+        },
+        "incidents": {
+          "title": "List of incidents"
+        },
+        "on_call": {
+          "title": "Lista de incidentes"
+        }
+      }
+    },
+    "slash": {
+      "bindings": "Administrar la App de PagerDuty"
+    }
   }
 }
