@@ -1,23 +1,28 @@
 import {Request, Response} from 'express';
 import manifest from '../manifest.json';
 import {newOKCallResponseWithMarkdown} from '../utils/call-responses';
-import {AppActingUser, AppCallRequest, AppCallResponse, ExpandedBotActingUser, Oauth2App} from '../types';
+import {AppActingUser, AppCallRequest, AppCallResponse, AppContext, ExpandedBotActingUser, Oauth2App} from '../types';
 import {addBulletSlashCommand, h5, joinLines} from '../utils/markdown';
 import {KVStoreClient, KVStoreOptions} from '../clients/kvstore';
 import {Commands} from '../constant';
+import {configureI18n} from "../utils/translations";
 import {existsKvPagerDutyConfig, isConnected, isUserSystemAdmin} from '../utils/utils';
 
 export const getHelp = async (request: Request, response: Response) => {
+		const call: AppCallRequest = request.body;
+
     const helpText: string = [
-        getHeader(),
+        getHeader(call.context),
         await getCommands(request.body)
     ].join('');
     const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(helpText);
     response.json(callResponse);
 };
 
-function getHeader(): string {
-    return h5(`Mattermost PagerDuty Plugin - Slash Command Help`);
+function getHeader(context: AppContext): string {
+		const i18nObj = configureI18n(context);
+
+    return h5(i18nObj.__('api.help.text'));
 }
 
 async function getCommands(call: AppCallRequest): Promise<String> {
@@ -28,6 +33,7 @@ async function getCommands(call: AppCallRequest): Promise<String> {
     const oauth2: Oauth2App | undefined = context.oauth2;
     const actingUser: AppActingUser | undefined = context.acting_user;
     const commands: string[] = [];
+		const i18nObj = configureI18n(call.context);
 
     const options: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
@@ -35,23 +41,23 @@ async function getCommands(call: AppCallRequest): Promise<String> {
     };
     const kvClient = new KVStoreClient(options);
 
-    commands.push(addBulletSlashCommand(Commands.HELP, `Launch the PagerDuty plugin command line help syntax, check out the [documentation](${homepageUrl}).`));
+    commands.push(addBulletSlashCommand(Commands.HELP, i18nObj.__('api.help.command_help', { url: homepageUrl })));
     if (isUserSystemAdmin(<AppActingUser>actingUser)) {
-        commands.push(addBulletSlashCommand(Commands.CONFIGURE, `Configure PagerDuty`));
+        commands.push(addBulletSlashCommand(Commands.CONFIGURE, i18nObj.__('api.help.command_configure')));
     }
     if (await existsKvPagerDutyConfig(kvClient)) {
         if (isConnected(oauth2)) {
-            commands.push(addBulletSlashCommand(`${Commands.INCIDENT}`, 'Create a new incidence.'));
-            commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} add [Pager Duty Service ID] [Mattermost Channel]`, 'Add subscription of service to channel'));
-            commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} list`, 'List subscriptions open'));
-            commands.push(addBulletSlashCommand(`${Commands.SUBSCRIPTION} remove [SubscriptionId]`, 'Delete subscription of channel'));
-            commands.push(addBulletSlashCommand(`${Commands.ONCALL}`, 'Find out who is on call for a PagerDuty service.'));
-            commands.push(addBulletSlashCommand(`${Commands.LIST} service`, 'Show all services from PagerDuty'));
-            commands.push(addBulletSlashCommand(`${Commands.LIST} incident`, 'Show all incidents from PagerDuty'));
+            commands.push(addBulletSlashCommand(`${Commands.INCIDENT}`, i18nObj.__('api.help.command_incident')));
+            commands.push(addBulletSlashCommand(i18nObj.__('api.help.command_subcription', { command: Commands.SUBSCRIPTION }), i18nObj.__('api.help.command_subcription_description')));
+            commands.push(addBulletSlashCommand(i18nObj.__('api.help.command_subcription_list'), i18nObj.__('api.help.command_subcription_list_description')));
+            commands.push(addBulletSlashCommand(i18nObj.__('api.help.command_subcription_remove', { command: Commands.SUBSCRIPTION}), i18nObj.__('api.help.command_subcription_remove_description')));
+            commands.push(addBulletSlashCommand(`${Commands.ONCALL}`, i18nObj.__('api.help.command_oncall')));
+            commands.push(addBulletSlashCommand(i18nObj.__('api.help.command_service', { command: Commands.SERVICE }), i18nObj.__('api.help.command_service_description')));
+            commands.push(addBulletSlashCommand(i18nObj.__('api.help.command_list'), i18nObj.__('api.help.command_list_description')));
         }
 
-        commands.push(addBulletSlashCommand(`${Commands.CONNECT}`, 'Connect your PagerDuty account'));
-        commands.push(addBulletSlashCommand(`${Commands.DISCONNECT}`, 'Logout from your PagerDuty account'));
+        commands.push(addBulletSlashCommand(`${Commands.CONNECT}`, i18nObj.__('api.help.command_connect')));
+        commands.push(addBulletSlashCommand(`${Commands.DISCONNECT}`, i18nObj.__('api.help.command_disconnect')));
     }
 
     return `${joinLines(...commands)}`;

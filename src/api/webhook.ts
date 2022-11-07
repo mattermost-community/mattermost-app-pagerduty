@@ -17,6 +17,7 @@ import {MattermostClient, MattermostOptions} from '../clients/mattermost';
 import config from '../config';
 import {Routes} from '../constant'
 import {h6, hyperlink} from '../utils/markdown';
+import {configureI18n} from "../utils/translations";
 import {replace, toTitleCase} from '../utils/utils';
 import {APIResponse, PartialCall} from "@pagerduty/pdjs/build/src/api";
 import {api} from "@pagerduty/pdjs";
@@ -29,6 +30,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
     const m: Manifest = manifest;
+		const i18nObj = configureI18n(context);
 
     const incident = {
         id: eventData.id
@@ -42,11 +44,11 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                 {
                     location: "embedded",
                     app_id: m.app_id,
-                    description: h6(`Triggered: ${hyperlink(`#${eventData.number} ${eventData.title}`, eventData.html_url)}`),
+										description: h6(i18nObj.__('api.webhook.binding.description', { link: hyperlink(`#${eventData.number} ${eventData.title}`, eventData.html_url) })),
                     bindings: [
                         {
                             location: ActionsEvents.ACKNOWLEDGED_ALERT_BUTTON_EVENT,
-                            label: 'Acknowledged',
+                            label: i18nObj.__('api.webhook.binding.label'),
                             submit: {
                                 path: Routes.App.CallPathIncidentAcknowledgedAction,
                                 expand: {
@@ -61,7 +63,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                         },
                         {
                             location: ActionsEvents.CLOSE_ALERT_BUTTON_EVENT,
-                            label: 'Resolve',
+                            label: i18nObj.__('api.webhook.button_event'),
                             submit: {
                                 path: Routes.App.CallPathIncidentResolveAction,
                                 expand: {
@@ -76,11 +78,11 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                         },
                         {
                             location: ActionsEvents.OTHER_OPTIONS_SELECT_EVENT,
-                            label: "Other actions...",
+                            label: i18nObj.__('api.webhook.select_event'),
                             bindings: [
                                 {
                                     location: ActionsEvents.OTHER_INCIDENT_VIEW_DETAIL,
-                                    label: "View details",
+                                    label: i18nObj.__('api.webhook.select_event_details'),
                                     submit: {
                                         path: Routes.App.CallPathDetailViewIncidentAction,
                                         expand: {
@@ -95,7 +97,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                 },
                                 {
                                     location: ActionsEvents.OTHER_INCIDENT_ADD_NOTE,
-                                    label: "Add note",
+                                    label: i18nObj.__('api.webhook.add_note'),
                                     submit: {
                                         path: Routes.App.CallPathNoteToIncidentAction,
                                         expand: {
@@ -110,7 +112,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                 },
                                 {
                                     location: ActionsEvents.OTHER_INCIDENT_CHANGE_PRIORITY,
-                                    label: "Change Priority",
+                                    label: i18nObj.__('api.webhook.priority'),
                                     submit: {
                                         path: Routes.App.CallPathChangeIncidentPriorityAction,
                                         expand: {
@@ -125,7 +127,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                 },
                                 {
                                     location: ActionsEvents.OTHER_INCIDENT_REASSIGN,
-                                    label: "Reassign",
+                                    label: i18nObj.__('api.webhook.reassign'),
                                     submit: {
                                         path: Routes.App.CallPathAssignIncidentAction,
                                         expand: {
@@ -158,6 +160,7 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
     const eventData: AddNoteWebhook = event.data;
+		const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -168,7 +171,12 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
         props: {
             attachments: [
                 {
-                    text: `Note added to ${hyperlink(eventData.incident.summary, eventData.incident.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)} \n "${eventData.content}"`
+                    text: i18nObj.__('api.webhook.text_incident',
+												{
+														link: hyperlink(eventData.incident.summary, eventData.incident.html_url),
+														html_url: hyperlink(event.agent.summary, event.agent.html_url),
+														content: eventData.content
+												})
                 }
             ]
         }
@@ -186,6 +194,7 @@ async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: Webhook
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
     const eventData: EventWebhook = event.data;
+		const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -196,7 +205,11 @@ async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: Webhook
         props: {
             attachments: [
                 {
-                    text: `Acknowledged ${hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)}`
+                    text: i18nObj.__('api.webhook.text_binding',
+												{
+														link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+														html_url: hyperlink(event.agent.summary, event.agent.html_url)
+												})
                 }
             ]
         }
@@ -214,6 +227,7 @@ async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRe
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
     const eventData: EventWebhook = event.data;
+		const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -225,7 +239,12 @@ async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRe
         props: {
             attachments: [
                 {
-                    text: `Reassigned ${hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url)} to ${assignees.join(', ')} by ${hyperlink(event.agent.summary, event.agent.html_url)}`
+                    text: i18nObj.__('api.webhook.text_reassigned',
+												{
+														link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+														assignees: assignees.join(', '),
+														html_url: hyperlink(event.agent.summary, event.agent.html_url)
+												})
                 }
             ]
         }
@@ -243,6 +262,7 @@ async function notifyIncidentResolved({ data: { event }, rawQuery }: WebhookRequ
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
     const eventData: EventWebhook = event.data;
+		const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -253,7 +273,11 @@ async function notifyIncidentResolved({ data: { event }, rawQuery }: WebhookRequ
         props: {
             attachments: [
                 {
-                    text: `Resolved ${hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)}`
+                    text: i18nObj.__('api.webhook.text_resolved',
+												{
+														link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+														html_url: hyperlink(event.agent.summary, event.agent.html_url)
+												})
                 }
             ]
         }
@@ -271,6 +295,7 @@ async function notifyChangeIncidentPriority({ data: { event }, rawQuery }: Webho
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
     const eventData: EventWebhook = event.data;
+		const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
@@ -281,7 +306,12 @@ async function notifyChangeIncidentPriority({ data: { event }, rawQuery }: Webho
         props: {
             attachments: [
                 {
-                    text: `Updated ${hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url)} priority to ${hyperlink(`${eventData.priority.summary}`, eventData.priority.html_url)} by ${hyperlink(event.agent.summary, event.agent.html_url)}`
+                    text: i18nObj.__('api.webhook.text_updated',
+												{
+														link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+														html_url: hyperlink(`${eventData.priority.summary}`, eventData.priority.html_url),
+														agent_summary: hyperlink(event.agent.summary, event.agent.html_url)
+												})
                 }
             ]
         }
@@ -307,6 +337,7 @@ const WEBHOOKS_ACTIONS: { [key: string]: Function } = {
 export const incomingWebhook = async (request: Request, response: Response) => {
     const webhookRequest: WebhookRequest<any> = request.body.values;
     const context: AppContext = request.body.context;
+		const i18nObj = configureI18n(context);
 
     let callResponse: AppCallResponse;
     try {
@@ -318,7 +349,7 @@ export const incomingWebhook = async (request: Request, response: Response) => {
         callResponse = newOKCallResponse();
         response.json(callResponse);
     } catch (error: any) {
-        callResponse = newErrorCallResponseWithMessage('Error webhook: ' + error.message);
+        callResponse = newErrorCallResponseWithMessage(i18nObj.__('api.webhook.error', { message: error.message }));
         response.json(callResponse);
     }
 };

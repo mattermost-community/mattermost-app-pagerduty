@@ -1,4 +1,4 @@
-import { AppBinding  } from '../types';
+import {AppBinding, AppContext} from '../types';
 import {
     AppExpandLevels,
     PagerDutyIcon,
@@ -9,14 +9,17 @@ import {
     SubscriptionDeleteForm,
     CreateIncidentForm,
 } from '../constant';
+import {configureI18n} from "../utils/translations";
 
-export const getHelpBinding = (): any => {
+export const getHelpBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         label: Commands.HELP,
         icon: PagerDutyIcon,
-        description: 'Show PagerDuty Help',
+        description: i18nObj.__('bindings.bindings.help.description'),
         form: {
-            title: "Show PagerDuty Help Title",
+            title: i18nObj.__('bindings.bindings.help.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.BindingPathHelp,
@@ -30,25 +33,29 @@ export const getHelpBinding = (): any => {
     };
 };
 
-export const getIncidentsBinding = () => {
+export const getIncidentsBinding = (context: AppContext) => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.INCIDENT,
-        description: 'Trigger a PagerDuty incident',
+        description: i18nObj.__('bindings.bindings.incident.description'),
         hint: `[${Commands.CREATE}]`,
         bindings: [
-            incidentCreateBinding(),
+            incidentCreateBinding(context),
         ]
     }
 }
 
-const incidentCreateBinding = (): AppBinding => {
+const incidentCreateBinding = (context: AppContext): AppBinding => {
+		const i18nObj = configureI18n(context);
+
     return {
         label: Commands.CREATE,
         icon: PagerDutyIcon,
-        description: 'Create incident in PagerDuty',
+        description: i18nObj.__('bindings.bindings.create_incident.description'),
         form: {
-            title: "Show PagerDuty Help Title",
+            title: i18nObj.__('bindings.bindings.create_incident.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: `${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`,
@@ -62,39 +69,41 @@ const incidentCreateBinding = (): AppBinding => {
                 {
                     type: AppFieldTypes.TEXT,
                     name: CreateIncidentForm.SERVICE,
-                    modal_label: 'Impacted Service',
-                    description: 'Impacted service name',
+                    modal_label: i18nObj.__('bindings.bindings.create_incident.modal_impacted_label'),
+                    description: i18nObj.__('bindings.bindings.create_incident.modal_impacted_description'),
                 },
                 {
                     type: AppFieldTypes.TEXT,
                     name: CreateIncidentForm.TITLE,
-                    modal_label: 'Title',
-                    description: 'Incident title',
+                    modal_label: i18nObj.__('bindings.bindings.create_incident.modal_title_label'),
+                    description: i18nObj.__('bindings.bindings.create_incident.modal_title_description'),
                 },
                 {
                     type: AppFieldTypes.TEXT,
                     name: CreateIncidentForm.DESCRIPTION,
-                    modal_label: 'Description (optional)',
-                    description: 'Incident description',
+                    modal_label: i18nObj.__('bindings.bindings.create_incident.modal_description_label'),
+                    description: i18nObj.__('bindings.bindings.create_incident.modal_description_description'),
                 },
                 {
                     type: AppFieldTypes.TEXT,
                     name: CreateIncidentForm.ASSIGN_TO,
-                    modal_label: 'Assign to (optional)',
-                    description: 'To whom this incident will be assigned',
+                    modal_label: i18nObj.__('bindings.bindings.create_incident.modal_assign_label'),
+                    description: i18nObj.__('bindings.bindings.create_incident.modal_assign_description'),
                 },
             ]
         }
     }
 }
 
-export const getConfigureBinding = (): any => {
+export const getConfigureBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.CONFIGURE,
-        description: 'Setup PagerDuty Admin Account',
+        description: i18nObj.__('bindings.bindings.configure.description'),
         form: {
-            title: "Setup PagerDuty",
+            title: i18nObj.__('bindings.bindings.configure.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathConfigForm,
@@ -111,13 +120,15 @@ export const getConfigureBinding = (): any => {
     }
 };
 
-export const accountLoginBinding = (): any => {
+export const accountLoginBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.CONNECT,
-        description: 'Connect your PagerDuty account',
+        description: i18nObj.__('bindings.bindings.account_login.description'),
         form: {
-            title: "Account login",
+            title: i18nObj.__('bindings.bindings.account_login.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathConnectSubmit,
@@ -130,13 +141,15 @@ export const accountLoginBinding = (): any => {
     }
 };
 
-export const accountLogoutBinding = (): any => {
+export const accountLogoutBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.DISCONNECT,
-        description: 'Disconnect your PagerDuty account',
+        description: i18nObj.__('bindings.bindings.account_logout.description'),
         form: {
-            title: "Account logout",
+            title: i18nObj.__('bindings.bindings.account_logout.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathDisconnectSubmit,
@@ -150,7 +163,9 @@ export const accountLogoutBinding = (): any => {
     }
 };
 
-export const subscriptionBinding = (): AppBinding => {
+export const subscriptionBinding = (context: AppContext): AppBinding => {
+		const i18nObj = configureI18n(context);
+
     const subCommands: string[] = [
         Commands.ADD,
         Commands.DELETE,
@@ -159,26 +174,28 @@ export const subscriptionBinding = (): AppBinding => {
 
     const bindings: AppBinding[] = [];
 
-    bindings.push(subscriptionAddBinding());
-    bindings.push(subscriptionDeleteBinding());
-    bindings.push(subscriptionListBinding());
+    bindings.push(subscriptionAddBinding(context));
+    bindings.push(subscriptionDeleteBinding(context));
+    bindings.push(subscriptionListBinding(context));
 
     return {
         icon: PagerDutyIcon,
         label: Commands.SUBSCRIPTION,
-        description: 'Subscription teams of PagerDuty to Mattermost channel',
+        description: i18nObj.__('bindings.bindings.subcription.description'),
         hint: `[${subCommands.join(' | ')}]`,
         bindings
     }
 };
 
-export const subscriptionAddBinding = (): any => {
+export const subscriptionAddBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.ADD,
-        description: 'Add a service subscription to a channel',
+        description: i18nObj.__('bindings.bindings.subcription.description'),
         form: {
-            title: "Add a service subscription to a channel",
+            title: i18nObj.__('bindings.bindings.subcription.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathSubscriptionAddSubmit,
@@ -190,7 +207,7 @@ export const subscriptionAddBinding = (): any => {
             },
             fields: [
                 {
-                    modal_label: 'Service id',
+                    modal_label: i18nObj.__('bindings.bindings.subcription.modal_service'),
                     name: SubscriptionCreateForm.SERVICE_ID,
                     type: AppFieldTypes.TEXT,
                     is_required: true,
@@ -198,7 +215,7 @@ export const subscriptionAddBinding = (): any => {
                     max_length: 100
                 },
                 {
-                    modal_label: 'Channel',
+                    modal_label: i18nObj.__('bindings.bindings.subcription.modal_channel'),
                     name: SubscriptionCreateForm.CHANNEL_ID,
                     type: AppFieldTypes.CHANNEL,
                     is_required: true,
@@ -209,13 +226,15 @@ export const subscriptionAddBinding = (): any => {
     }
 };
 
-export const subscriptionDeleteBinding = (): any => {
+export const subscriptionDeleteBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.DELETE,
-        description: 'Unsubscribe service from channel',
+        description: i18nObj.__('bindings.bindings.subcription.delete.description'),
         form: {
-            title: "Unsubscribe service from channel",
+            title: i18nObj.__('bindings.bindings.subcription.delete.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathSubscriptionDeleteSubmit,
@@ -227,7 +246,7 @@ export const subscriptionDeleteBinding = (): any => {
             },
             fields: [
                 {
-                    modal_label: 'Subscription ID',
+                    modal_label: i18nObj.__('bindings.bindings.subcription.delete.label'),
                     name: SubscriptionDeleteForm.SUBSCRIPTION_ID,
                     type: AppFieldTypes.TEXT,
                     is_required: true,
@@ -240,13 +259,15 @@ export const subscriptionDeleteBinding = (): any => {
     }
 };
 
-export const subscriptionListBinding = (): any => {
+export const subscriptionListBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.LIST,
-        description: 'List of service subscribed to channels',
+        description: i18n,
         form: {
-            title: "List of service subscribed to channels",
+            title: i18nObj.__('bindings.bindings.subcription.list.description'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathSubscriptionListSubmit,
@@ -261,7 +282,9 @@ export const subscriptionListBinding = (): any => {
     }
 };
 
-export const listBinding = (): AppBinding => {
+export const listBinding = (context: AppContext): AppBinding => {
+		const i18nObj = configureI18n(context);
+
     const subCommands: string[] = [
         Commands.SERVICE,
         Commands.INCIDENT,
@@ -270,26 +293,28 @@ export const listBinding = (): AppBinding => {
 
     const bindings: AppBinding[] = [];
 
-    bindings.push(serviceListBinding());
-    bindings.push(incidentListBinding());
-    bindings.push(onCallListBinding());
+    bindings.push(serviceListBinding(context));
+    bindings.push(incidentListBinding(context));
+    bindings.push(onCallListBinding(context));
 
     return {
         icon: PagerDutyIcon,
         label: Commands.LIST,
-        description: 'List PagerDuty',
+        description: i18nObj.__('bindings.bindings.subcription.list.binding'),
         hint: `[${subCommands.join(' | ')}]`,
         bindings
     }
 };
 
-export const serviceListBinding = (): any => {
+export const serviceListBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.SERVICE,
-        description: 'List of services',
+        description: i18nObj.__('bindings.bindings.subcription.service.title'),
         form: {
-            title: 'List of services',
+            title: i18nObj.__('bindings.bindings.subcription.service.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathServiceSubmit,
@@ -303,13 +328,15 @@ export const serviceListBinding = (): any => {
     }
 };
 
-export const incidentListBinding = (): any => {
+export const incidentListBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.INCIDENT,
-        description: 'List of incidents',
+        description: i18nObj.__('bindings.bindings.subcription.incidents.title'),
         form: {
-            title: 'List of incidents',
+            title: i18nObj.__('bindings.bindings.subcription.incidents.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathIncidentSubmit,
@@ -323,13 +350,15 @@ export const incidentListBinding = (): any => {
     }
 };
 
-export const onCallListBinding = (): any => {
+export const onCallListBinding = (context: AppContext): any => {
+		const i18nObj = configureI18n(context);
+
     return {
         icon: PagerDutyIcon,
         label: Commands.ONCALL,
-        description: 'List of users on call',
+        description: i18nObj.__('bindings.bindings.subcription'),
         form: {
-            title: 'List of users on call',
+            title: i18nObj.__('bindings.bindings.subcription'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathOnCallSubmit,
