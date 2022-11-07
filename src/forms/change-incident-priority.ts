@@ -1,12 +1,14 @@
 import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
 import { AppExpandLevels, AppFieldTypes, ChangeIncidentPriorityForm, ExceptionType, PagerDutyIcon, ReassignIncidentForm, Routes } from "../constant";
 import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Incident, Oauth2App, PagerDutyOpts, Priority, UpdateIncident, UserResponse } from "../types";
+import {configureI18n} from "../utils/translations";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
 import { getPrioritiesOptionList, getUsersOptionList } from "./pagerduty-options";
 
 export async function changeIncidentPriorityActionForm(call: AppCallRequest): Promise<AppForm> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+	 const i18nObj = configureI18n(call.context);
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
@@ -18,14 +20,14 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get incident failed'
+      i18nObj.__('forms.incident.exception')
    );
    const incident: Incident = responseIncident.data['incident'];
 
    const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(tokenOpts);
    const fields: AppField[] = [
       {
-         modal_label: 'Priorities',
+         modal_label: i18nObj.__('forms.change-incident.label-priorities'),
          type: AppFieldTypes.STATIC_SELECT,
          name: ChangeIncidentPriorityForm.PRIORITY,
          is_required: true, 
@@ -34,8 +36,8 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
    ];
 
    return {
-      title: 'Change incident priority',
-      header: `Choose a new priority level to the incident "${incident.summary}":`,
+      title: i18nObj.__('forms.change-incident.title'),
+      header: i18nObj.__('forms.change-incident.header'),
       icon: PagerDutyIcon,
       fields: fields,
       submit: {
@@ -53,6 +55,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
 export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Promise<string> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+	 const i18nObj = configureI18n(call.context);
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
@@ -66,7 +69,7 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get incident failed'
+      i18nObj.__('forms.add-note.exception')
    );
    const incident: Incident = responseIncident.data['incident'];
 
@@ -75,7 +78,7 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
          replace(Routes.PagerDuty.PriorityPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get priority failed'
+			 i18nObj.__('forms.add-note.exception')
    );
    const priority: Priority = responsePriority.data['priority'];
 
@@ -92,7 +95,7 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
          { data }
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty incident update failed'
+      i18nObj.__('forms.change-incident.update')
    );
-   return `You have updated incident "${incident.summary}" priority to ${priority.name}`;
+	 return i18nObj.__('forms.change-incident.update-failed', { summary: incident.summary, name: priority.name });
 }

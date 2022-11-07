@@ -1,12 +1,14 @@
 import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
 import { AppExpandLevels, AppFieldTypes, ExceptionType, PagerDutyIcon, ReassignIncidentForm, Routes } from "../constant";
 import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Incident, Oauth2App, PagerDutyOpts, UpdateIncident, UserResponse } from "../types";
+import {configureI18n} from "../utils/translations";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
 import { getUsersOptionList } from "./pagerduty-options";
 
 export async function reassignIncidentActionForm(call: AppCallRequest): Promise<AppForm> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+	 const i18nObj = configureI18n(call.context);
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
@@ -18,11 +20,11 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get incident failed'
+      i18nObj.__('forms.reassign.incident-failed')
    );
    const incident: Incident = responseIncident.data['incident'];
 
-   const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts);
+   const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call.context);
    const fields: AppField[] = [
       {
          modal_label: 'User',
@@ -34,8 +36,8 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
    ];
 
    return {
-      title: 'Assign incident',
-      header: `Choose a user to assign the incident "${incident.summary}" to:`,
+      title: i18nObj.__('forms.reassign.title'),
+      header: i18nObj.__('forms.reassign.header', { summary: incident.summary }),
       icon: PagerDutyIcon,
       fields: fields,
       submit: {
@@ -53,6 +55,7 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
 export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<string> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
+	 const i18nObj = configureI18n(call.context);
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
@@ -66,7 +69,7 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get incident failed'
+      i18nObj.__('forms.reassign.header')
    );
    const incident: Incident = responseIncident.data['incident'];
 
@@ -75,7 +78,7 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
          replace(Routes.PagerDuty.UserPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get user failed'
+      i18nObj.__('forms.reassign.user-failed')
    );
    const user: UserResponse = responseUser.data['user'];
 
@@ -99,7 +102,7 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
          { data }
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty incident update failed'
+      i18nObj.__('forms.reassign.user-update')
    );
-   return `You have reassigned incident "${incident.summary}" to ${user?.name}`;
+		return i18nObj.__('forms.reassign.reassign-incident', { summary: incident.summary, name: user?.name })
 }

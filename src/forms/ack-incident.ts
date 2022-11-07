@@ -6,6 +6,7 @@ import {
    UpdateIncident,
 } from '../types';
 import {  ExceptionType,  Routes,  } from '../constant';
+import {configureI18n} from "../utils/translations";
 import {  replace, tryPromiseForGenerateMessage } from '../utils/utils';
 import { api, APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
 
@@ -14,6 +15,7 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const incident: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incident?.id;
+	 const i18nObj = configureI18n(call.context);
    
    try {
       const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
@@ -22,13 +24,13 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
          ),
          ExceptionType.MARKDOWN,
-         'PagerDuty webhook failed'
+         i18nObj.__('forms.incident.exception')
       );
 
       const incident: Incident = responseSubscriptions.data['incident'];
    
       if (incident.status === 'acknowledged') {
-         throw new Error(`You already have acknowledged "${incident.summary}"`);
+         throw new Error(i18nObj.__('forms.incident.error', { summary: incident.summary }));
       }
       
       const data: UpdateIncident = {
@@ -44,10 +46,10 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
             { data }
          ),
          ExceptionType.MARKDOWN,
-         'PagerDuty incident update failed'
+         i18nObj.__('forms.incident.exception_update')
       );
 
-      message = `You have acknowledged incident "${incident.summary}"`;
+      message = i18nObj.__('forms.incident.message', { summary: incident.summary });
    } catch (error: any) {
       message = error.message;
    }

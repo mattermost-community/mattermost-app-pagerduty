@@ -135,4 +135,107 @@
       "bindings": "Manage PagerDuty App"
     }
   },
+  "forms": {
+    "incident": {
+      "exception": "PagerDuty webhook failed'",
+      "error": "You already have acknowledged \"{{ summary }}\"",
+      "exception_update": "PagerDuty incident update failed",
+      "message": "You have acknowledged incident \"{{ summary }}\""
+    },
+    "add-note": {
+      "exception": "PagerDuty get incident failed",
+      "label": "Note for incident \" {{ summary }}\"",
+      "description": "Your note here...",
+      "title": "Add Note",
+      "failed": "PagerDuty add note failed",
+      "incident": "Note will be added for incident {{ summary }}"
+    },
+    "change-incident": {
+      "label-priorities": "Priorities",
+      "title": "Change incident priority",
+      "header": "`Choose a new priority level to the incident \"{{ summary }}\":`",
+      "update": "PagerDuty incident update failed",
+      "update-failed": "You have updated incident \"{{ summary }}\" priority to {{ name }}"
+    },
+    "configure-admin": {
+      "title": "Configure PagerDuty",
+      "header": "Configure the PagerDuty app with the following information.",
+      "label-client": "Client ID",
+      "description-client": "API integration PagerDuty Client ID",
+      "label-secret": "Client Secret",
+      "description-secret": "API integration PagerDuty Client Secret"
+    },
+    "delete-post": {
+      "failed": "Mattermost failed"
+    },
+    "incident-create": {
+      "title": "Create New Incident",
+      "failed": "PagerDuty service failed",
+      "impacted-label": "Impacted Service",
+      "impacted-description": "Impacted service name",
+      "title-label": "Title",
+      "title-description": "Incident title",
+      "description-label": "Description (optional)",
+      "description-description": "Incident description",
+      "assign-label": "Assign to (optional)",
+      "assign-description": "To whom this incident will be assigned",
+      "add-incident-exception": "Required data not sended [Impacted service and title]",
+      "create-incident-exception": "Required data not sended [Impacted service and title]"
+    },
+    "incident-detail": {
+      "exception": "PagerDuty get incident failed",
+      "title-decription": "Description",
+      "title-service": "Service",
+      "title-policy": "Escalation Policy",
+      "title-priority": "Priority",
+      "title-urgency": "Urgency",
+      "title-asignee": "Assignee",
+      "title-incident": "Incident: {{ url }}"
+    },
+    "incident-list": {
+      "message": "PagerDuty incident failed"
+    },
+    "list-call": {
+      "message": "PagerDuty policy failed"
+    },
+    "list-service": {
+      "message": "PagerDuty service failed"
+    },
+    "oauth": {
+      "exception-complete": "Bad Request: code param not provided",
+      "successfully-account": "You have successfully connected your PagerDuty account!",
+      "exception-account": "You still do not have connected your PagerDuty account"
+    },
+    "option": {
+      "service-failed": "PagerDuty service failed",
+      "user-failed": "PagerDuty get users failed",
+      "priorities-failed": "PagerDuty get priorities failed"
+    },
+    "reassign": {
+      "incident-failed": "PagerDuty incident failed",
+      "title": "Assign incident",
+      "header": "Choose a user to assign the incident \"{{ summary }}\" to:",
+      "user-failed": "PagerDuty get user failed",
+      "user-update": "PagerDuty incident update failed",
+      "reassign-incident": "You have reassigned incident \"{{ summary }}\" to {{ name }}"
+    },
+    "resolved": {
+      "failed": "Mattermost failed",
+      "incident-failed": "PagerDuty get incident failed",
+      "incident-exception": "\"PagerDuty incident update failed\". You already have resolved incident \"{{ summary }}\"",
+      "title-incident": "Resolve incident",
+      "header-incident": "Are you sure you want to resolve incident \"{{ summary }}\"?",
+      "incident-update-failed": "PagerDuty incident update failed",
+      "incident-update-exception": "You have succesfully resolved incident \"{{ summary }}\"!",
+      "title-trigger": "Triggered: {{ url }}",
+      "status-title": "Status",
+      "status-value": "Resolved",
+      "policity-title": "Escalation policy"
+    },
+    "subcription": {
+      "webhook-failed": "PagerDuty webhook failed",
+      "service-failed": "PagerDuty service failed",
+      "service-exception": "Service [{{ summary }}] is already associated with channel [{{ channel }}]"
+    }
+  }
 }

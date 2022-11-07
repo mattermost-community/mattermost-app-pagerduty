@@ -5,10 +5,12 @@ import {
 } from '../types';
 import {AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys} from '../constant';
 import {KVStoreProps, KVStoreClient, KVStoreOptions} from '../clients/kvstore';
+import {configureI18n} from "../utils/translations";
 
 export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const botAccessToken: string | undefined = call.context.bot_access_token;
+		const i18nObj = configureI18n(call.context);
 
     const options: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
@@ -19,24 +21,24 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
     const config: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
 
     const form: AppForm = {
-        title: 'Configure PagerDuty',
-        header: 'Configure the PagerDuty app with the following information.',
+        title: i18nObj.__('forms.configure-admin.title'),
+        header: i18nObj.__('forms.configure-admin.header'),
         icon: PagerDutyIcon,
         fields: [
             {
                 type: AppFieldTypes.TEXT,
                 name: ConfigureForm.CLIENT_ID,
-                modal_label: 'Client ID',
+                modal_label: i18nObj.__('forms.configure-admin.label-client'),
                 value: config.pagerduty_client_id,
-                description: 'API integration PagerDuty Client ID',
+                description: i18nObj.__('forms.configure-admin.description-client'),
                 is_required: true,
             },
             {
                 type: AppFieldTypes.TEXT,
                 name: ConfigureForm.CLIENT_SECRET,
-                modal_label: 'Client Secret',
+                modal_label: i18nObj.__('forms.configure-admin.label-secret'),
                 value: config.pagerduty_client_secret,
-                description: 'API integration PagerDuty Client Secret',
+                description: i18nObj.__('forms.configure-admin.description-secret'),
                 is_required: true,
             }
         ],

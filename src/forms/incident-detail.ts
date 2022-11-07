@@ -4,12 +4,13 @@ import { ExceptionType, Routes } from "../constant";
 import { AppAttachmentField, AppCallRequest, AppCallValues, AppField, Incident, Oauth2App, PostEphemeralCreate } from "../types";
 import { h6, hyperlink } from "../utils/markdown";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
-
+import { configureI18n } from "../utils/translations";
 
 export async function showIncidentDetailPost(call: AppCallRequest): Promise<any> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
+	 const i18nObj = configureI18n(call.context);
 
    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
@@ -18,7 +19,7 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get incident failed'
+      i18nObj.__('forms.incident-detail.exception')
    );
 
    const incident: Incident = responseIncident.data['incident'];
@@ -30,17 +31,17 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
    const fields: AppAttachmentField[] = [
       {
          short: false,
-         title: 'Description',
+         title: i18nObj.__('forms.incident-detail.title-decription'),
          value: `${incident.description}`,
       },
       {
          short: true,
-         title: 'Service',
+         title: i18nObj.__('forms.incident-detail.title-service'),
          value: h6(`${hyperlink(`${incident.service.summary}`, incident.service.html_url)}`),
       },
       {
          short: true,
-         title: 'Escalation Policy',
+         title: i18nObj.__('forms.incident-detail.title-policy'),
          value: h6(`${hyperlink(`${incident.escalation_policy.summary}`, incident.escalation_policy.html_url)}`),
       }
    ]
@@ -50,7 +51,7 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
       fields.push(
          {
             short: true,
-            title: 'Priority',
+            title: i18nObj.__('forms.incident-detail.title-priority'),
             value: `${priority.summary} (${`${incident.urgency}`.toUpperCase()})`,
          }
       );
@@ -58,7 +59,7 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
       fields.push(
          {
             short: true,   
-            title: 'Urgency',
+            title: i18nObj.__('forms.incident-detail.title-urgency'),
             value: `${incident.urgency}`.toUpperCase(),
          }
       );
@@ -69,7 +70,7 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
       fields.push(
          {
             short: true,
-            title: 'Assignee',
+            title: i18nObj.__('forms.incident-detail.title-asignee'),
             value: h6(`${hyperlink(`${assignee.summary}`, assignee.html_url)}`),
          }
       );
@@ -83,7 +84,7 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
          props: {
             attachments: [
                {
-                  title: h6(`Incident: ${hyperlink(`${incident.summary}`, incident.html_url)}`),
+									 title: h6(i18nObj.__('forms.incident-detail.title-incident')),
                   title_link: '',
                   fields: fields
                }
