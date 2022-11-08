@@ -134,5 +134,108 @@
     "slash": {
       "bindings": "Administrar la App de PagerDuty"
     }
+  },
+  "forms": {
+    "incident": {
+      "exception": "Falló el webhook de PagerDuty'",
+      "error": "Ya has reconocido \"{{ summary }}\"",
+      "exception_update": "La actualización del incidente de PagerDuty falló",
+      "message": "Has reconocido el incidente \"{{ summary }}\""
+    },
+    "add-note": {
+      "exceptopn": "Error al obtener el incidente de PagerDuty",
+      "label": "Nota para incidente \" {{ summary }}\"",
+      "description": "Tu nota aquí...",
+      "title": "Añadir la nota",
+      "failed": "Error al agregar la nota de PagerDuty",
+      "incident": "Se agregará una nota para el incidente {{ summary }}"
+    },
+    "change-incident": {
+      "label-priorities": "Prioridades",
+      "title": "Cambiar la prioridad del incidente",
+      "header": "`Elija un nuevo nivel de prioridad para el incidente \"{{ summary }}\":`",
+      "update": "La actualización del incidente de PagerDuty fallód",
+      "update-failed": "Ha actualizado la prioridad del incidente \"{{ summary }}\" a {{ name }}"
+    },
+    "configure-admin": {
+      "title": "Configurar PagerDuty",
+      "header": "Configure la aplicación PagerDuty con la siguiente información.",
+      "label-client": "Identificación del cliente",
+      "description-client": "ID de cliente de integración de API PagerDuty",
+      "label-secret": "Secreto del cliente",
+      "description-secret": "Integración API PagerDuty Client Secret"
+    },
+    "delete-post": {
+      "failed": "Mattermost falló"
+    },
+    "incident-create": {
+      "title": "Crear nuevo incidente",
+      "failed": "Falló el servicio PagerDuty",
+      "impacted-label": "Servicio afectado",
+      "impacted-description": "Nombre del servicio afectado",
+      "title-label": "Título",
+      "title-description": "Título del incidente",
+      "description-label": "Descripción (opcional)",
+      "description-description": "Descripción del incidente",
+      "assign-label": "Asignar a (opcional)",
+      "assign-description": "A quién se asignará este incidente",
+      "add-incident-exception": "No se enviaron los datos necesarios [servicio y título afectados]",
+      "create-incident-exception": "No se enviaron los datos necesarios [servicio y título afectados]"
+    },
+    "incident-detail": {
+      "exception": "Error al obtener el incidente de PagerDuty",
+      "title-decription": "Descripción",
+      "title-service": "Service",
+      "title-policy": "Política de escalada",
+      "title-priority": "Prioridad",
+      "title-urgency": "Urgencia",
+      "title-asignee": "Cesionario",
+      "title-incident": "Incidente: {{ url }}"
+    },
+    "incident-list": {
+      "message": "Incidente de PagerDuty falló"
+    },
+    "list-call": {
+      "message": "La política de PagerDuty falló"
+    },
+    "list-service": {
+      "message": "Falló el servicio PagerDuty"
+    },
+    "oauth": {
+      "exception-complete": "Solicitud incorrecta: parámetro de código no proporcionado",
+      "successfully-account": "¡Ha conectado correctamente su cuenta de PagerDuty!",
+      "exception-account": "You still do not have connected your PagerDuty account"
+    },
+    "option": {
+      "service-failed": "Falló el servicio PagerDuty",
+      "user-failed": "PagerDuty get users failed",
+      "priorities-failed": "Error al obtener las prioridades de PagerDuty"
+    },
+    "reassign": {
+      "incident-failed": "Incidente de PagerDuty falló",
+      "title": "Asignar incidente",
+      "header": "Elija un usuario para asignarle el incidente \"{{ summary }}\":",
+      "user-failed": "Error al obtener el usuario de PagerDuty",
+      "user-update": "La actualización del incidente de PagerDuty falló",
+      "reassign-incident": "Has reasignado el incidente \"{{ summary }}\" a {{ name }}"
+    },
+    "resolved": {
+      "failed": "Mattermost falló",
+      "incident-failed": "PagerDuty get incident failed",
+      "incident-exception": "\"Falló la actualización del incidente de PagerDuty\". Ya has resuelto el incidente \"{{ summary }}\"",
+      "title-incident": "Resolver incidente",
+      "header-incident": "¿Está seguro de que desea resolver el incidente \"{{ summary }}\"?",
+      "incident-update-failed": "La actualización del incidente de PagerDuty falló",
+      "incident-update-exception": "Has resuelto correctamente el incidente \"{{ summary }}\"!",
+      "title-trigger": "Desencadenado por: {{ url }}",
+      "status-title": "Estado",
+      "status-value": "Resuelto",
+      "policity-title": "Escalation policy"
+    },
+    "subcription": {
+      "webhook-failed": "Falló el webhook de PagerDuty",
+      "service-failed": "Falló el servicio PagerDuty",
+      "service-exception": "El servicio [{{ summary }}] ya está asociado con el canal [{{ channel }}]"
+    }
   }
 }

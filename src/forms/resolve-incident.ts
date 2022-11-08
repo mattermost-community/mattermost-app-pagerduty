@@ -10,6 +10,7 @@ import {
    PostUpdate, 
    UpdateIncident 
 } from "../types";
+import {configureI18n} from "../utils/translations";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
 import * as _ from 'lodash';
 import { api, APIResponse, PartialCall } from "@pagerduty/pdjs/build/src/api";
@@ -23,23 +24,24 @@ export async function confirmResolveOpenModal(call: AppCallRequest): Promise<App
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
    const postId: string = <string>call.context.post?.id;
+	 const i18nObj = configureI18n(call.context);
 
    const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
       pdClient.get(
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get incident failed'
+      i18nObj.__('forms.')
    );
-   const incident: Incident = responseIncident.data['incident'];
+   const incident: Incident = responseIncident.data['incident.resolved.incident-failed'];
    if (incident.status === 'resolved') {
       await updatePostResolveIncident(call, postId, incident);
-      throw new Exception(ExceptionType.MARKDOWN, `"PagerDuty incident update failed". You already have resolved incident "${incident.summary}"`)
+      throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }))
    }
 
    return {
-      title: 'Resolve incident',
-      header: `Are you sure you want to resolve incident "${incident.summary}"?`,
+      title: i18nObj.__('forms.resolvedtitle-incident.'),
+      header: i18nObj.__('forms.resolved.header-incident', { summary: incident.summary }),
       icon: PagerDutyIcon,
       fields: [],
       submit: {
@@ -62,6 +64,7 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
    const postId: string = <string>call.state.post?.id;
+	 const i18nObj = configureI18n(call.context);
 
    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
@@ -70,14 +73,14 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty get incident failed'
+      i18nObj.__('forms.resolved.incident-failed"')
    );
 
    const incident: Incident = responseIncident.data['incident'];
   
    if (incident.status === 'resolved') {
       await updatePostResolveIncident(call, postId, incident);
-      throw new Exception(ExceptionType.MARKDOWN, `"PagerDuty incident update failed". You already have resolved incident "${incident.summary}"`)
+      throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }))
    }
 
    const data: UpdateIncident = {
@@ -93,17 +96,18 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
          { data }
       ),
       ExceptionType.MARKDOWN,
-      'PagerDuty incident update failed'
+      i18nObj.__('forms.resolved.incident-update-failed')
    );
 
    await updatePostResolveIncident(call, postId, incident);
-   return `You have succesfully resolved incident "${incident.summary}"!`;
+   return i18nObj.__('forms.resolved.incident-update-exception', { summary: incident.summary });
 
 }
 
 async function updatePostResolveIncident(call: AppCallRequest, postId: string, incident: Incident) {
    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
    const botAccessToken: string | undefined = call.context.bot_access_token;
+	 const i18nObj = configureI18n(call.context);
 
    const mattermostOptions: MattermostOptions = {
       mattermostUrl: <string>mattermostUrl,
@@ -111,25 +115,25 @@ async function updatePostResolveIncident(call: AppCallRequest, postId: string, i
    };
 
    const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
-   await tryPromiseForGenerateMessage(mattermostClient.getPost(postId), ExceptionType.MARKDOWN, 'Mattermost failed');
+   await tryPromiseForGenerateMessage(mattermostClient.getPost(postId), ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.failed'));
 
    const updatePost: PostUpdate = {
       id: postId,
       props: {
          attachments: [
             {
-               title: h6(`Triggered: ${hyperlink(`${incident.summary}`, incident.html_url)}`), 
+								title: h6(i18nObj.__('forms.resolved.title-trigger', { url: hyperlink(`${incident.summary}`, incident.html_url) })),
                title_link: '',
                color: "#AD251C",
                fields: [
                   {
                      short: true,
-                     title: 'Status',
-                     value: 'Resolved'
+                     title: i18nObj.__('forms.resolved.status-title'),
+                     value: i18nObj.__('forms.resolved.status-value')
                   },
                   {
                      short: true,
-                     title: 'Escalation policy',
+                     title: i18nObj.__('forms.resolved.policity-title'),
                      value: `${incident.escalation_policy.summary}`
                   }
                ]

@@ -168,9 +168,10 @@ export const addNoteToIncidentSubmit = async (request: Request, response: Respon
 
 export const closePostActions = async (request: Request, response: Response) => {
    let callResponse: AppCallResponse = newOKCallResponse();
+	 const call: AppCallRequest = request.body;
 
    try {
-      await deletePostCall(request.body);
+      await deletePostCall(request.body, call.context);
    } catch (error: any) {
       callResponse = showMessageToMattermost(error);
    }

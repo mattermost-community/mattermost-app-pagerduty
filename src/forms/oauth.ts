@@ -13,6 +13,7 @@ import {
 } from '../types';
 import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
 import {ExceptionType, Routes, StoreKeys} from '../constant';
+import {configureI18n} from "../utils/translations";
 import {encodeFormData, isConnected} from '../utils/utils';
 import {Exception} from "../utils/exception";
 import config from '../config';
@@ -51,9 +52,10 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const actingUserID: string | undefined = call.context.acting_user?.id;
     const oauth2CompleteUrl: string | undefined = call.context.oauth2?.complete_url;
     const values: AppCallValues | undefined = call.values;
+		const i18nObj = configureI18n(call.context);
 
     if (!values?.code) {
-        throw new Error(values?.error_description || 'Bad Request: code param not provided');
+        throw new Error(values?.error_description || i18nObj.__('forms.oauth.exception-complete'));
     }
 
     const kvOptions: KVStoreOptions = {
@@ -112,7 +114,7 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOption);
     const channel: Channel = await mattermostClient.createDirectChannel([<string>botUserID, <string>actingUserID]);
     const post: PostCreate = {
-        message: 'You have successfully connected your PagerDuty account!',
+        message: i18nObj.__('forms.oauth.successfully-account'),
         user_id: botUserID,
         channel_id: channel.id,
         root_id: '',
@@ -124,9 +126,10 @@ export async function oauth2Disconnect(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const accessToken: string | undefined = call.context.acting_user_access_token;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
+		const i18nObj = configureI18n(call.context);
 
     if (!isConnected(oauth2)) {
-        throw new Exception(ExceptionType.MARKDOWN, 'You still do not have connected your PagerDuty account');
+        throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.oauth.exception-account'));
     }
 
     const kvOptionsOauth: KVStoreOptions = {

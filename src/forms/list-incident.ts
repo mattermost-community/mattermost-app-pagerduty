@@ -3,10 +3,12 @@ import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
 import queryString from 'query-string';
 import {AppCallRequest, Incident, Oauth2App} from '../types';
 import {ExceptionType, Routes} from '../constant';
+import {configureI18n} from "../utils/translations";
 import {tryPromiseForGenerateMessage} from '../utils/utils';
 
 export async function getAllIncidentsCall(call: AppCallRequest): Promise<Incident[]> {
     const oauth2: Oauth2App | undefined = call.context.oauth2;
+		const i18nObj = configureI18n(call.context);
 
     const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
@@ -16,7 +18,7 @@ export async function getAllIncidentsCall(call: AppCallRequest): Promise<Inciden
     const responseIncidents: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(`${Routes.PagerDuty.IncidentsPathPrefix}?${queryParams}`),
         ExceptionType.MARKDOWN,
-        'PagerDuty incident failed'
+        i18nObj.__('forms.incident-list.message')
     );
     const incidents: Incident[] = responseIncidents.data['incidents'];
 
