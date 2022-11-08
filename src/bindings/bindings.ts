@@ -12,7 +12,7 @@ import {
 import {configureI18n} from "../utils/translations";
 
 export const getHelpBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         label: Commands.HELP,
@@ -34,7 +34,7 @@ export const getHelpBinding = (context: AppContext): any => {
 };
 
 export const getIncidentsBinding = (context: AppContext) => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -48,7 +48,7 @@ export const getIncidentsBinding = (context: AppContext) => {
 }
 
 const incidentCreateBinding = (context: AppContext): AppBinding => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         label: Commands.CREATE,
@@ -96,7 +96,7 @@ const incidentCreateBinding = (context: AppContext): AppBinding => {
 }
 
 export const getConfigureBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -108,12 +108,9 @@ export const getConfigureBinding = (context: AppContext): any => {
             submit: {
                 path: Routes.App.CallPathConfigForm,
                 expand: {
-                    admin_access_token: AppExpandLevels.EXPAND_SUMMARY,
                     acting_user: AppExpandLevels.EXPAND_SUMMARY,
-                    acting_user_access_token: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
@@ -121,7 +118,7 @@ export const getConfigureBinding = (context: AppContext): any => {
 };
 
 export const accountLoginBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -142,7 +139,7 @@ export const accountLoginBinding = (context: AppContext): any => {
 };
 
 export const accountLogoutBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -164,7 +161,7 @@ export const accountLogoutBinding = (context: AppContext): any => {
 };
 
 export const subscriptionBinding = (context: AppContext): AppBinding => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     const subCommands: string[] = [
         Commands.ADD,
@@ -188,7 +185,7 @@ export const subscriptionBinding = (context: AppContext): AppBinding => {
 };
 
 export const subscriptionAddBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -227,7 +224,7 @@ export const subscriptionAddBinding = (context: AppContext): any => {
 };
 
 export const subscriptionDeleteBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -260,7 +257,7 @@ export const subscriptionDeleteBinding = (context: AppContext): any => {
 };
 
 export const subscriptionListBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -283,7 +280,7 @@ export const subscriptionListBinding = (context: AppContext): any => {
 };
 
 export const listBinding = (context: AppContext): AppBinding => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     const subCommands: string[] = [
         Commands.SERVICE,
@@ -307,7 +304,7 @@ export const listBinding = (context: AppContext): AppBinding => {
 };
 
 export const serviceListBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -329,7 +326,7 @@ export const serviceListBinding = (context: AppContext): any => {
 };
 
 export const incidentListBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
@@ -351,7 +348,7 @@ export const incidentListBinding = (context: AppContext): any => {
 };
 
 export const onCallListBinding = (context: AppContext): any => {
-		const i18nObj = configureI18n(context);
+	const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
