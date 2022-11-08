@@ -24,7 +24,6 @@
     "requested_permissions": [
         "act_as_bot",
         "act_as_user",
-        "act_as_admin",
         "remote_webhooks",
         "remote_oauth2"
     ],
@@ -33,6 +32,13 @@
     ],
     "http": {
         "root_url": "https://mattermost-pagerduty-dev.ancient.mx"
+    },
+    "remote_webhook_auth_type": "none",
+    "on_remote_webhook": {
+        "path": "/webhook",
+        "expand": {
+            "oauth2_app": "all"
+        }
     },
     "aws_lambda": {
         "functions": [

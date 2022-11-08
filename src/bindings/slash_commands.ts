@@ -16,7 +16,7 @@ import {
     PagerDutyIcon
 } from '../constant';
 import {KVStoreClient, KVStoreOptions} from "../clients/kvstore";
-import {existsKvPagerDutyConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
+import { existsOauth2AppConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
 import { configureI18n } from '../utils/translations';
 
 const newCommandBindings = (context: AppContext, bindings: AppBinding[], commands: string[]): AppsState => {
@@ -60,7 +60,7 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
         commands.push(Commands.CONFIGURE);
     }
     
-    if (await existsKvPagerDutyConfig(kvClient)) {
+    if (existsOauth2AppConfig(oauth2)) {
         if (isConnected(oauth2)) {
             commands.push(Commands.SUBSCRIPTION);
             commands.push(Commands.INCIDENT);

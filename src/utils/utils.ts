@@ -2,7 +2,7 @@ import {APIResponse} from '@pagerduty/pdjs/build/src/api';
 import {newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown} from './call-responses';
 import {ExceptionType, StoreKeys} from '../constant';
 import {Exception} from './exception';
-import {AppActingUser, AppCallResponse, Oauth2App} from '../types';
+import {AppActingUser, AppCallResponse, AppContext, Oauth2App} from '../types';
 import {KVStoreClient, KVStoreProps} from '../clients/kvstore';
 
 export function replace(value: string, searchValue: string, replaceValue: string): string {
@@ -30,9 +30,8 @@ export function encodeFormData(data: any): string {
         .join('&');
 }
 
-export async function existsKvPagerDutyConfig(kvClient: KVStoreClient): Promise<boolean> {
-    const pdConfig: KVStoreProps = await kvClient.kvGet(StoreKeys.config);
-    return Boolean(Object.keys(pdConfig).length);
+export function existsOauth2AppConfig(oauth2App: Oauth2App): boolean {
+    return !!oauth2App.client_id && !!oauth2App.client_secret;
 }
 
 export function tryPromisePagerDuty(p: Promise<any>) {
