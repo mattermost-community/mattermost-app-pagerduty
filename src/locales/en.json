@@ -120,15 +120,9 @@
 				"modal_service": "bindings.bindings.subcription.modal_service",
 				"modal_channel": "bindings.bindings.subcription.modal_channel",
 				"list": {
-					"description": "bindings.bindings.subcription.list.description"
-				},
-				"service": {
-					"title": "bindings.bindings.subcription.service.title"
-				},
-				"incidents": {
-					"title": "bindings.bindings.subcription.incidents.title"
-				},
-				"on_call": "bindings.bindings.subcription.on_call"
+					"description": "List of service subscribed to channels",
+					"binding": "List PagerDuty"
+				}
 			},
 			"list": {
 				"binding": "List PagerDuty",
