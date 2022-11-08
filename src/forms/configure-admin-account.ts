@@ -47,7 +47,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
 
 export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-    const botAccessToken: string | undefined = call.context.acting_user_access_token;
+    const botAccessToken: string | undefined = call.context.bot_access_token;
     const values: AppCallValues = <any>call.values;
 
     const pagerDutyClientID: string = values[ConfigureForm.CLIENT_ID];
