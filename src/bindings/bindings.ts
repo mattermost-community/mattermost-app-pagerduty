@@ -265,7 +265,7 @@ export const subscriptionListBinding = (context: AppContext): any => {
     return {
         icon: PagerDutyIcon,
         label: Commands.LIST,
-        description: i18n,
+        description: i18nObj.__('bindings.bindings.subcription.list.description'),
         form: {
             title: i18nObj.__('bindings.bindings.subcription.list.description'),
             icon: PagerDutyIcon,
