@@ -293,11 +293,12 @@ export const listBinding = (context: AppContext): AppBinding => {
     bindings.push(serviceListBinding(context));
     bindings.push(incidentListBinding(context));
     bindings.push(onCallListBinding(context));
+    
 
     return {
         icon: PagerDutyIcon,
         label: Commands.LIST,
-        description: i18nObj.__('bindings.bindings.subcription.list.binding'),
+        description: i18nObj.__('bindings.bindings.list.binding'),
         hint: `[${subCommands.join(' | ')}]`,
         bindings
     }
@@ -309,9 +310,9 @@ export const serviceListBinding = (context: AppContext): any => {
     return {
         icon: PagerDutyIcon,
         label: Commands.SERVICE,
-        description: i18nObj.__('bindings.bindings.subcription.service.title'),
+        description: i18nObj.__('bindings.bindings.list.service.title'),
         form: {
-            title: i18nObj.__('bindings.bindings.subcription.service.title'),
+            title: i18nObj.__('bindings.bindings.list.service.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathServiceSubmit,
@@ -331,9 +332,9 @@ export const incidentListBinding = (context: AppContext): any => {
     return {
         icon: PagerDutyIcon,
         label: Commands.INCIDENT,
-        description: i18nObj.__('bindings.bindings.subcription.incidents.title'),
+        description: i18nObj.__('bindings.bindings.list.incidents.title'),
         form: {
-            title: i18nObj.__('bindings.bindings.subcription.incidents.title'),
+            title: i18nObj.__('bindings.bindings.list.incidents.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathIncidentSubmit,
@@ -348,14 +349,14 @@ export const incidentListBinding = (context: AppContext): any => {
 };
 
 export const onCallListBinding = (context: AppContext): any => {
-	const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     return {
         icon: PagerDutyIcon,
         label: Commands.ONCALL,
-        description: i18nObj.__('bindings.bindings.subcription'),
+        description: i18nObj.__('bindings.bindings.list.on_call.title'),
         form: {
-            title: i18nObj.__('bindings.bindings.subcription'),
+            title: i18nObj.__('bindings.bindings.list.on_call.title'),
             icon: PagerDutyIcon,
             submit: {
                 path: Routes.App.CallPathOnCallSubmit,

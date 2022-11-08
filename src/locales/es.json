@@ -115,11 +115,10 @@
           "description": "Darse de baja del servicio del canal",
           "title": "Darse de baja del servicio del canal",
           "label": "ID de suscripción"
-        },
-        "list": {
-          "description": "Lista de servicios suscritos a canales",
-          "binding": "Lista PagerDuty"
-        },
+        }
+      },
+      "list": {
+        "binding": "Registros de PagerDuty",
         "service": {
           "title": "Lista de servicios"
         },
