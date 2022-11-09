@@ -52,13 +52,8 @@ export class KVStoreClient {
         }).then((response: AxiosResponse<any>) => response.data);
     }
 
-    public storeOauth2App(id: string, secret: string): Promise<any> {
-        const m: Manifest = manifest;
-        const data: Oauth2App = {
-            client_id: id,
-            client_secret: secret,
-        };
-        const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathOAuth2App}/${m.app_id}`;
+    public storeOauth2App(data: Oauth2App): Promise<any> {
+        const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathOAuth2App}`;
         return axios.post(url, data, {
             headers: {
                 Authorization: `BEARER ${this.config.accessToken}`,

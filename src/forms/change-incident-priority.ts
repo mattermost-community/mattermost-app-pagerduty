@@ -8,7 +8,7 @@ import { getPrioritiesOptionList, getUsersOptionList } from "./pagerduty-options
 export async function changeIncidentPriorityActionForm(call: AppCallRequest): Promise<AppForm> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
-	 const i18nObj = configureI18n(call.context);
+	const i18nObj = configureI18n(call.context);
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
@@ -24,7 +24,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
    );
    const incident: Incident = responseIncident.data['incident'];
 
-   const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(tokenOpts);
+   const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(tokenOpts, call.context);
    const fields: AppField[] = [
       {
          modal_label: i18nObj.__('forms.change-incident.label-priorities'),

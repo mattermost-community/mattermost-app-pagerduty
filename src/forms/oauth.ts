@@ -20,23 +20,13 @@ import config from '../config';
 import {MattermostClient, MattermostOptions} from "../clients/mattermost";
 
 export async function oauth2Connect(call: AppCallRequest): Promise<string> {
-    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-    const botAccessToken: string | undefined = call.context.bot_access_token;
-    const oauth2CompleteUrl: string | undefined = call.context.oauth2?.complete_url;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
     const state: string | undefined = call.values?.state;
-
-    const kvOptions: KVStoreOptions = {
-        mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
-    };
-    const kvStoreClient = new KVStoreClient(kvOptions);
-    const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
-
     const url: string = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
 
     const urlWithParams = new URL(url);
-    urlWithParams.searchParams.append('client_id', kvStoreProps.pagerduty_client_id);
-    urlWithParams.searchParams.append('redirect_uri', <string>oauth2CompleteUrl);
+    urlWithParams.searchParams.append('client_id', oauth2.client_id);
+    urlWithParams.searchParams.append('redirect_uri', <string>oauth2.complete_url);
     urlWithParams.searchParams.append('state', <string>state);
     urlWithParams.searchParams.append('response_type', 'code');
     urlWithParams.searchParams.append('scope', 'read write');
@@ -46,33 +36,26 @@ export async function oauth2Connect(call: AppCallRequest): Promise<string> {
 
 export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-    const botAccessToken: string | undefined = call.context.bot_access_token;
     const accessToken: string | undefined = call.context.acting_user_access_token;
     const botUserID: string | undefined = call.context.bot_user_id;
     const actingUserID: string | undefined = call.context.acting_user?.id;
-    const oauth2CompleteUrl: string | undefined = call.context.oauth2?.complete_url;
     const values: AppCallValues | undefined = call.values;
-		const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
 
     if (!values?.code) {
         throw new Error(values?.error_description || i18nObj.__('forms.oauth.exception-complete'));
     }
 
-    const kvOptions: KVStoreOptions = {
-        mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
-    };
-    const kvStoreClient = new KVStoreClient(kvOptions);
-    const kvStoreProps: KVStoreProps = await kvStoreClient.kvGet(StoreKeys.config);
-
     const url: string = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthTokenPathPrefix}`;
     const oauthData: any = {
         grant_type: 'authorization_code',
-        client_id: kvStoreProps.pagerduty_client_id,
-        client_secret: kvStoreProps.pagerduty_client_secret,
-        redirect_uri: <string>oauth2CompleteUrl,
+        client_id: oauth2.client_id,
+        client_secret: oauth2.client_secret,
+        redirect_uri: <string>oauth2.complete_url,
         code: values.code
     };
+    
     const data: OauthUserToken = await fetch(url, {
         method: 'POST',
         headers: {

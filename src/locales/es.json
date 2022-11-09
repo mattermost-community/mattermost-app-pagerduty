@@ -119,7 +119,10 @@
         "list": {
           "description": "Lista de servicios suscritos a canales",
           "binding": "Lista PagerDuty"
-        },
+        }
+      },
+      "list": {
+        "binding": "Registros de PagerDuty",
         "service": {
           "title": "Lista de servicios"
         },
