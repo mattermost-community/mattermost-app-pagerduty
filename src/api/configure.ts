@@ -16,11 +16,11 @@ import { configureI18n } from '../utils/translations';
 
 export const configureAdminAccountForm: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
-		const call: AppCallRequest = req.body;
-		const i18nObj = configureI18n(call.context);
+    const call: AppCallRequest = req.body;
+    const i18nObj = configureI18n(call.context);
 
     try {
-        const form = await pagerDutyConfigForm(req.body);
+        const form = await pagerDutyConfigForm(call);
         callResponse = newFormCallResponse(form);
         res.json(callResponse);
     } catch (error: any) {
@@ -31,11 +31,11 @@ export const configureAdminAccountForm: CallResponseHandler = async (req: Reques
 
 export const configureAdminAccountSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
-		const call: AppCallRequest = req.body;
-		const i18nObj = configureI18n(call.context);
+    const call: AppCallRequest = req.body;
+    const i18nObj = configureI18n(call.context);
 
     try {
-        await pagerDutyConfigSubmit(req.body);
+        await pagerDutyConfigSubmit(call);
         callResponse = newOKCallResponseWithMarkdown(i18nObj.__('api.configure.configure_admin_account_response'));
         res.json(callResponse);
     } catch (error: any) {
@@ -46,7 +46,7 @@ export const configureAdminAccountSubmit: CallResponseHandler = async (req: Requ
 
 export const connectAccountLoginSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     const call: AppCallRequest = req.body;
-		const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
     const connectUrl: string | undefined = call.context.oauth2?.connect_url;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
     const message: string = isConnected(oauth2)

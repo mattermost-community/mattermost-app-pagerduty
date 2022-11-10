@@ -4,7 +4,7 @@ import {
     AppForm,
     Oauth2App,
 } from '../types';
-import {AppExpandLevels, AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys} from '../constant';
+import {AppExpandLevels, AppFieldSubTypes, AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys} from '../constant';
 import {KVStoreProps, KVStoreClient, KVStoreOptions} from '../clients/kvstore';
 import {configureI18n} from "../utils/translations";
 
@@ -27,6 +27,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
             },
             {
                 type: AppFieldTypes.TEXT,
+                subtype: AppFieldSubTypes.PASSWORD,
                 name: ConfigureForm.CLIENT_SECRET,
                 modal_label: i18nObj.__('forms.configure-admin.label-secret'),
                 value: oauth2.client_secret,
@@ -47,7 +48,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
 
 export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-    const botAccessToken: string | undefined = call.context.bot_access_token;
+    const accessToken: string | undefined = call.context.acting_user_access_token;
     const values: AppCallValues = <any>call.values;
 
     const pagerDutyClientID: string = values[ConfigureForm.CLIENT_ID];
@@ -55,7 +56,7 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void>
 
     const options: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken,
+        accessToken: <string>accessToken,
     };
     
     const kvStoreClient = new KVStoreClient(options);
