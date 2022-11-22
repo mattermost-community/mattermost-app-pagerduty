@@ -67,8 +67,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                             submit: {
                                 path: Routes.App.CallPathIncidentResolveAction,
                                 expand: {
-                                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                                    oauth2_app: AppExpandLevels.EXPAND_ALL,
                                     post: AppExpandLevels.EXPAND_SUMMARY
                                 },
                                 state: {
@@ -86,8 +86,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathDetailViewIncidentAction,
                                         expand: {
-                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_user: AppExpandLevels.EXPAND_ALL,
+                                            oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
                                         },
                                         state: {
@@ -101,8 +101,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathNoteToIncidentAction,
                                         expand: {
-                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_user: AppExpandLevels.EXPAND_ALL,
+                                            oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
                                         },
                                         state: {
@@ -116,8 +116,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathChangeIncidentPriorityAction,
                                         expand: {
-                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_user: AppExpandLevels.EXPAND_ALL,
+                                            oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
                                         },
                                         state: {
@@ -131,8 +131,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathAssignIncidentAction,
                                         expand: {
-                                            oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                                            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                            oauth2_user: AppExpandLevels.EXPAND_ALL,
+                                            oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
                                         },
                                         state: {
