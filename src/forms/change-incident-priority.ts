@@ -12,7 +12,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
-   
+
    const pdClient: PartialCall = api(tokenOpts);
 
    const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
@@ -30,7 +30,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
          modal_label: i18nObj.__('forms.change-incident.label-priorities'),
          type: AppFieldTypes.STATIC_SELECT,
          name: ChangeIncidentPriorityForm.PRIORITY,
-         is_required: true, 
+         is_required: true,
          options: prioritiesOpts,
       },
    ];
@@ -44,8 +44,8 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
          path: `${Routes.App.CallPathChangeIncidentPrioritySubmit}`,
          expand: {
             app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+            oauth2_app: AppExpandLevels.EXPAND_ALL,
+            oauth2_user: AppExpandLevels.EXPAND_ALL
          },
          state: call.state
       }

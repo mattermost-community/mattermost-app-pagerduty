@@ -19,7 +19,7 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 	 const i18nObj = configureI18n(call.context);
-   
+
    const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call.context);
    const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call.context);
 
@@ -64,8 +64,8 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
          path: `${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`,
          expand: {
             app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+            oauth2_app: AppExpandLevels.EXPAND_ALL,
+            oauth2_user: AppExpandLevels.EXPAND_ALL
          }
       }
    } as AppForm;
@@ -93,7 +93,7 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
       incident_title: values.incident_title,
       incident_description: values.incident_description,
       incident_assign_to: <AppSelectOption>assign
-   } 
+   }
 
    await postIncidentMethod(valuesData, tokenOpts, call.context);
 }

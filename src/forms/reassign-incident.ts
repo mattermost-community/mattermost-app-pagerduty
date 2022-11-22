@@ -12,7 +12,7 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
-   
+
    const pdClient: PartialCall = api(tokenOpts);
 
    const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
@@ -30,7 +30,7 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
          modal_label: 'User',
          type: AppFieldTypes.STATIC_SELECT,
          name: ReassignIncidentForm.ASSIGN_TO,
-         is_required: true, 
+         is_required: true,
          options: assignToOpts,
       },
    ];
@@ -44,8 +44,8 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
          path: `${Routes.App.CallPathAssignIncidentSubmit}`,
          expand: {
             app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+            oauth2_app: AppExpandLevels.EXPAND_ALL,
+            oauth2_user: AppExpandLevels.EXPAND_ALL
          },
          state: call.state
       }

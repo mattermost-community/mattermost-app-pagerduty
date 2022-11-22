@@ -25,8 +25,8 @@ export const getHelpBinding = (context: AppContext): any => {
                 path: Routes.App.BindingPathHelp,
                 expand: {
                     acting_user: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    oauth2_app: AppExpandLevels.EXPAND_ALL
                 }
             }
         }
@@ -61,8 +61,8 @@ const incidentCreateBinding = (context: AppContext): AppBinding => {
                 path: `${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`,
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL
                 }
             },
             fields: [
@@ -110,7 +110,7 @@ export const getConfigureBinding = (context: AppContext): any => {
                 expand: {
                     acting_user: AppExpandLevels.EXPAND_SUMMARY,
                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
@@ -131,8 +131,8 @@ export const accountLoginBinding = (context: AppContext): any => {
             submit: {
                 path: Routes.App.CallPathConnectSubmit,
                 expand: {
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL
                 }
             }
         }
@@ -153,8 +153,8 @@ export const accountLogoutBinding = (context: AppContext): any => {
                 path: Routes.App.CallPathDisconnectSubmit,
                 expand: {
                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    oauth2_app: AppExpandLevels.EXPAND_ALL
                 }
             }
         }
@@ -199,8 +199,8 @@ export const subscriptionAddBinding = (context: AppContext): any => {
                 path: Routes.App.CallPathSubscriptionAddSubmit,
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
                 }
             },
             fields: [
@@ -238,8 +238,8 @@ export const subscriptionDeleteBinding = (context: AppContext): any => {
                 path: Routes.App.CallPathSubscriptionDeleteSubmit,
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL
                 },
             },
             fields: [
@@ -272,8 +272,8 @@ export const subscriptionListBinding = (context: AppContext): any => {
                 expand: {
                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                     app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL
                 }
             }
         }
@@ -294,7 +294,7 @@ export const listBinding = (context: AppContext): AppBinding => {
     bindings.push(serviceListBinding(context));
     bindings.push(incidentListBinding(context));
     bindings.push(onCallListBinding(context));
-    
+
 
     return {
         icon: PagerDutyIcon,
@@ -319,8 +319,8 @@ export const serviceListBinding = (context: AppContext): any => {
                 path: Routes.App.CallPathServiceSubmit,
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL
                 }
             }
         }
@@ -341,8 +341,8 @@ export const incidentListBinding = (context: AppContext): any => {
                 path: Routes.App.CallPathIncidentSubmit,
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL
                 }
             }
         }
@@ -363,8 +363,8 @@ export const onCallListBinding = (context: AppContext): any => {
                 path: Routes.App.CallPathOnCallSubmit,
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    oauth2_user: AppExpandLevels.EXPAND_ALL
                 }
             }
         }
