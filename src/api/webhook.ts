@@ -35,7 +35,7 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
     const incident = {
         id: eventData.id
     }
-    
+
     const payload: PostCreate = {
         message: "",
         channel_id: channelId,
@@ -52,8 +52,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                             submit: {
                                 path: Routes.App.CallPathIncidentAcknowledgedAction,
                                 expand: {
-                                    oauth2_user: AppExpandLevels.EXPAND_SUMMARY,
-                                    oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
+                                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                                    oauth2_app: AppExpandLevels.EXPAND_ALL,
                                     post: AppExpandLevels.EXPAND_SUMMARY
                                 },
                                 state: {
