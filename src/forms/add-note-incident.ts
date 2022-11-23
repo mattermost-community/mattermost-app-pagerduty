@@ -39,8 +39,8 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
          path: `${Routes.App.CallPathNoteToIncidentSubmit}`,
          expand: {
             app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+            oauth2_app: AppExpandLevels.EXPAND_ALL,
+            oauth2_user: AppExpandLevels.EXPAND_ALL
          },
          state: call.state
       }
@@ -55,7 +55,7 @@ export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string>
 
    const values: AppCallValues | undefined = call.values;
    const incidentMessage: string = values?.[NoteModalForm.NOTE_MESSAGE];
-   
+
    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
    const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
@@ -73,10 +73,10 @@ export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string>
          content: incidentMessage
       }
    };
-   
+
    await tryPromiseForGenerateMessage(
       pdClient.post(
-         `${replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)}${Routes.PagerDuty.NotesPathPrefix}`, 
+         `${replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)}${Routes.PagerDuty.NotesPathPrefix}`,
          { data }
       ), ExceptionType.MARKDOWN, i18nObj.__('forms.add-note.failed'));
 

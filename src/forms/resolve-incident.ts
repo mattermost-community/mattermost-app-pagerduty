@@ -1,14 +1,14 @@
 import { MattermostClient, MattermostOptions } from "../clients/mattermost";
 import { AppExpandLevels, ExceptionType, PagerDutyIcon, Routes } from "../constant";
-import { 
-   AppCallRequest, 
-   AppCallValues, 
-   AppForm, 
-   Incident, 
-   Oauth2App, 
-   PagerDutyOpts, 
-   PostUpdate, 
-   UpdateIncident 
+import {
+   AppCallRequest,
+   AppCallValues,
+   AppForm,
+   Incident,
+   Oauth2App,
+   PagerDutyOpts,
+   PostUpdate,
+   UpdateIncident
 } from "../types";
 import {configureI18n} from "../utils/translations";
 import { replace, tryPromiseForGenerateMessage } from "../utils/utils";
@@ -48,8 +48,8 @@ export async function confirmResolveOpenModal(call: AppCallRequest): Promise<App
          path: `${Routes.App.CallPathIncidentResolveSubmit}`,
          expand: {
             app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_app: AppExpandLevels.EXPAND_SUMMARY,
-            oauth2_user: AppExpandLevels.EXPAND_SUMMARY
+            oauth2_app: AppExpandLevels.EXPAND_ALL,
+            oauth2_user: AppExpandLevels.EXPAND_ALL
          },
          state: {
             ...call.state,
@@ -77,7 +77,7 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
    );
 
    const incident: Incident = responseIncident.data['incident'];
-  
+
    if (incident.status === 'resolved') {
       await updatePostResolveIncident(call, postId, incident);
       throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }))
@@ -89,7 +89,7 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
          status: 'resolved'
       }
    }
-   
+
    await tryPromiseForGenerateMessage(
       pdClient.put(
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId),
