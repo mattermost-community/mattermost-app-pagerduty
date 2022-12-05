@@ -7,6 +7,7 @@ import {
 import {AppExpandLevels, AppFieldSubTypes, AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys} from '../constant';
 import {KVStoreProps, KVStoreClient, KVStoreOptions} from '../clients/kvstore';
 import {configureI18n} from "../utils/translations";
+import { MattermostClient } from '../clients/mattermost';
 
 export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm> {
     const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
@@ -40,16 +41,22 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
             expand: {
                 locale: AppExpandLevels.EXPAND_SUMMARY,
                 acting_user_access_token: AppExpandLevels.EXPAND_ALL,
+                acting_user: AppExpandLevels.EXPAND_SUMMARY,
+                oauth2_app: AppExpandLevels.EXPAND_ALL,
+                channel: AppExpandLevels.EXPAND_SUMMARY,
             }
         },
     };
     return form;
 }
 
-export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void> {
+export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const accessToken: string | undefined = call.context.acting_user_access_token;
+    const botUserID: string | undefined = call.context.bot_user_id;
     const values: AppCallValues = <any>call.values;
+    const i18nObj = configureI18n(call.context);
+    const teamId = call.context.channel.team_id as string;
 
     const pagerDutyClientID: string = values[ConfigureForm.CLIENT_ID];
     const pagerDutyClientSecret: string = values[ConfigureForm.CLIENT_SECRET];
@@ -67,5 +74,10 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<void>
     }
 
     await kvStoreClient.storeOauth2App(oauth2App);
+    const mattermostClient: MattermostClient = new MattermostClient(options);
+    await mattermostClient.addUserToTeam(<string>teamId, <string>botUserID);
+
+    
+    return i18nObj.__('api.configure.configure_admin_account_response');
 }
 

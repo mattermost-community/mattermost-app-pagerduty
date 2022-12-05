@@ -35,13 +35,13 @@ export const configureAdminAccountSubmit: CallResponseHandler = async (req: Requ
     const i18nObj = configureI18n(call.context);
 
     try {
-        await pagerDutyConfigSubmit(call);
-        callResponse = newOKCallResponseWithMarkdown(i18nObj.__('api.configure.configure_admin_account_response'));
-        res.json(callResponse);
+        const message = await pagerDutyConfigSubmit(call);
+        callResponse = newOKCallResponseWithMarkdown(message);
     } catch (error: any) {
         callResponse = newErrorCallResponseWithMessage(i18nObj.__('api.configure.configure_admin_account_error', { message: error.message }));
-        res.json(callResponse);
     }
+
+    res.json(callResponse);
 };
 
 export const connectAccountLoginSubmit: CallResponseHandler = async (req: Request, res: Response) => {
