@@ -115,6 +115,7 @@ export const getConfigureBinding = (context: AppContext): any => {
                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
+                    channel: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
