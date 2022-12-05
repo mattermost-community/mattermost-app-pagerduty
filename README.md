@@ -40,7 +40,7 @@ The ``/pd`` command should be available after the configuration has been success
 4. On the **My Apps** page, select **Create New APP** and fill the form. 
 5. When the form is completed, select **OAuth 2.0** in the same form (on the **Add** button below). 
 6. In the **Redirect URL** field, add the following link (where "mattermostURL" should be replaced with the link to you Mattermost instance):
-``{mattermostURL}/plugins/com.mattermost.apps/apps/PagerDuty/oauth2/remote/complete``
+``{mattermostURL}/plugins/com.mattermost.apps/apps/pagerduty/oauth2/remote/complete``
 7. Select **Save**.
 8. The ``Client ID`` and ``Client Secret`` will be displayed. Save them in a safe place - the ``Client Secret`` can't be recovered). 
 9. To finish, in the **Scopes** select **Read/Write**, then select **Save**.
