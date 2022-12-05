@@ -5,9 +5,12 @@ import {ExceptionType, PDFailed, Routes, SubscriptionCreateForm} from '../consta
 import {Exception} from '../utils/exception';
 import {configureI18n} from "../utils/translations";
 import {replace, tryPromiseForGenerateMessage} from '../utils/utils';
+import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 
 export async function subscriptionAddCall(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
+    const accessToken: string | undefined = call.context.acting_user_access_token;
+    const botUserID: string | undefined = call.context.bot_user_id;
     const appPath: string | undefined = call.context.app_path;
     const whSecret: string | undefined = call.context.app?.webhook_secret;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
@@ -80,5 +83,14 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
             }
         }
     }), ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.webhook-failed'));
+
+
+    const mattermostOption: MattermostOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>accessToken
+    };
+    const mattermostClient: MattermostClient = new MattermostClient(mattermostOption);
+    await mattermostClient.addMemberToChannel(channelId, <string>botUserID);
+
     return i18nObj.__('api.subcription.created');
 }
