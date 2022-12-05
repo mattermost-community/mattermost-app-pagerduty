@@ -205,7 +205,7 @@ export const subscriptionAddBinding = (context: AppContext): any => {
             },
             fields: [
                 {
-                    modal_label: i18nObj.__('bindings.bindings.subcription.modal_service'),
+                    modal_label: i18nObj.__('bindings.bindings.subcription.add.modal_service'),
                     name: SubscriptionCreateForm.SERVICE_ID,
                     type: AppFieldTypes.TEXT,
                     is_required: true,
@@ -213,7 +213,7 @@ export const subscriptionAddBinding = (context: AppContext): any => {
                     max_length: 100
                 },
                 {
-                    modal_label: i18nObj.__('bindings.bindings.subcription.modal_channel'),
+                    modal_label: i18nObj.__('bindings.bindings.subcription.add.modal_channel'),
                     name: SubscriptionCreateForm.CHANNEL_ID,
                     type: AppFieldTypes.CHANNEL,
                     is_required: true,

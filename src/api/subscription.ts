@@ -13,32 +13,26 @@ import {showMessageToMattermost} from '../utils/utils';
 
 export const subscriptionAddSubmit: CallResponseHandler = async (request: Request, response: Response) => {
     let callResponse: AppCallResponse;
-		const call: AppCallRequest = request.body;
-		const i18nObj = configureI18n(call.context);
 
     try {
-        await subscriptionAddCall(request.body);
-        callResponse = newOKCallResponseWithMarkdown(i18nObj.__('api.subcription.created'));
-        response.json(callResponse);
+        const message = await subscriptionAddCall(request.body);
+        callResponse = newOKCallResponseWithMarkdown(message);
     } catch (error: any) {
         callResponse = showMessageToMattermost(error);
-        response.json(callResponse);
     }
+    response.json(callResponse);
 };
 
 export const subscriptionDeleteSubmit: CallResponseHandler = async (request: Request, response: Response) => {
     let callResponse: AppCallResponse;
-		const call: AppCallRequest = request.body;
-		const i18nObj = configureI18n(call.context);
 
     try {
-        await subscriptionDeleteCall(request.body);
-        callResponse = newOKCallResponseWithMarkdown(i18nObj.__('api.subcription.deleted'));
-        response.json(callResponse);
+        const message = await subscriptionDeleteCall(request.body);
+        callResponse = newOKCallResponseWithMarkdown(message);
     } catch (error: any) {
         callResponse = showMessageToMattermost(error);
-        response.json(callResponse);
     }
+    response.json(callResponse);
 };
 
 export const subscriptionListSubmit: CallResponseHandler = async (request: Request, response: Response) => {

@@ -6,13 +6,13 @@ import {Exception} from '../utils/exception';
 import {configureI18n} from "../utils/translations";
 import {replace, tryPromiseForGenerateMessage} from '../utils/utils';
 
-export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
+export async function subscriptionAddCall(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const appPath: string | undefined = call.context.app_path;
     const whSecret: string | undefined = call.context.app?.webhook_secret;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
     const values: AppCallValues | undefined  = call.values;
-		const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     const channelId: string = values?.[SubscriptionCreateForm.CHANNEL_ID].value;
     const channelName: string = values?.[SubscriptionCreateForm.CHANNEL_ID].label;
@@ -37,7 +37,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
     for (let subscription of subscriptions) {
         const params: URLSearchParams = new URL(subscription.delivery_method.url).searchParams;
         if (params.get('channelId') === channelId && subscription.filter.id === service.id) {
-						throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }))
+            throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }))
         }
     }
 
@@ -80,4 +80,5 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<void> {
             }
         }
     }), ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.webhook-failed'));
+    return i18nObj.__('api.subcription.created');
 }
