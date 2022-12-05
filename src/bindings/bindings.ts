@@ -26,7 +26,9 @@ export const getHelpBinding = (context: AppContext): any => {
                 expand: {
                     acting_user: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
-                    oauth2_app: AppExpandLevels.EXPAND_ALL
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    app: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
@@ -62,7 +64,8 @@ const incidentCreateBinding = (context: AppContext): AppBinding => {
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_ALL
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             },
             fields: [
@@ -132,7 +135,8 @@ export const accountLoginBinding = (context: AppContext): any => {
                 path: Routes.App.CallPathConnectSubmit,
                 expand: {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_ALL
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
@@ -154,7 +158,8 @@ export const accountLogoutBinding = (context: AppContext): any => {
                 expand: {
                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
-                    oauth2_app: AppExpandLevels.EXPAND_ALL
+                    oauth2_app: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
@@ -198,9 +203,10 @@ export const subscriptionAddBinding = (context: AppContext): any => {
             submit: {
                 path: Routes.App.CallPathSubscriptionAddSubmit,
                 expand: {
-                    app: AppExpandLevels.EXPAND_SUMMARY,
+                    app: AppExpandLevels.EXPAND_ALL,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             },
             fields: [
@@ -239,7 +245,8 @@ export const subscriptionDeleteBinding = (context: AppContext): any => {
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_ALL
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 },
             },
             fields: [
@@ -273,7 +280,8 @@ export const subscriptionListBinding = (context: AppContext): any => {
                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                     app: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_ALL
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
@@ -320,7 +328,8 @@ export const serviceListBinding = (context: AppContext): any => {
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_ALL
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
@@ -342,7 +351,8 @@ export const incidentListBinding = (context: AppContext): any => {
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_ALL
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
@@ -364,7 +374,8 @@ export const onCallListBinding = (context: AppContext): any => {
                 expand: {
                     app: AppExpandLevels.EXPAND_SUMMARY,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                    oauth2_user: AppExpandLevels.EXPAND_ALL
+                    oauth2_user: AppExpandLevels.EXPAND_ALL,
+                    locale: AppExpandLevels.EXPAND_SUMMARY,
                 }
             }
         }
