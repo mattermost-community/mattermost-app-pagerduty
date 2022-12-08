@@ -15,7 +15,7 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const incident: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incident?.id;
-	 const i18nObj = configureI18n(call.context);
+   const i18nObj = configureI18n(call.context);
    
    try {
       const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });

@@ -224,7 +224,7 @@
     },
     "resolved": {
       "failed": "Mattermost falló",
-      "incident-failed": "PagerDuty get incident failed",
+      "incident-failed": "PagerDuty falló al obtener el incidente",
       "incident-exception": "\"Falló la actualización del incidente de PagerDuty\". Ya has resuelto el incidente \"{{ summary }}\"",
       "title-incident": "Resolver incidente",
       "header-incident": "¿Está seguro de que desea resolver el incidente \"{{ summary }}\"?",

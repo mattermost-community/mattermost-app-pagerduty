@@ -236,13 +236,13 @@
 			"title-trigger": "Triggered: {{ url }}",
 			"status-title": "Status",
 			"status-value": "Resolved",
-			"policity-title": "Escalation policy"
+			"policity-title": "Escalation policy",
+			"incident-failed\"": "forms.resolved.incident-failed\""
 		},
 		"subcription": {
 			"webhook-failed": "PagerDuty webhook failed",
 			"service-failed": "PagerDuty service failed",
 			"service-exception": "Service [{{ summary }}] is already associated with channel [{{ channel }}]"
 		}
-	},
-	"forms.": "forms."
+	}
 }

@@ -19,28 +19,30 @@ import { h6, hyperlink } from "../utils/markdown";
 
 export async function confirmResolveOpenModal(call: AppCallRequest): Promise<AppForm> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
+   console.log(call);
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
    const pdClient: PartialCall = api(tokenOpts);
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
    const postId: string = <string>call.context.post?.id;
-	 const i18nObj = configureI18n(call.context);
+   const i18nObj = configureI18n(call.context);
 
    const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
       pdClient.get(
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      i18nObj.__('forms.')
+      i18nObj.__('forms.resolved.incident-failed')
    );
-   const incident: Incident = responseIncident.data['incident.resolved.incident-failed'];
+   console.log(responseIncident);
+   const incident: Incident = responseIncident.data['incident'];
    if (incident.status === 'resolved') {
       await updatePostResolveIncident(call, postId, incident);
       throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }))
    }
 
    return {
-      title: i18nObj.__('forms.resolvedtitle-incident.'),
+      title: i18nObj.__('forms.resolved.title-incident'),
       header: i18nObj.__('forms.resolved.header-incident', { summary: incident.summary }),
       icon: PagerDutyIcon,
       fields: [],
