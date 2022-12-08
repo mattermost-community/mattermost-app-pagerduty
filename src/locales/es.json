@@ -146,7 +146,7 @@
       "message": "Has reconocido el incidente \"{{ summary }}\""
     },
     "add-note": {
-      "exceptopn": "Error al obtener el incidente de PagerDuty",
+      "exception": "Error al obtener el incidente de PagerDuty",
       "label": "Nota para incidente \" {{ summary }}\"",
       "description": "Tu nota aquí...",
       "title": "Añadir la nota",

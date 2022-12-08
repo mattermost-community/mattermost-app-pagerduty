@@ -17,7 +17,7 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      i18nObj.__('forms.add-note.exceptopn')
+      i18nObj.__('forms.add-note.exception')
    );
    const incident: Incident = responseIncident.data['incident'];
    const fields: AppField[] = [
@@ -63,7 +63,7 @@ export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string>
          replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
       ),
       ExceptionType.MARKDOWN,
-      i18nObj.__('forms..add-note.exceptopn')
+      i18nObj.__('forms..add-note.exception')
    );
 
    const incident: Incident = responseIncident.data['incident'];

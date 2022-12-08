@@ -243,5 +243,6 @@
 			"service-failed": "PagerDuty service failed",
 			"service-exception": "Service [{{ summary }}] is already associated with channel [{{ channel }}]"
 		}
-	}
+	},
+	"forms.": "forms."
 }
