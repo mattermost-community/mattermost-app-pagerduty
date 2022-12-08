@@ -19,7 +19,6 @@ import { h6, hyperlink } from "../utils/markdown";
 
 export async function confirmResolveOpenModal(call: AppCallRequest): Promise<AppForm> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
-   console.log(call);
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
    const pdClient: PartialCall = api(tokenOpts);
    const incidentValues: AppCallValues | undefined = call.state.incident;
@@ -66,7 +65,7 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
    const postId: string = <string>call.state.post?.id;
-	 const i18nObj = configureI18n(call.context);
+   const i18nObj = configureI18n(call.context);
 
    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
@@ -109,7 +108,7 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
 async function updatePostResolveIncident(call: AppCallRequest, postId: string, incident: Incident) {
    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
    const botAccessToken: string | undefined = call.context.bot_access_token;
-	 const i18nObj = configureI18n(call.context);
+   const i18nObj = configureI18n(call.context);
 
    const mattermostOptions: MattermostOptions = {
       mattermostUrl: <string>mattermostUrl,
@@ -124,7 +123,7 @@ async function updatePostResolveIncident(call: AppCallRequest, postId: string, i
       props: {
          attachments: [
             {
-								title: h6(i18nObj.__('forms.resolved.title-trigger', { url: hyperlink(`${incident.summary}`, incident.html_url) })),
+               title: h6(i18nObj.__('forms.resolved.title-trigger', { url: hyperlink(`${incident.summary}`, incident.html_url) })),
                title_link: '',
                color: "#AD251C",
                fields: [
@@ -144,5 +143,8 @@ async function updatePostResolveIncident(call: AppCallRequest, postId: string, i
          ]
       }
    }
-   await mattermostClient.updatePost(<string>postId, updatePost);
+   try {
+      await mattermostClient.updatePost(<string>postId, updatePost);
+   } catch (error) {
+   }
 }
