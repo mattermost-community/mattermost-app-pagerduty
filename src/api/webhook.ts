@@ -181,11 +181,11 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
             attachments: [
                 {
                     text: i18nObj.__('api.webhook.text_incident',
-					{
-						link: hyperlink(eventData.incident.summary, eventData.incident.html_url),
-						html_url: hyperlink(event.agent.summary, event.agent.html_url),
-						content: eventData.content
-					})
+                        {
+                            link: hyperlink(eventData.incident.summary, eventData.incident.html_url),
+                            html_url: hyperlink(event.agent.summary, event.agent.html_url),
+                            content: eventData.content
+                        })
                 }
             ]
         }
@@ -215,10 +215,10 @@ async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: Webhook
             attachments: [
                 {
                     text: i18nObj.__('api.webhook.text_binding',
-						{
-							link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
-							html_url: hyperlink(event.agent.summary, event.agent.html_url)
-						}
+                        {
+                            link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+                            html_url: hyperlink(event.agent.summary, event.agent.html_url)
+                        }
                     )
                 }
             ]
@@ -242,7 +242,7 @@ async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRe
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
     const channelId: string = <string>parsedQuery['channelId'];
 
-    const  assignees: string[] = eventData.assignees.map((assign) => hyperlink(assign.summary, assign.html_url));
+    const assignees: string[] = eventData.assignees.map((assign) => hyperlink(assign.summary, assign.html_url));
     const payload: PostCreate = {
         message: '',
         channel_id: channelId,
@@ -250,11 +250,11 @@ async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRe
             attachments: [
                 {
                     text: i18nObj.__('api.webhook.text_reassigned',
-						{
-							link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
-							assignees: assignees.join(', '),
-							html_url: hyperlink(event.agent.summary, event.agent.html_url)
-						}
+                        {
+                            link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+                            assignees: assignees.join(', '),
+                            html_url: hyperlink(event.agent.summary, event.agent.html_url)
+                        }
                     )
                 }
             ]
@@ -285,10 +285,10 @@ async function notifyIncidentResolved({ data: { event }, rawQuery }: WebhookRequ
             attachments: [
                 {
                     text: i18nObj.__('api.webhook.text_resolved',
-						{
-							link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
-							html_url: hyperlink(event.agent.summary, event.agent.html_url)
-						}
+                        {
+                            link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+                            html_url: hyperlink(event.agent.summary, event.agent.html_url)
+                        }
                     )
                 }
             ]
@@ -319,11 +319,11 @@ async function notifyChangeIncidentPriority({ data: { event }, rawQuery }: Webho
             attachments: [
                 {
                     text: i18nObj.__('api.webhook.text_updated',
-						{
-							link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
-							html_url: hyperlink(`${eventData.priority.summary}`, eventData.priority.html_url),
-							agent_summary: hyperlink(event.agent.summary, event.agent.html_url)
-						}
+                        {
+                            link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
+                            html_url: hyperlink(`${eventData.priority.summary}`, eventData.priority.html_url),
+                            agent_summary: hyperlink(event.agent.summary, event.agent.html_url)
+                        }
                     )
                 }
             ]
