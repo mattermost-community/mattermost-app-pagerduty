@@ -12,7 +12,6 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
    const incidentId: string = incidentValues?.id;
    const i18nObj = configureI18n(call.context);
    const userId = call.context.acting_user?.id as string;
-   console.log(call.context);
 
    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 

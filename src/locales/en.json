@@ -29,7 +29,7 @@
 			"command_disconnect": "Logout from your PagerDuty account"
 		},
 		"incident": {
-			"text": "Incident List: Found ${serviceLength} matching services.",
+			"text": "Incident List: Found {{ length }} matching services.",
 			"detail": "View detail.",
 			"created": "Incident created",
 			"created_error": "Unable to create a new incident {{ messaage }}"

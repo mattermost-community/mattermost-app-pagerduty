@@ -33,9 +33,9 @@ export async function confirmResolveOpenModal(call: AppCallRequest): Promise<App
       ExceptionType.MARKDOWN,
       i18nObj.__('forms.resolved.incident-failed')
    );
-   console.log(responseIncident);
+   
    const incident: Incident = responseIncident.data['incident'];
-   if (incident.status === 'resolved') {
+   if (incident?.status === 'resolved') {
       await updatePostResolveIncident(call, postId, incident);
       throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }))
    }
