@@ -63,7 +63,7 @@
       "add_note": "Añadir la nota",
       "priority": "Cambiar prioridad",
       "reassign": "Reasignar",
-      "text_incident": "Nota añadida a {{ link }} por {{ html_url }} \\n \"{{ content }}\"",
+      "text_incident": "Nota añadida a {{ link }} por {{ html_url }} \n > \"{{ content }}\"",
       "text_binding": "Admitido {{ link }} por {{ html_url }}",
       "text_reassigned": "Reasignado {{ link }} a {{ assignees }} por {{ html_url }}",
       "text_resolved": "Resuelto {{ link }} por {{ html_url }}",
@@ -146,7 +146,7 @@
       "message": "Has reconocido el incidente \"{{ summary }}\""
     },
     "add-note": {
-      "exceptopn": "Error al obtener el incidente de PagerDuty",
+      "exception": "Error al obtener el incidente de PagerDuty",
       "label": "Nota para incidente \" {{ summary }}\"",
       "description": "Tu nota aquí...",
       "title": "Añadir la nota",
@@ -156,7 +156,7 @@
     "change-incident": {
       "label-priorities": "Prioridades",
       "title": "Cambiar la prioridad del incidente",
-      "header": "`Elija un nuevo nivel de prioridad para el incidente \"{{ summary }}\":`",
+      "header": "Elija un nuevo nivel de prioridad para el incidente \"{{ summary }}\":",
       "update": "La actualización del incidente de PagerDuty fallód",
       "update-failed": "Ha actualizado la prioridad del incidente \"{{ summary }}\" a {{ name }}"
     },
@@ -224,7 +224,7 @@
     },
     "resolved": {
       "failed": "Mattermost falló",
-      "incident-failed": "PagerDuty get incident failed",
+      "incident-failed": "PagerDuty falló al obtener el incidente",
       "incident-exception": "\"Falló la actualización del incidente de PagerDuty\". Ya has resuelto el incidente \"{{ summary }}\"",
       "title-incident": "Resolver incidente",
       "header-incident": "¿Está seguro de que desea resolver el incidente \"{{ summary }}\"?",

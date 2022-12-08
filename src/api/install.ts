@@ -7,7 +7,18 @@ import {joinLines} from "../utils/markdown";
 import {configureI18n} from "../utils/translations";
 
 export const getInstall = async (request: Request, response: Response) => {
-    const call: AppCallRequest = request.body;
+    const call: AppCallRequest = request.body; 
+    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
+    const actingUserToken: string | undefined = call.context.acting_user_access_token;
+    const userId: string | undefined = call.context.bot_user_id;
+
+    const mattermostOpts: MattermostOptions = {
+        mattermostUrl: <string>mattermostUrl,
+        accessToken: <string>actingUserToken
+    };
+    
+    const mattermostClient: MattermostClient = new MattermostClient(mattermostOpts);
+    await mattermostClient.updateRolesByUser(<string>userId, 'system_user system_post_all');
 
     const helpText: string = [
         getCommands(call.context)
@@ -18,7 +29,7 @@ export const getInstall = async (request: Request, response: Response) => {
 };
 
 function getCommands(context: AppContext): string {
-		const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     const homepageUrl: string = manifest.homepage_url;
     return `${joinLines(i18nObj.__('api.install.text', { url: homepageUrl }))}\n`;

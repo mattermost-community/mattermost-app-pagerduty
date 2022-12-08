@@ -10,7 +10,8 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;
-	 const i18nObj = configureI18n(call.context);
+   const i18nObj = configureI18n(call.context);
+   const userId = call.context.acting_user?.id as string;
 
    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
@@ -25,7 +26,7 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
    const incident: Incident = responseIncident.data['incident'];
    
    const mattermostUrl: string | undefined = call.context.mattermost_site_url;
-   const botAccessToken: string | undefined = call.context.bot_access_token;
+   const userAccessToken: string | undefined = call.context.acting_user_access_token;
    const channelId: string | undefined = call.context.post?.channel_id;
 
    const fields: AppAttachmentField[] = [
@@ -77,14 +78,14 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
    }
 
    let post: any = {
-      user_id: <string>call.context.acting_user?.id,
+      user_id: userId,
       post: {
          message: "",
          channel_id: <string>channelId,
          props: {
             attachments: [
                {
-									 title: h6(i18nObj.__('forms.incident-detail.title-incident')),
+                  title: h6(i18nObj.__('forms.incident-detail.title-incident')),
                   title_link: '',
                   fields: fields
                }
@@ -95,9 +96,9 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
 
    const mattermostOptions: MattermostOptions = {
       mattermostUrl: <string>mattermostUrl,
-      accessToken: <string>botAccessToken
+      accessToken: <string>userAccessToken
    };
    const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
-   
+
    await mattermostClient.createEphemeralPost(post);
 }
