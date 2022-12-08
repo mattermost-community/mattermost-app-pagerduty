@@ -57,6 +57,7 @@
 				"label": "Acknowledged",
 				"description": "Triggered: {{ link }}"
 			},
+			"acknowledge": "Acknowledge",
 			"button_event": "Resolve",
 			"select_event": "Other actions...",
 			"select_event_details": "View details",

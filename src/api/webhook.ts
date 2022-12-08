@@ -45,10 +45,12 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                     bindings: [
                         {
                             location: ActionsEvents.ACKNOWLEDGED_ALERT_BUTTON_EVENT,
-                            label: i18nObj.__('api.webhook.binding.label'),
+                            label: i18nObj.__('api.webhook.acknowledge'),
                             submit: {
                                 path: Routes.App.CallPathIncidentAcknowledgedAction,
                                 expand: {
+                                    acting_user: AppExpandLevels.EXPAND_ALL,
+                                    acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                                     post: AppExpandLevels.EXPAND_SUMMARY
@@ -64,6 +66,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                             submit: {
                                 path: Routes.App.CallPathIncidentResolveAction,
                                 expand: {
+                                    acting_user: AppExpandLevels.EXPAND_ALL,
+                                    acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                                     post: AppExpandLevels.EXPAND_SUMMARY
@@ -83,6 +87,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathDetailViewIncidentAction,
                                         expand: {
+                                            acting_user: AppExpandLevels.EXPAND_ALL,
+                                            acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
@@ -98,6 +104,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathNoteToIncidentAction,
                                         expand: {
+                                            acting_user: AppExpandLevels.EXPAND_ALL,
+                                            acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
@@ -113,6 +121,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathChangeIncidentPriorityAction,
                                         expand: {
+                                            acting_user: AppExpandLevels.EXPAND_ALL,
+                                            acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
@@ -128,6 +138,8 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     submit: {
                                         path: Routes.App.CallPathAssignIncidentAction,
                                         expand: {
+                                            acting_user: AppExpandLevels.EXPAND_ALL,
+                                            acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
                                             post: AppExpandLevels.EXPAND_SUMMARY
