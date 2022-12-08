@@ -64,7 +64,7 @@
 			"add_note": "Add note",
 			"priority": "Change Priority",
 			"reassign": "Reassign",
-			"text_incident": "Note added to {{ link }} by {{ html_url }} \\n \"{{ content }}\"",
+			"text_incident": "Note added to {{ link }} by {{ html_url }} \n > \"{{ content }}\"",
 			"text_binding": "Acknowledged {{ link }} by {{ html_url }}",
 			"text_reassigned": "Reassigned {{ link }} to {{ assignees }} by {{ html_url }}",
 			"text_resolved": "Resolved {{ link }} by {{ html_url }}",
@@ -160,7 +160,7 @@
 		"change-incident": {
 			"label-priorities": "Priorities",
 			"title": "Change incident priority",
-			"header": "`Choose a new priority level to the incident \"{{ summary }}\":`",
+			"header": "Choose a new priority level to the incident \"{{ summary }}\":",
 			"update": "PagerDuty incident update failed",
 			"update-failed": "You have updated incident \"{{ summary }}\" priority to {{ name }}"
 		},
@@ -244,6 +244,11 @@
 			"webhook-failed": "PagerDuty webhook failed",
 			"service-failed": "PagerDuty service failed",
 			"service-exception": "Service [{{ summary }}] is already associated with channel [{{ channel }}]"
+		},
+		"": {
+			"add-note": {
+				"exception": "forms..add-note.exception"
+			}
 		}
 	}
 }

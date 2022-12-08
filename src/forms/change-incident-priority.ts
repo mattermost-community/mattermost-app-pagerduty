@@ -37,7 +37,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
 
    return {
       title: i18nObj.__('forms.change-incident.title'),
-      header: i18nObj.__('forms.change-incident.header'),
+      header: i18nObj.__('forms.change-incident.header', { summary: incident.summary }),
       icon: PagerDutyIcon,
       fields: fields,
       submit: {
@@ -55,7 +55,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
 export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Promise<string> {
    const oauth2: Oauth2App | undefined = call.context.oauth2;
    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
-	 const i18nObj = configureI18n(call.context);
+   const i18nObj = configureI18n(call.context);
 
    const incidentValues: AppCallValues | undefined = call.state.incident;
    const incidentId: string = incidentValues?.id;

@@ -63,7 +63,7 @@
       "add_note": "Añadir la nota",
       "priority": "Cambiar prioridad",
       "reassign": "Reasignar",
-      "text_incident": "Nota añadida a {{ link }} por {{ html_url }} \\n \"{{ content }}\"",
+      "text_incident": "Nota añadida a {{ link }} por {{ html_url }} \n > \"{{ content }}\"",
       "text_binding": "Admitido {{ link }} por {{ html_url }}",
       "text_reassigned": "Reasignado {{ link }} a {{ assignees }} por {{ html_url }}",
       "text_resolved": "Resuelto {{ link }} por {{ html_url }}",
@@ -156,7 +156,7 @@
     "change-incident": {
       "label-priorities": "Prioridades",
       "title": "Cambiar la prioridad del incidente",
-      "header": "`Elija un nuevo nivel de prioridad para el incidente \"{{ summary }}\":`",
+      "header": "Elija un nuevo nivel de prioridad para el incidente \"{{ summary }}\":",
       "update": "La actualización del incidente de PagerDuty fallód",
       "update-failed": "Ha actualizado la prioridad del incidente \"{{ summary }}\" a {{ name }}"
     },
