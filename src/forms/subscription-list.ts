@@ -19,7 +19,7 @@ import { h6, joinLines } from '../utils/markdown';
 export async function subscriptionListCall(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const userAccessToken: string | undefined = call.context.acting_user_access_token;
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const i18nObj = configureI18n(call.context);
 
     const options: MattermostOptions = {

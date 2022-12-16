@@ -2,7 +2,7 @@ import { APIResponse } from '@pagerduty/pdjs/build/src/api';
 
 import { ExceptionType, StoreKeys } from '../constant';
 
-import { AppActingUser, AppCallResponse, AppContext, Oauth2App } from '../types';
+import { AppActingUser, AppCallResponse, AppContext, Oauth2App, Oauth2CurrentUser } from '../types';
 import { KVStoreClient, KVStoreProps } from '../clients/kvstore';
 
 import { Exception } from './exception';
@@ -24,7 +24,7 @@ export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: s
 }
 
 export function isConnected(oauth2: Oauth2App): boolean {
-    return Boolean(oauth2?.user) && Boolean(Object.keys(oauth2.user).length);
+    return Boolean(oauth2?.user) && Boolean(Object.keys(<Oauth2CurrentUser>oauth2.user).length);
 }
 
 export function encodeFormData(data: any): string {

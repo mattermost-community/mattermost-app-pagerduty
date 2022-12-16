@@ -8,7 +8,7 @@ import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
 import { getUsersOptionList } from './pagerduty-options';
 
 export async function reassignIncidentActionForm(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
     const i18nObj = configureI18n(call.context);
 
@@ -55,7 +55,7 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
 }
 
 export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
     const i18nObj = configureI18n(call.context);
 

@@ -104,6 +104,21 @@ export type EventWebhook = {
     type: string;
     urgency: string;
 }
+export type IncidentPriority = {
+    id: string,
+    type: 'priority',
+    summary: string,
+    self: string,
+    html_url: null,
+    account_id: string,
+    color: string,
+    created_at: string,
+    description: string,
+    name: string,
+    order: number,
+    schema_version: number,
+    updated_at: string,
+}
 
 export type Incident = {
     incident_number: number;
@@ -154,21 +169,7 @@ export type Incident = {
         self: string;
         html_url: string;
     };
-    priority?: {
-        id: string,
-        type: 'priority',
-        summary: string,
-        self: string,
-        html_url: null,
-        account_id: string,
-        color: string,
-        created_at: string,
-        description: string,
-        name: string,
-        order: number,
-        schema_version: number,
-        updated_at: string,
-    },
+    priority?: IncidentPriority,
     incidents_responders: any[];
     responder_requests: any[];
     subscriber_requests: any[];

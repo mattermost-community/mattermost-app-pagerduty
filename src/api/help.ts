@@ -31,7 +31,7 @@ async function getCommands(call: AppCallRequest): Promise<string> {
     const context = call.context as ExpandedBotActingUser;
     const mattermostUrl: string | undefined = context.mattermost_site_url;
     const botAccessToken: string | undefined = context.bot_access_token;
-    const oauth2: Oauth2App | undefined = context.oauth2;
+    const oauth2: Oauth2App = context.oauth2 as Oauth2App;
     const actingUser: AppActingUser | undefined = context.acting_user;
     const commands: string[] = [];
     const i18nObj = configureI18n(call.context);

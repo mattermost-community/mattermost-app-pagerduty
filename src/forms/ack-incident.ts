@@ -13,7 +13,7 @@ import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function ackAlertAction(call: AppCallRequest): Promise<string> {
     let message: string;
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const incidentValue: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValue?.id;
     const i18nObj = configureI18n(call.context);

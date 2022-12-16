@@ -6,7 +6,7 @@ import { configureI18n } from '../utils/translations';
 import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
     const pdClient: PartialCall = api(tokenOpts);
     const incidentValues: AppCallValues | undefined = call.state.incident;
@@ -49,7 +49,7 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
 }
 
 export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
     const i18nObj = configureI18n(call.context);

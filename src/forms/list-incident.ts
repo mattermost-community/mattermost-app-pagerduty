@@ -8,7 +8,7 @@ import { configureI18n } from '../utils/translations';
 import { tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function getAllIncidentsCall(call: AppCallRequest): Promise<Incident[]> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const i18nObj = configureI18n(call.context);
 
     const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
