@@ -1,10 +1,11 @@
-import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
-import {api} from '@pagerduty/pdjs';
-import {AppCallRequest, AppCallValues, Oauth2App, Service, WebhookSubscription} from '../types';
-import {ExceptionType, PDFailed, Routes, SubscriptionCreateForm} from '../constant';
-import {Exception} from '../utils/exception';
-import {configureI18n} from "../utils/translations";
-import {replace, tryPromiseForGenerateMessage} from '../utils/utils';
+import { APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
+import { api } from '@pagerduty/pdjs';
+
+import { AppCallRequest, AppCallValues, Oauth2App, Service, WebhookSubscription } from '../types';
+import { ExceptionType, PDFailed, Routes, SubscriptionCreateForm } from '../constant';
+import { Exception } from '../utils/exception';
+import { configureI18n } from '../utils/translations';
+import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 
 export async function subscriptionAddCall(call: AppCallRequest): Promise<string> {
@@ -14,7 +15,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
     const appPath: string | undefined = call.context.app_path;
     const whSecret: string | undefined = call.context.app?.webhook_secret;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
-    const values: AppCallValues | undefined  = call.values;
+    const values: AppCallValues | undefined = call.values;
     const i18nObj = configureI18n(call.context);
 
     const channelId: string = values?.[SubscriptionCreateForm.CHANNEL_ID].value;
@@ -28,19 +29,19 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
         ExceptionType.MARKDOWN,
         i18nObj.__('forms.subcription.webhook-failed')
     );
-    const subscriptions: WebhookSubscription[] = responseSubscriptions.data['webhook_subscriptions'];
+    const subscriptions: WebhookSubscription[] = responseSubscriptions.data.webhook_subscriptions;
 
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(replace(Routes.PagerDuty.ServicePathPrefix, Routes.PathsVariable.Identifier, serviceId)),
         ExceptionType.MARKDOWN,
         i18nObj.__('forms.subcription.service-failed')
     );
-    const service: Service = responseServices.data['service'];
+    const service: Service = responseServices.data.service;
 
-    for (let subscription of subscriptions) {
+    for (const subscription of subscriptions) {
         const params: URLSearchParams = new URL(subscription.delivery_method.url).searchParams;
         if (params.get('channelId') === channelId && subscription.filter.id === service.id) {
-            throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }))
+            throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }));
         }
     }
 
@@ -54,7 +55,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
                 delivery_method: {
                     type: 'http_delivery_method',
                     url: urlWithParams.href,
-                    custom_headers: []
+                    custom_headers: [],
                 },
                 description: `Mattermost_${service.name}_${channelName}`,
                 events: [
@@ -73,21 +74,20 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
                     'incident.unacknowledged',
                     'service.created',
                     'service.deleted',
-                    'service.updated'
+                    'service.updated',
                 ],
                 filter: {
                     id: serviceId,
-                    type: 'service_reference'
+                    type: 'service_reference',
                 },
-                type: 'webhook_subscription'
-            }
-        }
+                type: 'webhook_subscription',
+            },
+        },
     }), ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.webhook-failed'));
-
 
     const mattermostOption: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>accessToken
+        accessToken: <string>accessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOption);
     await mattermostClient.addMemberToChannel(channelId, <string>botUserID);

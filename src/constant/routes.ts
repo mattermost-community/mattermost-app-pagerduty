@@ -1,7 +1,7 @@
 
 const PathsVariable = {
-    Identifier: ':IDENTIFIER'
-}
+    Identifier: ':IDENTIFIER',
+};
 
 export const AppsPluginName = 'com.mattermost.apps';
 
@@ -28,7 +28,7 @@ const AppPaths = {
     OAuthConnectPath: '/oauth2/connect',
 
     CallPathIncidentCreate: '/incident/create',
-    
+
     CallPathIncidentAcknowledgedAction: '/incident/acknowledged/action',
     CallPathIncidentUnAcknowledgedAction: '/incident/unacknowledged/action',
 
@@ -52,7 +52,7 @@ const AppPaths = {
     CallPathSubmit: '/submit',
     CallPathForm: '/form',
     CallPathForms: '/forms',
-}
+};
 
 const PagerDutyPaths = {
     OAuthAuthorizationPathPrefix: '/oauth/authorize',
@@ -89,18 +89,18 @@ const MattermostPaths = {
     PostPath: `/posts/${PathsVariable.Identifier}`,
     UserPath: `/users/${PathsVariable.Identifier}`,
     ChannelPath: `/channels/${PathsVariable.Identifier}`,
-    ChannelDirectPath: `/channels/direct`,
+    ChannelDirectPath: '/channels/direct',
     ChannelMemberPath: `/channels/${PathsVariable.Identifier}/members`,
     TeamMemberPath: `/teams/${PathsVariable.Identifier}/members`,
-    
+
     DialogsOpenPath: '/actions/dialogs/open',
     ApiVersionV4: '/api/v4',
     ApiVersionV1: '/api/v1',
-}
+};
 
 export const Routes = {
     PathsVariable,
     App: AppPaths,
     Mattermost: MattermostPaths,
-    PagerDuty: PagerDutyPaths
+    PagerDuty: PagerDutyPaths,
 };

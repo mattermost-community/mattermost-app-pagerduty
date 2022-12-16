@@ -1,9 +1,12 @@
-import {APIResponse} from '@pagerduty/pdjs/build/src/api';
-import {newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown} from './call-responses';
-import {ExceptionType, StoreKeys} from '../constant';
-import {Exception} from './exception';
-import {AppActingUser, AppCallResponse, AppContext, Oauth2App} from '../types';
-import {KVStoreClient, KVStoreProps} from '../clients/kvstore';
+import { APIResponse } from '@pagerduty/pdjs/build/src/api';
+
+import { ExceptionType, StoreKeys } from '../constant';
+
+import { AppActingUser, AppCallResponse, AppContext, Oauth2App } from '../types';
+import { KVStoreClient, KVStoreProps } from '../clients/kvstore';
+
+import { Exception } from './exception';
+import { newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown } from './call-responses';
 
 export function replace(value: string, searchValue: string, replaceValue: string): string {
     return value.replace(searchValue, replaceValue);
@@ -21,24 +24,24 @@ export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: s
 }
 
 export function isConnected(oauth2: Oauth2App): boolean {
-    return !!oauth2?.user && !!Object.keys(oauth2.user).length;
+    return Boolean(oauth2?.user) && Boolean(Object.keys(oauth2.user).length);
 }
 
 export function encodeFormData(data: any): string {
-    return Object.keys(data)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-        .join('&');
+    return Object.keys(data).
+        map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).
+        join('&');
 }
 
 export function existsOauth2AppConfig(oauth2App: Oauth2App): boolean {
-    return !!oauth2App.client_id && !!oauth2App.client_secret;
+    return Boolean(oauth2App.client_id) && Boolean(oauth2App.client_secret);
 }
 
 export function tryPromisePagerDuty(p: Promise<any>) {
     return p.then((response: APIResponse) => {
         const data: any = response?.data;
-        const errors: any = data?.['errors'];
-        if (!!errors) {
+        const errors: any = data?.errors;
+        if (Boolean(errors)) {
             const message: string = errors.detail;
             return Promise.reject(new Error(message));
         }
@@ -58,13 +61,13 @@ export function errorDataPagerduty(data: any): string {
 }
 
 export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: ExceptionType, message: string) {
-    return p
-        .then((response) =>
-            !!errorDataPagerduty(response)
-                ? Promise.reject(new Error(errorDataPagerduty(response)))
-                : response
-        )
-        .catch((error) => {
+    return p.
+        then((response) =>
+            (Boolean(errorDataPagerduty(response)) ?
+                Promise.reject(new Error(errorDataPagerduty(response))) :
+                response)
+        ).
+        catch((error) => {
             const errorMessage: string = errorDataMessage(error);
             throw new Exception(exceptionType, `"${message}".  ${errorMessage}`);
         });
@@ -76,16 +79,16 @@ export function showMessageToMattermost(exception: Exception | Error): AppCallRe
     }
 
     switch (exception.type) {
-        case ExceptionType.TEXT_ERROR: return newErrorCallResponseWithMessage(exception.message);
-        case ExceptionType.MARKDOWN: return newOKCallResponseWithMarkdown(exception.message);
-        default: return newErrorCallResponseWithMessage(exception.message);
+    case ExceptionType.TEXT_ERROR: return newErrorCallResponseWithMessage(exception.message);
+    case ExceptionType.MARKDOWN: return newOKCallResponseWithMarkdown(exception.message);
+    default: return newErrorCallResponseWithMessage(exception.message);
     }
 }
 
 export function toTitleCase(str: string): string {
     return str.replace(
         /\w\S*/g,
-        function(txt: string) {
+        (txt: string) => {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
     );

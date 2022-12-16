@@ -1,6 +1,7 @@
-import {APIResponse, PartialCall} from '@pagerduty/pdjs/build/src/api';
-import {api} from '@pagerduty/pdjs';
+import { APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
+import { api } from '@pagerduty/pdjs';
 import fetch from 'node-fetch';
+
 import {
     AppCallRequest,
     AppCallValues,
@@ -9,20 +10,20 @@ import {
     Oauth2CurrentUser,
     OauthUserToken,
     PostCreate,
-    UserMe
+    UserMe,
 } from '../types';
-import {KVStoreClient, KVStoreOptions, KVStoreProps} from '../clients/kvstore';
-import {ExceptionType, Routes, StoreKeys} from '../constant';
-import {configureI18n} from "../utils/translations";
-import {encodeFormData, isConnected} from '../utils/utils';
-import {Exception} from "../utils/exception";
+import { KVStoreClient, KVStoreOptions, KVStoreProps } from '../clients/kvstore';
+import { ExceptionType, Routes, StoreKeys } from '../constant';
+import { configureI18n } from '../utils/translations';
+import { encodeFormData, isConnected } from '../utils/utils';
+import { Exception } from '../utils/exception';
 import config from '../config';
-import {MattermostClient, MattermostOptions} from "../clients/mattermost";
+import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 
 export async function oauth2Connect(call: AppCallRequest): Promise<string> {
     const oauth2: Oauth2App | undefined = call.context.oauth2;
     const state: string | undefined = call.values?.state;
-    const url: string = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
+    const url = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
 
     const urlWithParams = new URL(url);
     urlWithParams.searchParams.append('client_id', oauth2.client_id);
@@ -47,35 +48,35 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
         throw new Error(values?.error_description || i18nObj.__('forms.oauth.exception-complete'));
     }
 
-    const url: string = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthTokenPathPrefix}`;
+    const url = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthTokenPathPrefix}`;
     const oauthData: any = {
         grant_type: 'authorization_code',
         client_id: oauth2.client_id,
         client_secret: oauth2.client_secret,
         redirect_uri: <string>oauth2.complete_url,
-        code: values.code
+        code: values.code,
     };
-    
+
     const data: OauthUserToken = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         },
-        body: encodeFormData(oauthData)
-    }).then((response) => response.json())
-        .then((response) =>
-            response.error
-                ? Promise.reject(new Error(response.error_description))
-                : response
+        body: encodeFormData(oauthData),
+    }).then((response) => response.json()).
+        then((response) =>
+            (response.error ?
+                Promise.reject(new Error(response.error_description)) :
+                response)
         );
 
     const pdClient: PartialCall = api({ token: data.access_token, tokenType: data.token_type });
     const responseCurrentUser: APIResponse = await pdClient.get(Routes.PagerDuty.CurrentUserPathPrefix);
-    const currentUser: UserMe = responseCurrentUser.data['user'];
+    const currentUser: UserMe = responseCurrentUser.data.user;
 
     const kvOptionsOauth: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>accessToken
+        accessToken: <string>accessToken,
     };
     const kvStoreClientOauth = new KVStoreClient(kvOptionsOauth);
 
@@ -85,14 +86,14 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
             id: currentUser.id,
             name: currentUser.name,
             email: currentUser.email,
-            role: currentUser.role
-        }
+            role: currentUser.role,
+        },
     };
     await kvStoreClientOauth.storeOauth2User(storedToken);
 
     const mattermostOption: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>accessToken
+        accessToken: <string>accessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOption);
     const channel: Channel = await mattermostClient.createDirectChannel([<string>botUserID, <string>actingUserID]);
@@ -109,7 +110,7 @@ export async function oauth2Disconnect(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const accessToken: string | undefined = call.context.acting_user_access_token;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
-		const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     if (!isConnected(oauth2)) {
         throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.oauth.exception-account'));
@@ -117,7 +118,7 @@ export async function oauth2Disconnect(call: AppCallRequest): Promise<void> {
 
     const kvOptionsOauth: KVStoreOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>accessToken
+        accessToken: <string>accessToken,
     };
     const kvStoreClientOauth = new KVStoreClient(kvOptionsOauth);
 
