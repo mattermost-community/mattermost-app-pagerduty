@@ -6,6 +6,9 @@
 # Node artifact files
 node_modules/
 dist/
+dist-ts/
+/dist/
+/dist-ts/
 
 # Compiled Java class files
 *.class
@@ -51,3 +54,6 @@ Thumbs.db
 
 #Environment variables
 .env
+
+.eslintcache
+
