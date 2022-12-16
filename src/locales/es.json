@@ -1,0 +1,244 @@
+{
+  "api": {
+    "configure": {
+      "error_admin_account": "No se puede abrir el formulario de configuración: {{ message }}",
+      "configure_admin_account_response": "Configuración de PagerDuty actualizada con éxito",
+      "configure_admin_account_error": "Error al procesar la solicitud del formulario: {{ message }}",
+      "connect_account_login": "Ya has iniciado sesión en PagerDuty con el usuario {{ user }}",
+      "follow_account_login": "Siga esta {{ url }} para conectar Mattermost a su cuenta de PagerDuty.",
+      "error_connect": "No se puede abrir el formulario de configuración: {{ message }}",
+      "disconnect": "Has desconectado tu cuenta de PagerDuty"
+    },
+    "help": {
+      "text": "Complemento Mattermost PagerDuty - Ayuda con el comando Slash",
+      "command_help": "Inicie la sintaxis de ayuda de la línea de comandos del complemento PagerDuty, consulte la [documentación]( {{ url }}).",
+      "command_configure": "Configurar PagerDuty",
+      "command_incident": "Crear una nueva incidencia.",
+      "command_subcription": "{{ command }} agregue [ID de servicio de buscapersonas] [Canal más importante]",
+      "command_subcription_description": "Agregar suscripción de servicio al canal",
+      "command_subcription_list": "{{ command }} lista",
+      "command_subcription_list_description": "Lista de suscripciones abiertas",
+      "command_subcription_remove": "{{ command }} eliminar [Id de suscripción]",
+      "command_subcription_remove_description": "Eliminar suscripción de canal",
+      "command_oncall": "Descubra quién está de guardia para un servicio PagerDuty.",
+      "command_service": "{{ command }} servicio",
+      "command_service_description": "Mostrar todos los servicios de PagerDuty",
+      "command_list": "{{ commands }} incidente",
+      "command_list_description": "Mostrar todos los incidentes de PagerDuty",
+      "command_connect": "Conecte su cuenta de PagerDuty",
+      "command_disconnect": "Salga de su cuenta de PagerDuty"
+    },
+    "incident": {
+      "text": "Lista de incidentes: se encontraron {{ length }} servicios coincidentes.",
+      "detail": "Ver Detalle.",
+      "created": "Incidente creado",
+      "created_error": "No se puede crear un nuevo incidente {{ messaage }}"
+    },
+    "install": {
+      "text": "Para terminar de configurar la aplicación PagerDuty, lea la sección [Inicio rápido]( {{ url }}#inicio rápido) del LÉAME"
+    },
+    "on_call": {
+      "text": "Lista de políticas: se encontraron {{ length }} políticas coincidentes.",
+      "call": "- {{ policy_summary }} ({{ level }}) - Por {{ user_summary }} {{ hyperlink }}"
+    },
+    "service": {
+      "text": "Lista de servicios: se encontraron {{ length }} servicios coincidentes.",
+      "service": "- ID de servicio \"{{ id }}\" - Nombre de servicio \"{{ name }}\""
+    },
+    "subcription": {
+      "created": "Se creará la suscripción",
+      "deleted": "Se eliminará la suscripción.",
+      "list": "Lista de suscripciones: se encontraron {{ length }} suscripciones abiertas.",
+      "subcription_description": "- ID de suscripción: \"{{ id }}\" - Nombre del servicio \"{{ service_name }}\" - Nombre del canal \"{{ channel_name }}\""
+    },
+    "webhook": {
+      "error": "Error webhook: {{ message }}",
+      "binding": {
+        "label": "Admitido",
+        "description": "Motivado: {{ link }}"
+      },
+      "button_event": "Resolver",
+      "select_event": "Otras acciones...",
+      "select_event_details": "Ver detalles",
+      "add_note": "Añadir la nota",
+      "priority": "Cambiar prioridad",
+      "reassign": "Reasignar",
+      "text_incident": "Nota añadida a {{ link }} por {{ html_url }} \n > \"{{ content }}\"",
+      "text_binding": "Admitido {{ link }} por {{ html_url }}",
+      "text_reassigned": "Reasignado {{ link }} a {{ assignees }} por {{ html_url }}",
+      "text_resolved": "Resuelto {{ link }} por {{ html_url }}",
+      "text_updated": "Actualizado {{ link }} prioridad a {{ html_url }} por {{ agent_summary }}"
+    }
+  },
+  "bindings": {
+    "bindings": {
+      "help": {
+        "description": "Mostrar ayuda de PagerDuty",
+        "title": "Mostrar título de ayuda de PagerDuty"
+      },
+      "incident": {
+        "description": "Activar un incidente de PagerDuty"
+      },
+      "create_incident": {
+        "description": "Create incident in PagerDuty",
+        "title": "Show PagerDuty Help Title",
+        "modal_impacted_label": "Servicio afectado",
+        "modal_impacted_description": "Nombre del servicio afectado",
+        "modal_title_label": "Título",
+        "modal_title_description": "Título del incidente",
+        "modal_description_label": "Descripción (opcional)",
+        "modal_description_description": "Descripción del incidente",
+        "modal_assign_label": "Asignar a (opcional)",
+        "modal_assign_description": "A quién se asignará este incidente"
+      },
+      "configure": {
+        "description": "Configurar la cuenta de administrador de PagerDuty",
+        "title": "Configuración PagerDuty"
+      },
+      "account_login": {
+        "description": "Conecte su cuenta de PagerDuty",
+        "title": "Cuenta de Ingreso"
+      },
+      "account_logout": {
+        "description": "Desconecta tu cuenta de PagerDuty",
+        "title": "Cierre de sesión de la cuenta"
+      },
+      "subcription": {
+        "description": "Equipos de suscripción de PagerDuty al canal Mattermost",
+        "add": {
+          "description": "Agregar una suscripción de servicio a un canal",
+          "title": "Agregar una suscripción de servicio a un canal",
+          "modal_service": "ID de servicio",
+          "modal_channel": "Canal"
+        },
+        "delete": {
+          "description": "Darse de baja del servicio del canal",
+          "title": "Darse de baja del servicio del canal",
+          "label": "ID de suscripción"
+        },
+        "list": {
+          "description": "Lista de servicios suscritos a canales",
+          "binding": "Lista PagerDuty"
+        }
+      },
+      "list": {
+        "binding": "Registros de PagerDuty",
+        "service": {
+          "title": "Lista de servicios"
+        },
+        "incidents": {
+          "title": "List of incidents"
+        },
+        "on_call": {
+          "title": "Lista de incidentes"
+        }
+      }
+    },
+    "slash": {
+      "bindings": "Administrar la App de PagerDuty"
+    }
+  },
+  "forms": {
+    "incident": {
+      "exception": "Falló el webhook de PagerDuty'",
+      "error": "Ya has reconocido \"{{ summary }}\"",
+      "exception_update": "La actualización del incidente de PagerDuty falló",
+      "message": "Has reconocido el incidente \"{{ summary }}\""
+    },
+    "add-note": {
+      "exception": "Error al obtener el incidente de PagerDuty",
+      "label": "Nota para incidente \" {{ summary }}\"",
+      "description": "Tu nota aquí...",
+      "title": "Añadir la nota",
+      "failed": "Error al agregar la nota de PagerDuty",
+      "incident": "Se agregará una nota para el incidente {{ summary }}"
+    },
+    "change-incident": {
+      "label-priorities": "Prioridades",
+      "title": "Cambiar la prioridad del incidente",
+      "header": "Elija un nuevo nivel de prioridad para el incidente \"{{ summary }}\":",
+      "update": "La actualización del incidente de PagerDuty fallód",
+      "update-failed": "Ha actualizado la prioridad del incidente \"{{ summary }}\" a {{ name }}"
+    },
+    "configure-admin": {
+      "title": "Configurar PagerDuty",
+      "header": "Configure la aplicación PagerDuty con la siguiente información.",
+      "label-client": "Identificación del cliente",
+      "description-client": "ID de cliente de integración de API PagerDuty",
+      "label-secret": "Secreto del cliente",
+      "description-secret": "Integración API PagerDuty Client Secret"
+    },
+    "delete-post": {
+      "failed": "Mattermost falló"
+    },
+    "incident-create": {
+      "title": "Crear nuevo incidente",
+      "failed": "Falló el servicio PagerDuty",
+      "impacted-label": "Servicio afectado",
+      "impacted-description": "Nombre del servicio afectado",
+      "title-label": "Título",
+      "title-description": "Título del incidente",
+      "description-label": "Descripción (opcional)",
+      "description-description": "Descripción del incidente",
+      "assign-label": "Asignar a (opcional)",
+      "assign-description": "A quién se asignará este incidente",
+      "add-incident-exception": "No se enviaron los datos necesarios [servicio y título afectados]",
+      "create-incident-exception": "No se enviaron los datos necesarios [servicio y título afectados]"
+    },
+    "incident-detail": {
+      "exception": "Error al obtener el incidente de PagerDuty",
+      "title-decription": "Descripción",
+      "title-service": "Service",
+      "title-policy": "Política de escalada",
+      "title-priority": "Prioridad",
+      "title-urgency": "Urgencia",
+      "title-asignee": "Cesionario",
+      "title-incident": "Incidente: {{ url }}"
+    },
+    "incident-list": {
+      "message": "Incidente de PagerDuty falló"
+    },
+    "list-call": {
+      "message": "La política de PagerDuty falló"
+    },
+    "list-service": {
+      "message": "Falló el servicio PagerDuty"
+    },
+    "oauth": {
+      "exception-complete": "Solicitud incorrecta: parámetro de código no proporcionado",
+      "successfully-account": "¡Ha conectado correctamente su cuenta de PagerDuty!",
+      "exception-account": "You still do not have connected your PagerDuty account"
+    },
+    "option": {
+      "service-failed": "Falló el servicio PagerDuty",
+      "user-failed": "PagerDuty get users failed",
+      "priorities-failed": "Error al obtener las prioridades de PagerDuty"
+    },
+    "reassign": {
+      "incident-failed": "Incidente de PagerDuty falló",
+      "title": "Asignar incidente",
+      "header": "Elija un usuario para asignarle el incidente \"{{ summary }}\":",
+      "user-failed": "Error al obtener el usuario de PagerDuty",
+      "user-update": "La actualización del incidente de PagerDuty falló",
+      "reassign-incident": "Has reasignado el incidente \"{{ summary }}\" a {{ name }}"
+    },
+    "resolved": {
+      "failed": "Mattermost falló",
+      "incident-failed": "PagerDuty falló al obtener el incidente",
+      "incident-exception": "\"Falló la actualización del incidente de PagerDuty\". Ya has resuelto el incidente \"{{ summary }}\"",
+      "title-incident": "Resolver incidente",
+      "header-incident": "¿Está seguro de que desea resolver el incidente \"{{ summary }}\"?",
+      "incident-update-failed": "La actualización del incidente de PagerDuty falló",
+      "incident-update-exception": "Has resuelto correctamente el incidente \"{{ summary }}\"!",
+      "title-trigger": "Desencadenado por: {{ url }}",
+      "status-title": "Estado",
+      "status-value": "Resuelto",
+      "policity-title": "Escalation policy"
+    },
+    "subcription": {
+      "webhook-failed": "Falló el webhook de PagerDuty",
+      "service-failed": "Falló el servicio PagerDuty",
+      "service-exception": "El servicio [{{ summary }}] ya está asociado con el canal [{{ channel }}]"
+    }
+  }
+}

@@ -1,0 +1,254 @@
+{
+	"api": {
+		"configure": {
+			"error_admin_account": "Unable to open configuration form: {{ message }}",
+			"configure_admin_account_response": "Successfully updated PagerDuty configuration",
+			"configure_admin_account_error": "Error processing form request: {{ message }}",
+			"connect_account_login": "You are already logged into PagerDuty with user {{ message }}",
+			"follow_account_login": "Follow this {{ url }} to connect Mattermost to your PagerDuty Account.",
+			"error_connect": "Unable to open configuration form: {{ message }}",
+			"disconnect": "You have disconnected your PagerDuty account"
+		},
+		"help": {
+			"text": "Mattermost PagerDuty Plugin - Slash Command Help",
+			"command_help": "Launch the PagerDuty plugin command line help syntax, check out the [documentation]( {{ url }}).",
+			"command_configure": "Configure PagerDuty",
+			"command_incident": "Create a new incidence.",
+			"command_subcription": "{{ command }} add [Pager Duty Service ID] [Mattermost Channel]",
+			"command_subcription_description": "Add subscription of service to channel",
+			"command_subcription_list": "{{ command }} list",
+			"command_subcription_list_description": "List subscriptions open",
+			"command_subcription_remove": "{{ command }} remove [SubscriptionId]",
+			"command_subcription_remove_description": "Delete subscription of channel",
+			"command_oncall": "Find out who is on call for a PagerDuty service.",
+			"command_service": "{{ command }} service",
+			"command_service_description": "Show all services from PagerDuty",
+			"command_list": "{{ command }} incident",
+			"command_list_description": "Show all incidents from PagerDuty",
+			"command_connect": "Connect your PagerDuty account",
+			"command_disconnect": "Logout from your PagerDuty account"
+		},
+		"incident": {
+			"text": "Incident List: Found {{ length }} matching services.",
+			"detail": "View detail.",
+			"created": "Incident created",
+			"created_error": "Unable to create a new incident {{ messaage }}"
+		},
+		"install": {
+			"text": "To finish configuring the PagerDuty app please read the [Quick Start]( {{ url }}#quick-start) section of the README"
+		},
+		"on_call": {
+			"text": "Policy List: Found {{ length }} matching policies.",
+			"call": "- {{ policy_summary }} ({{ level }}) - By {{ user_summary }} {{ hyperlink }}"
+		},
+		"service": {
+			"text": "Service List: Found {{ length }} matching services.",
+			"service": "- Service ID \"{{ id }}\" - Service Name \"{{ name }}\""
+		},
+		"subcription": {
+			"created": "Subscription will be created",
+			"deleted": "Subscription will be deleted",
+			"list": "Subscription List: Found {{ length }} open subscriptions.",
+			"subcription_description": "- Subscription ID: \"{{ id }}\" - Service Name \"{{ service_name }}\" - Channel Name \"{{ channel_name }}\""
+		},
+		"webhook": {
+			"error": "Error webhook: {{ message }}",
+			"binding": {
+				"label": "Acknowledged",
+				"description": "Triggered: {{ link }}"
+			},
+			"acknowledge": "Acknowledge",
+			"button_event": "Resolve",
+			"select_event": "Other actions...",
+			"select_event_details": "View details",
+			"add_note": "Add note",
+			"priority": "Change Priority",
+			"reassign": "Reassign",
+			"text_incident": "Note added to {{ link }} by {{ html_url }} \n > \"{{ content }}\"",
+			"text_binding": "Acknowledged {{ link }} by {{ html_url }}",
+			"text_reassigned": "Reassigned {{ link }} to {{ assignees }} by {{ html_url }}",
+			"text_resolved": "Resolved {{ link }} by {{ html_url }}",
+			"text_updated": "Updated {{ link }} priority to {{ html_url }} by {{ agent_summary }}"
+		}
+	},
+	"bindings": {
+		"bindings": {
+			"help": {
+				"description": "Show PagerDuty Help",
+				"title": "Show PagerDuty Help Title"
+			},
+			"incident": {
+				"description": "Trigger a PagerDuty incident"
+			},
+			"create_incident": {
+				"description": "Create incident in PagerDuty",
+				"title": "Show PagerDuty Help Title",
+				"modal_impacted_label": "Impacted Service",
+				"modal_impacted_description": "Impacted service name",
+				"modal_title_label": "Title",
+				"modal_title_description": "Incident title",
+				"modal_description_label": "Description (optional)",
+				"modal_description_description": "Incident description",
+				"modal_assign_label": "Assign to (optional)",
+				"modal_assign_description": "To whom this incident will be assigned"
+			},
+			"configure": {
+				"description": "Setup PagerDuty Admin Account",
+				"title": "Setup PagerDuty"
+			},
+			"account_login": {
+				"description": "Connect your PagerDuty account",
+				"title": "Account login"
+			},
+			"account_logout": {
+				"description": "Disconnect your PagerDuty account",
+				"title": "Account logout"
+			},
+			"subcription": {
+				"description": "Subscription teams of PagerDuty to Mattermost channel",
+				"add": {
+					"description": "Add a service subscription to a channel",
+					"title": "Add a service subscription to a channel",
+					"modal_service": "Service id",
+					"modal_channel": "Channel"
+				},
+				"delete": {
+					"description": "Unsubscribe service from channel",
+					"title": "Unsubscribe service from channel",
+					"label": "Subscription ID"
+				},
+				"title": "bindings.bindings.subcription.title",
+				"modal_service": "bindings.bindings.subcription.modal_service",
+				"modal_channel": "bindings.bindings.subcription.modal_channel",
+				"list": {
+					"description": "List of service subscribed to channels",
+					"binding": "List PagerDuty"
+				}
+			},
+			"list": {
+				"binding": "List PagerDuty",
+				"service": {
+					"title": "List of services"
+				},
+				"incidents": {
+					"title": "List of incidents"
+				},
+				"on_call": {
+					"title": "List of users on call"
+				}
+			}
+		},
+		"slash": {
+			"bindings": "Manage PagerDuty App"
+		}
+	},
+	"forms": {
+		"incident": {
+			"exception": "PagerDuty webhook failed'",
+			"error": "You already have acknowledged \"{{ summary }}\"",
+			"exception_update": "PagerDuty incident update failed",
+			"message": "You have acknowledged incident \"{{ summary }}\""
+		},
+		"add-note": {
+			"exception": "PagerDuty get incident failed",
+			"label": "Note for incident \" {{ summary }}\"",
+			"description": "Your note here...",
+			"title": "Add Note",
+			"failed": "PagerDuty add note failed",
+			"incident": "Note will be added for incident {{ summary }}"
+		},
+		"change-incident": {
+			"label-priorities": "Priorities",
+			"title": "Change incident priority",
+			"header": "Choose a new priority level to the incident \"{{ summary }}\":",
+			"update": "PagerDuty incident update failed",
+			"update-failed": "You have updated incident \"{{ summary }}\" priority to {{ name }}"
+		},
+		"configure-admin": {
+			"title": "Configure PagerDuty",
+			"header": "Configure the PagerDuty app with the following information.",
+			"label-client": "Client ID",
+			"description-client": "API integration PagerDuty Client ID",
+			"label-secret": "Client Secret",
+			"description-secret": "API integration PagerDuty Client Secret"
+		},
+		"delete-post": {
+			"failed": "Mattermost failed"
+		},
+		"incident-create": {
+			"title": "Create New Incident",
+			"failed": "PagerDuty service failed",
+			"impacted-label": "Impacted Service",
+			"impacted-description": "Impacted service name",
+			"title-label": "Title",
+			"title-description": "Incident title",
+			"description-label": "Description (optional)",
+			"description-description": "Incident description",
+			"assign-label": "Assign to (optional)",
+			"assign-description": "To whom this incident will be assigned",
+			"add-incident-exception": "Required data not sended [Impacted service and title]",
+			"create-incident-exception": "Required data not sended [Impacted service and title]"
+		},
+		"incident-detail": {
+			"exception": "PagerDuty get incident failed",
+			"title-decription": "Description",
+			"title-service": "Service",
+			"title-policy": "Escalation Policy",
+			"title-priority": "Priority",
+			"title-urgency": "Urgency",
+			"title-asignee": "Assignee",
+			"title-incident": "Incident: {{ url }}"
+		},
+		"incident-list": {
+			"message": "PagerDuty incident failed"
+		},
+		"list-call": {
+			"message": "PagerDuty policy failed"
+		},
+		"list-service": {
+			"message": "PagerDuty service failed"
+		},
+		"oauth": {
+			"exception-complete": "Bad Request: code param not provided",
+			"successfully-account": "You have successfully connected your PagerDuty account!",
+			"exception-account": "You still do not have connected your PagerDuty account"
+		},
+		"option": {
+			"service-failed": "PagerDuty service failed",
+			"user-failed": "PagerDuty get users failed",
+			"priorities-failed": "PagerDuty get priorities failed"
+		},
+		"reassign": {
+			"incident-failed": "PagerDuty incident failed",
+			"title": "Assign incident",
+			"header": "Choose a user to assign the incident \"{{ summary }}\" to:",
+			"user-failed": "PagerDuty get user failed",
+			"user-update": "PagerDuty incident update failed",
+			"reassign-incident": "You have reassigned incident \"{{ summary }}\" to {{ name }}"
+		},
+		"resolved": {
+			"failed": "Mattermost failed",
+			"incident-failed": "PagerDuty get incident failed",
+			"incident-exception": "\"PagerDuty incident update failed\". You already have resolved incident \"{{ summary }}\"",
+			"title-incident": "Resolve incident",
+			"header-incident": "Are you sure you want to resolve incident \"{{ summary }}\"?",
+			"incident-update-failed": "PagerDuty incident update failed",
+			"incident-update-exception": "You have succesfully resolved incident \"{{ summary }}\"!",
+			"title-trigger": "Triggered: {{ url }}",
+			"status-title": "Status",
+			"status-value": "Resolved",
+			"policity-title": "Escalation policy",
+			"incident-failed\"": "forms.resolved.incident-failed\""
+		},
+		"subcription": {
+			"webhook-failed": "PagerDuty webhook failed",
+			"service-failed": "PagerDuty service failed",
+			"service-exception": "Service [{{ summary }}] is already associated with channel [{{ channel }}]"
+		},
+		"": {
+			"add-note": {
+				"exception": "forms..add-note.exception"
+			}
+		}
+	}
+}
