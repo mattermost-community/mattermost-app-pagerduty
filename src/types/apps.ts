@@ -46,6 +46,12 @@ export type AppSelectOption = {
 
 export type Oauth2CurrentUser = {
     token: string;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+    }
 }
 
 export interface Oauth2Data {
@@ -146,6 +152,11 @@ export type AppForm = {
     submit_label?: string;
 };
 
+export type PostApp = {
+    id: string,
+    channel_id: string
+}
+
 export type AppContext = {
     app_id: string;
     location?: string;
@@ -165,6 +176,8 @@ export type AppContext = {
     acting_user?: AppActingUser;
     acting_user_access_token?: string;
     oauth2?: Oauth2App;
+    app_path?: string;
+    post?: PostApp;
 };
 
 export type AppCallRequest = AppCall & {
@@ -325,4 +338,18 @@ export type AppContextAction = {
     mattermost_site_url: string;
     bot_access_token: string;
     selected_option?: string;
+}
+
+export type AppCallAction<T> = {
+    user_id: string;
+    user_name: string;
+    channel_id: string;
+    channel_name: string;
+    team_id: string;
+    team_domain: string;
+    post_id: string;
+    trigger_id: string;
+    type: string;
+    data_source: string;
+    context: T;
 }

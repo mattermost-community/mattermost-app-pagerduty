@@ -2,13 +2,13 @@ import { APIResponse, PartialCall, api } from '@pagerduty/pdjs/build/src/api';
 
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 import { ExceptionType, Routes } from '../constant';
-import { AppAttachmentField, AppCallRequest, AppCallValues, AppField, Incident, Oauth2App, PostEphemeralCreate } from '../types';
+import { AppAttachmentField, AppCallRequest, AppCallValues, AppField, Incident, IncidentPriority, Oauth2App, PostEphemeralCreate } from '../types';
 import { h6, hyperlink } from '../utils/markdown';
 import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
 import { configureI18n } from '../utils/translations';
 
 export async function showIncidentDetailPost(call: AppCallRequest): Promise<any> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
     const i18nObj = configureI18n(call.context);
@@ -48,8 +48,8 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
         },
     ];
 
-    const priority = incident?.priority;
-    if (Boolean(priority)) {
+    const priority: IncidentPriority = incident?.priority!;
+    if (Object.keys(priority).length) {
         fields.push(
             {
                 short: true,

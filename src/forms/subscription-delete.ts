@@ -7,7 +7,7 @@ import { configureI18n } from '../utils/translations';
 import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function subscriptionDeleteCall(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const values: AppCallValues | undefined = call.values;
     const i18nObj = configureI18n(call.context);
 

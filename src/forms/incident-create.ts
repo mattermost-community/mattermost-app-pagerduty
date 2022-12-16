@@ -19,7 +19,7 @@ import { configureI18n } from '../utils/translations';
 import { getServiceOptionList, getUsersOptionList } from './pagerduty-options';
 
 export async function createIncidentFormModal(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
     const i18nObj = configureI18n(call.context);
 
@@ -82,7 +82,7 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
         throw new Error(i18nObj.__('forms.incident-create.add-incident-exception'));
     }
 
-    const oauth2: Oauth2App | undefined = call?.context?.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 
     const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call.context);
@@ -105,7 +105,7 @@ export async function submitCreateIncident(call: AppCallRequest): Promise<any> {
     const values = call.values as CreateIncidentFormModalType;
     const i18nObj = configureI18n(call.context);
 
-    const oauth2: Oauth2App | undefined = call?.context?.oauth2;
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 
     if (!values?.incident_impacted_service && !values?.incident_title) {
