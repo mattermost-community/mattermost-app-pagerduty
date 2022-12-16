@@ -1,4 +1,4 @@
-import {UserProfile} from "./mattermost";
+import { UserProfile } from './mattermost';
 
 export type AppManifest = {
     app_id: string;
@@ -70,7 +70,7 @@ export type Oauth2App = {
 
 export type PostApp = {
     id: string,
-    channel_id: string     
+    channel_id: string
 }
 
 export type AppCall = {
@@ -249,6 +249,7 @@ export type AppFieldType = string;
 
 // This should go in mattermost-redux
 export type AppField = {
+
     // Name is the name of the JSON field to use.
     name: string;
     type: AppFieldType;

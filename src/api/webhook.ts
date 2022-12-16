@@ -1,23 +1,24 @@
-import {Request, Response} from 'express';
-import queryString, {ParsedQuery} from 'query-string';
+import { Request, Response } from 'express';
+import queryString, { ParsedQuery } from 'query-string';
+
 import {
-    EventWebhook,
     AddNoteWebhook,
     AppCallResponse,
     AppContext,
-    AppContextAction, Incident,
+    AppContextAction,
+    EventWebhook, Incident,
+    Manifest,
     PostCreate,
     WebhookEvent,
     WebhookRequest,
-    Manifest
 } from '../types';
-import {newErrorCallResponseWithMessage, newOKCallResponse} from '../utils/call-responses';
-import {ActionsEvents, AppExpandLevels, options_incident} from '../constant';
-import {MattermostClient, MattermostOptions} from '../clients/mattermost';
+import { newErrorCallResponseWithMessage, newOKCallResponse } from '../utils/call-responses';
+import { ActionsEvents, AppExpandLevels, options_incident } from '../constant';
+import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 import config from '../config';
-import {Routes} from '../constant'
-import {h6, hyperlink} from '../utils/markdown';
-import {configureI18n} from "../utils/translations";
+import { Routes } from '../constant';
+import { h6, hyperlink } from '../utils/markdown';
+import { configureI18n } from '../utils/translations';
 import manifest from '../manifest.json';
 
 async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
@@ -25,21 +26,21 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
     const botAccessToken: string | undefined = context.bot_access_token;
     const eventData: EventWebhook = event.data;
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
-    const channelId: string = <string>parsedQuery['channelId'];
+    const channelId: string = <string>parsedQuery.channelId;
     const m: Manifest = manifest;
     const i18nObj = configureI18n(context);
 
     const incident = {
-        id: eventData.id
-    }
+        id: eventData.id,
+    };
 
     const payload: PostCreate = {
-        message: "",
+        message: '',
         channel_id: channelId,
         props: {
             app_bindings: [
                 {
-                    location: "embedded",
+                    location: 'embedded',
                     app_id: m.app_id,
                     description: h6(i18nObj.__('api.webhook.binding.description', { link: hyperlink(`#${eventData.number} ${eventData.title}`, eventData.html_url) })),
                     bindings: [
@@ -53,12 +54,12 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                                    post: AppExpandLevels.EXPAND_SUMMARY
+                                    post: AppExpandLevels.EXPAND_SUMMARY,
                                 },
                                 state: {
-                                    incident
-                                }
-                            }
+                                    incident,
+                                },
+                            },
                         },
                         {
                             location: ActionsEvents.CLOSE_ALERT_BUTTON_EVENT,
@@ -70,12 +71,12 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                     acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                                     oauth2_app: AppExpandLevels.EXPAND_ALL,
-                                    post: AppExpandLevels.EXPAND_SUMMARY
+                                    post: AppExpandLevels.EXPAND_SUMMARY,
                                 },
                                 state: {
-                                    incident
-                                }
-                            }
+                                    incident,
+                                },
+                            },
                         },
                         {
                             location: ActionsEvents.OTHER_OPTIONS_SELECT_EVENT,
@@ -91,12 +92,12 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                             acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
-                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                            post: AppExpandLevels.EXPAND_SUMMARY,
                                         },
                                         state: {
-                                            incident
-                                        }
-                                    }
+                                            incident,
+                                        },
+                                    },
                                 },
                                 {
                                     location: ActionsEvents.OTHER_INCIDENT_ADD_NOTE,
@@ -108,12 +109,12 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                             acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
-                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                            post: AppExpandLevels.EXPAND_SUMMARY,
                                         },
                                         state: {
-                                            incident
-                                        }
-                                    }
+                                            incident,
+                                        },
+                                    },
                                 },
                                 {
                                     location: ActionsEvents.OTHER_INCIDENT_CHANGE_PRIORITY,
@@ -125,12 +126,12 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                             acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
-                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                            post: AppExpandLevels.EXPAND_SUMMARY,
                                         },
                                         state: {
-                                            incident
-                                        }
-                                    }
+                                            incident,
+                                        },
+                                    },
                                 },
                                 {
                                     location: ActionsEvents.OTHER_INCIDENT_REASSIGN,
@@ -142,24 +143,24 @@ async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookReq
                                             acting_user_access_token: AppExpandLevels.EXPAND_ALL,
                                             oauth2_user: AppExpandLevels.EXPAND_ALL,
                                             oauth2_app: AppExpandLevels.EXPAND_ALL,
-                                            post: AppExpandLevels.EXPAND_SUMMARY
+                                            post: AppExpandLevels.EXPAND_SUMMARY,
                                         },
                                         state: {
-                                            incident
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    }
+                                            incident,
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    };
 
     const mattermostOptions: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
+        accessToken: <string>botAccessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
     await mattermostClient.createPost(payload);
@@ -172,7 +173,7 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
     const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
-    const channelId: string = <string>parsedQuery['channelId'];
+    const channelId: string = <string>parsedQuery.channelId;
 
     const payload: PostCreate = {
         message: '',
@@ -184,16 +185,16 @@ async function notifyIncidentAnnotated({ data: { event }, rawQuery }: WebhookReq
                         {
                             link: hyperlink(eventData.incident.summary, eventData.incident.html_url),
                             html_url: hyperlink(event.agent.summary, event.agent.html_url),
-                            content: eventData.content
-                        })
-                }
-            ]
-        }
+                            content: eventData.content,
+                        }),
+                },
+            ],
+        },
     };
 
     const mattermostOptions: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
+        accessToken: <string>botAccessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
     await mattermostClient.createPost(payload);
@@ -206,7 +207,7 @@ async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: Webhook
     const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
-    const channelId: string = <string>parsedQuery['channelId'];
+    const channelId: string = <string>parsedQuery.channelId;
 
     const payload: PostCreate = {
         message: '',
@@ -217,17 +218,17 @@ async function notifyIncidentAcknowledged({ data: { event }, rawQuery }: Webhook
                     text: i18nObj.__('api.webhook.text_binding',
                         {
                             link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
-                            html_url: hyperlink(event.agent.summary, event.agent.html_url)
+                            html_url: hyperlink(event.agent.summary, event.agent.html_url),
                         }
-                    )
-                }
-            ]
-        }
+                    ),
+                },
+            ],
+        },
     };
 
     const mattermostOptions: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
+        accessToken: <string>botAccessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
     await mattermostClient.createPost(payload);
@@ -240,7 +241,7 @@ async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRe
     const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
-    const channelId: string = <string>parsedQuery['channelId'];
+    const channelId: string = <string>parsedQuery.channelId;
 
     const assignees: string[] = eventData.assignees.map((assign) => hyperlink(assign.summary, assign.html_url));
     const payload: PostCreate = {
@@ -253,17 +254,17 @@ async function notifyIncidentReassigned({ data: { event }, rawQuery }: WebhookRe
                         {
                             link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
                             assignees: assignees.join(', '),
-                            html_url: hyperlink(event.agent.summary, event.agent.html_url)
+                            html_url: hyperlink(event.agent.summary, event.agent.html_url),
                         }
-                    )
-                }
-            ]
-        }
+                    ),
+                },
+            ],
+        },
     };
 
     const mattermostOptions: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
+        accessToken: <string>botAccessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
     await mattermostClient.createPost(payload);
@@ -276,7 +277,7 @@ async function notifyIncidentResolved({ data: { event }, rawQuery }: WebhookRequ
     const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
-    const channelId: string = <string>parsedQuery['channelId'];
+    const channelId: string = <string>parsedQuery.channelId;
 
     const payload: PostCreate = {
         message: '',
@@ -287,17 +288,17 @@ async function notifyIncidentResolved({ data: { event }, rawQuery }: WebhookRequ
                     text: i18nObj.__('api.webhook.text_resolved',
                         {
                             link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
-                            html_url: hyperlink(event.agent.summary, event.agent.html_url)
+                            html_url: hyperlink(event.agent.summary, event.agent.html_url),
                         }
-                    )
-                }
-            ]
-        }
+                    ),
+                },
+            ],
+        },
     };
 
     const mattermostOptions: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
+        accessToken: <string>botAccessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
     await mattermostClient.createPost(payload);
@@ -310,7 +311,7 @@ async function notifyChangeIncidentPriority({ data: { event }, rawQuery }: Webho
     const i18nObj = configureI18n(context);
 
     const parsedQuery: ParsedQuery = queryString.parse(rawQuery);
-    const channelId: string = <string>parsedQuery['channelId'];
+    const channelId: string = <string>parsedQuery.channelId;
 
     const payload: PostCreate = {
         message: '',
@@ -322,17 +323,17 @@ async function notifyChangeIncidentPriority({ data: { event }, rawQuery }: Webho
                         {
                             link: hyperlink(`[#${eventData.number}] ${eventData.title}`, eventData.html_url),
                             html_url: hyperlink(`${eventData.priority.summary}`, eventData.priority.html_url),
-                            agent_summary: hyperlink(event.agent.summary, event.agent.html_url)
+                            agent_summary: hyperlink(event.agent.summary, event.agent.html_url),
                         }
-                    )
-                }
-            ]
-        }
+                    ),
+                },
+            ],
+        },
     };
 
     const mattermostOptions: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>botAccessToken
+        accessToken: <string>botAccessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
     await mattermostClient.createPost(payload);
@@ -344,7 +345,7 @@ const WEBHOOKS_ACTIONS: { [key: string]: Function } = {
     'incident.acknowledged': notifyIncidentAcknowledged,
     'incident.reassigned': notifyIncidentReassigned,
     'incident.resolved': notifyIncidentResolved,
-    'incident.priority_updated': notifyChangeIncidentPriority
+    'incident.priority_updated': notifyChangeIncidentPriority,
 };
 
 export const incomingWebhook = async (request: Request, response: Response) => {
@@ -354,7 +355,7 @@ export const incomingWebhook = async (request: Request, response: Response) => {
 
     let callResponse: AppCallResponse;
     try {
-        console.log('webhook', webhookRequest.data.event)
+        console.log('webhook', webhookRequest.data.event);
         const action: Function = WEBHOOKS_ACTIONS[webhookRequest.data.event.event_type];
         if (action) {
             await action(webhookRequest, context);

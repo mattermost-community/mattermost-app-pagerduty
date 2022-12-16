@@ -142,7 +142,6 @@ export type PostBindings = {
     bindings: PostEmbeddedBindings[]
 }
 
-
 export type PostCreate = {
     channel_id: string;
     message: string;

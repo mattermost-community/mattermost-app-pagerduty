@@ -1,17 +1,18 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
+
 import {
     CallResponseHandler,
     newErrorCallResponseWithMessage,
     newFormCallResponse,
     newOKCallResponse,
     newOKCallResponseWithData,
-    newOKCallResponseWithMarkdown
+    newOKCallResponseWithMarkdown,
 } from '../utils/call-responses';
-import {AppCallRequest, AppCallResponse, Oauth2App} from '../types';
-import {hyperlink} from '../utils/markdown';
-import {pagerDutyConfigForm, pagerDutyConfigSubmit} from '../forms/configure-admin-account';
-import {oauth2Connect, oauth2Complete, oauth2Disconnect} from '../forms/oauth';
-import {isConnected, showMessageToMattermost} from "../utils/utils";
+import { AppCallRequest, AppCallResponse, Oauth2App } from '../types';
+import { hyperlink } from '../utils/markdown';
+import { pagerDutyConfigForm, pagerDutyConfigSubmit } from '../forms/configure-admin-account';
+import { oauth2Complete, oauth2Connect, oauth2Disconnect } from '../forms/oauth';
+import { isConnected, showMessageToMattermost } from '../utils/utils';
 import { configureI18n } from '../utils/translations';
 
 export const configureAdminAccountForm: CallResponseHandler = async (req: Request, res: Response) => {
@@ -24,7 +25,7 @@ export const configureAdminAccountForm: CallResponseHandler = async (req: Reques
         callResponse = newFormCallResponse(form);
         res.json(callResponse);
     } catch (error: any) {
-        callResponse = newErrorCallResponseWithMessage(i18nObj.__('api.configure.error_admin_account', { message: error.message}) );
+        callResponse = newErrorCallResponseWithMessage(i18nObj.__('api.configure.error_admin_account', { message: error.message }));
         res.json(callResponse);
     }
 };
@@ -49,17 +50,17 @@ export const connectAccountLoginSubmit: CallResponseHandler = async (req: Reques
     const i18nObj = configureI18n(call.context);
     const connectUrl: string | undefined = call.context.oauth2?.connect_url;
     const oauth2: Oauth2App | undefined = call.context.oauth2;
-    const message: string = isConnected(oauth2)
-        ? i18nObj.__('api.configure.connect_account_login', { user: oauth2.user!.user.name.toString() })
-        : i18nObj.__('api.configure.follow_account_login', { url: hyperlink('link', <string>connectUrl) })
+    const message: string = isConnected(oauth2) ?
+        i18nObj.__('api.configure.connect_account_login', { user: oauth2.user!.user.name.toString() }) :
+        i18nObj.__('api.configure.follow_account_login', { url: hyperlink('link', <string>connectUrl) });
     const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(message);
     res.json(callResponse);
 };
 
-export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Response) => {
+export const fOauth2Connect: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
-		const call: AppCallRequest = req.body;
-		const i18nObj = configureI18n(call.context);
+    const call: AppCallRequest = req.body;
+    const i18nObj = configureI18n(call.context);
 
     try {
         const url: string = await oauth2Connect(req.body);
@@ -69,7 +70,7 @@ export const fOauth2Connect: CallResponseHandler = async (req:  Request, res: Re
         callResponse = newErrorCallResponseWithMessage(i18nObj.__('api.configure.error_connect', { message: error.message }));
         res.json(callResponse);
     }
-}
+};
 
 export const fOauth2Complete: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
@@ -82,12 +83,12 @@ export const fOauth2Complete: CallResponseHandler = async (req: Request, res: Re
         callResponse = newErrorCallResponseWithMessage(error.message);
         res.json(callResponse);
     }
-}
+};
 
 export const fOauth2Disconnect: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
-		const call: AppCallRequest = req.body;
-		const i18nObj = configureI18n(call.context);
+    const call: AppCallRequest = req.body;
+    const i18nObj = configureI18n(call.context);
 
     try {
         await oauth2Disconnect(req.body);
@@ -97,6 +98,5 @@ export const fOauth2Disconnect: CallResponseHandler = async (req: Request, res: 
         callResponse = showMessageToMattermost(error);
         res.json(callResponse);
     }
-}
-
+};
 

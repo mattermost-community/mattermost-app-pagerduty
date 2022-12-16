@@ -1,27 +1,28 @@
-import {Request, Response} from 'express';
-import {AppCallRequest, AppCallResponse, AppContext} from '../types';
-import {newOKCallResponseWithMarkdown} from '../utils/call-responses';
+import { Request, Response } from 'express';
+
+import { AppCallRequest, AppCallResponse, AppContext } from '../types';
+import { newOKCallResponseWithMarkdown } from '../utils/call-responses';
 import manifest from '../manifest.json';
-import {MattermostClient, MattermostOptions} from "../clients/mattermost";
-import {joinLines} from "../utils/markdown";
-import {configureI18n} from "../utils/translations";
+import { MattermostClient, MattermostOptions } from '../clients/mattermost';
+import { joinLines } from '../utils/markdown';
+import { configureI18n } from '../utils/translations';
 
 export const getInstall = async (request: Request, response: Response) => {
-    const call: AppCallRequest = request.body; 
+    const call: AppCallRequest = request.body;
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const actingUserToken: string | undefined = call.context.acting_user_access_token;
     const userId: string | undefined = call.context.bot_user_id;
 
     const mattermostOpts: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
-        accessToken: <string>actingUserToken
+        accessToken: <string>actingUserToken,
     };
-    
+
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOpts);
     await mattermostClient.updateRolesByUser(<string>userId, 'system_user system_post_all');
 
     const helpText: string = [
-        getCommands(call.context)
+        getCommands(call.context),
     ].join('');
     const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(helpText);
 

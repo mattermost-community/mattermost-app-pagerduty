@@ -1,6 +1,7 @@
-import axios, {AxiosResponse} from 'axios';
-import {AppsPluginName, Routes} from '../constant';
-import {Manifest, Oauth2App, Oauth2CurrentUser} from '../types';
+import axios, { AxiosResponse } from 'axios';
+
+import { AppsPluginName, Routes } from '../constant';
+import { Manifest, Oauth2App, Oauth2CurrentUser } from '../types';
 import manifest from '../manifest.json';
 
 export interface KVStoreOptions {

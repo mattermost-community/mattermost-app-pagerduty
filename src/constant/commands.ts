@@ -10,5 +10,5 @@ export const Commands = {
     CONNECT: 'connect',
     DISCONNECT: 'disconnect',
     ONCALL: 'oncall',
-    CREATE: 'create'
-}
+    CREATE: 'create',
+};

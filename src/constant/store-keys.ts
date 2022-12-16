@@ -1,3 +1,3 @@
 export const StoreKeys = {
-   config: 'config',
+    config: 'config',
 };

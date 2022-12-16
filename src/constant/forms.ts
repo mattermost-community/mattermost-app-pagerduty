@@ -1,25 +1,25 @@
-import { AppSelectOption } from "../types"
+import { AppSelectOption } from '../types';
 
 export const ConfigureForm = {
     CLIENT_ID: 'pagerduty_client_id',
-    CLIENT_SECRET: 'pagerduty_client_secret'
-}
+    CLIENT_SECRET: 'pagerduty_client_secret',
+};
 
 export const SubscriptionDeleteForm = {
-    SUBSCRIPTION_ID: 'subscription_id'
-}
+    SUBSCRIPTION_ID: 'subscription_id',
+};
 
 export const SubscriptionCreateForm = {
     SERVICE_ID: 'service_id',
-    CHANNEL_ID: 'channel_id'
-}
+    CHANNEL_ID: 'channel_id',
+};
 
 export const CreateIncidentForm = {
     SERVICE: 'incident_impacted_service',
     TITLE: 'incident_title',
     DESCRIPTION: 'incident_description',
-    ASSIGN_TO: 'incident_assign_to'
-}
+    ASSIGN_TO: 'incident_assign_to',
+};
 
 export type CreateIncidentFormModalType = {
     incident_impacted_service: AppSelectOption,
@@ -36,13 +36,13 @@ export type CreateIncidentFormCommandType = {
 }
 
 export const NoteModalForm = Object.freeze({
-    NOTE_MESSAGE: 'incident_message'
+    NOTE_MESSAGE: 'incident_message',
 });
 
 export const ReassignIncidentForm = {
-    ASSIGN_TO: 'incident_assign_to'
-}
+    ASSIGN_TO: 'incident_assign_to',
+};
 
 export const ChangeIncidentPriorityForm = {
-    PRIORITY: 'incident_priority'
-}
+    PRIORITY: 'incident_priority',
+};

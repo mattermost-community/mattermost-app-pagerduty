@@ -1,5 +1,7 @@
-import express, {Router} from 'express';
-import {Routes} from '../constant';
+import express, { Router } from 'express';
+
+import { Routes } from '../constant';
+
 import * as cManifest from './manifest';
 import * as cBindings from './bindings';
 import * as cInstall from './install';
@@ -54,7 +56,6 @@ router.post(`${Routes.App.CallPathAssignIncidentSubmit}`, cIncident.reassignInci
 
 router.post(`${Routes.App.CallPathChangeIncidentPriorityAction}`, cIncident.changePriorityIncidentModal);
 router.post(`${Routes.App.CallPathChangeIncidentPrioritySubmit}`, cIncident.changePriorityIncidentSubmit);
-
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));

@@ -1,8 +1,8 @@
-import {AppCallResponseType, AppCallType, AppExpandLevel, AppFieldType} from '../types';
+import { AppCallResponseType, AppCallType, AppExpandLevel, AppFieldType } from '../types';
 
 export const AppMattermostConfig = {
-    WEBHOOK: 'mattermost_webhook'
-}
+    WEBHOOK: 'mattermost_webhook',
+};
 
 export const AppBindingLocations = {
     POST_MENU_ITEM: '/post_menu',
@@ -48,5 +48,5 @@ export const AppFieldTypes: { [name: string]: AppFieldType } = {
 
 export const AppFieldSubTypes: { [name: string]: AppFieldType } = {
     TEXTAREA: 'textarea',
-    PASSWORD: 'password'
+    PASSWORD: 'password',
 };

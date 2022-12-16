@@ -1,15 +1,15 @@
-import {AppBinding, AppContext} from '../types';
+import { AppBinding, AppContext } from '../types';
 import {
     AppExpandLevels,
+    AppFieldTypes,
+    Commands,
+    CreateIncidentForm,
     PagerDutyIcon,
     Routes,
-    Commands,
     SubscriptionCreateForm,
-    AppFieldTypes,
     SubscriptionDeleteForm,
-    CreateIncidentForm,
 } from '../constant';
-import {configureI18n} from "../utils/translations";
+import { configureI18n } from '../utils/translations';
 
 export const getHelpBinding = (context: AppContext): any => {
     const i18nObj = configureI18n(context);
@@ -29,9 +29,9 @@ export const getHelpBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     app: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
+                },
+            },
+        },
     };
 };
 
@@ -45,9 +45,9 @@ export const getIncidentsBinding = (context: AppContext) => {
         hint: `[${Commands.CREATE}]`,
         bindings: [
             incidentCreateBinding(context),
-        ]
-    }
-}
+        ],
+    };
+};
 
 const incidentCreateBinding = (context: AppContext): AppBinding => {
     const i18nObj = configureI18n(context);
@@ -66,7 +66,7 @@ const incidentCreateBinding = (context: AppContext): AppBinding => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
+                },
             },
             fields: [
                 {
@@ -93,10 +93,10 @@ const incidentCreateBinding = (context: AppContext): AppBinding => {
                     modal_label: i18nObj.__('bindings.bindings.create_incident.modal_assign_label'),
                     description: i18nObj.__('bindings.bindings.create_incident.modal_assign_description'),
                 },
-            ]
-        }
-    }
-}
+            ],
+        },
+    };
+};
 
 export const getConfigureBinding = (context: AppContext): any => {
     const i18nObj = configureI18n(context);
@@ -116,10 +116,10 @@ export const getConfigureBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
                     channel: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    };
 };
 
 export const accountLoginBinding = (context: AppContext): any => {
@@ -138,10 +138,10 @@ export const accountLoginBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    };
 };
 
 export const accountLogoutBinding = (context: AppContext): any => {
@@ -161,10 +161,10 @@ export const accountLogoutBinding = (context: AppContext): any => {
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    };
 };
 
 export const subscriptionBinding = (context: AppContext): AppBinding => {
@@ -173,7 +173,7 @@ export const subscriptionBinding = (context: AppContext): AppBinding => {
     const subCommands: string[] = [
         Commands.ADD,
         Commands.DELETE,
-        Commands.LIST
+        Commands.LIST,
     ];
 
     const bindings: AppBinding[] = [];
@@ -187,8 +187,8 @@ export const subscriptionBinding = (context: AppContext): AppBinding => {
         label: Commands.SUBSCRIPTION,
         description: i18nObj.__('bindings.bindings.subcription.description'),
         hint: `[${subCommands.join(' | ')}]`,
-        bindings
-    }
+        bindings,
+    };
 };
 
 export const subscriptionAddBinding = (context: AppContext): any => {
@@ -210,7 +210,7 @@ export const subscriptionAddBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
+                },
             },
             fields: [
                 {
@@ -219,18 +219,18 @@ export const subscriptionAddBinding = (context: AppContext): any => {
                     type: AppFieldTypes.TEXT,
                     is_required: true,
                     position: 1,
-                    max_length: 100
+                    max_length: 100,
                 },
                 {
                     modal_label: i18nObj.__('bindings.bindings.subcription.add.modal_channel'),
                     name: SubscriptionCreateForm.CHANNEL_ID,
                     type: AppFieldTypes.CHANNEL,
                     is_required: true,
-                    position: 2
-                }
-            ]
-        }
-    }
+                    position: 2,
+                },
+            ],
+        },
+    };
 };
 
 export const subscriptionDeleteBinding = (context: AppContext): any => {
@@ -260,11 +260,11 @@ export const subscriptionDeleteBinding = (context: AppContext): any => {
                     is_required: true,
                     position: 1,
                     max_length: 36,
-                    min_length: 36
-                }
-            ]
-        }
-    }
+                    min_length: 36,
+                },
+            ],
+        },
+    };
 };
 
 export const subscriptionListBinding = (context: AppContext): any => {
@@ -285,10 +285,10 @@ export const subscriptionListBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    };
 };
 
 export const listBinding = (context: AppContext): AppBinding => {
@@ -297,7 +297,7 @@ export const listBinding = (context: AppContext): AppBinding => {
     const subCommands: string[] = [
         Commands.SERVICE,
         Commands.INCIDENT,
-        Commands.ONCALL
+        Commands.ONCALL,
     ];
 
     const bindings: AppBinding[] = [];
@@ -306,14 +306,13 @@ export const listBinding = (context: AppContext): AppBinding => {
     bindings.push(incidentListBinding(context));
     bindings.push(onCallListBinding(context));
 
-
     return {
         icon: PagerDutyIcon,
         label: Commands.LIST,
         description: i18nObj.__('bindings.bindings.list.binding'),
         hint: `[${subCommands.join(' | ')}]`,
-        bindings
-    }
+        bindings,
+    };
 };
 
 export const serviceListBinding = (context: AppContext): any => {
@@ -333,10 +332,10 @@ export const serviceListBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    };
 };
 
 export const incidentListBinding = (context: AppContext): any => {
@@ -356,10 +355,10 @@ export const incidentListBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    };
 };
 
 export const onCallListBinding = (context: AppContext): any => {
@@ -379,9 +378,9 @@ export const onCallListBinding = (context: AppContext): any => {
                     oauth2_app: AppExpandLevels.EXPAND_ALL,
                     oauth2_user: AppExpandLevels.EXPAND_ALL,
                     locale: AppExpandLevels.EXPAND_SUMMARY,
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    };
 };
 

@@ -1,23 +1,24 @@
-import {AppActingUser, AppBinding, AppCallRequest, AppContext, AppsState, Oauth2App} from '../types';
+import { AppActingUser, AppBinding, AppCallRequest, AppContext, AppsState, Oauth2App } from '../types';
+
+import {
+    AppBindingLocations,
+    CommandTrigger,
+    Commands,
+    PagerDutyIcon,
+} from '../constant';
+import { KVStoreClient, KVStoreOptions } from '../clients/kvstore';
+import { existsOauth2AppConfig, isConnected, isUserSystemAdmin } from '../utils/utils';
+import { configureI18n } from '../utils/translations';
 
 import {
     accountLoginBinding,
     accountLogoutBinding,
-    getIncidentsBinding,
     getConfigureBinding,
     getHelpBinding,
+    getIncidentsBinding,
     listBinding,
-    subscriptionBinding
+    subscriptionBinding,
 } from './bindings';
-import {
-    AppBindingLocations,
-    Commands,
-    CommandTrigger,
-    PagerDutyIcon
-} from '../constant';
-import {KVStoreClient, KVStoreOptions} from "../clients/kvstore";
-import { existsOauth2AppConfig, isConnected, isUserSystemAdmin} from "../utils/utils";
-import { configureI18n } from '../utils/translations';
 
 const newCommandBindings = (context: AppContext, bindings: AppBinding[], commands: string[]): AppsState => {
     const i18nObj = configureI18n(context);
@@ -42,7 +43,7 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
 
     const bindings: AppBinding[] = [];
     const commands: string[] = [
-        Commands.HELP
+        Commands.HELP,
     ];
 
     bindings.push(getHelpBinding(context));
@@ -51,13 +52,13 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
         bindings.push(getConfigureBinding(context));
         commands.push(Commands.CONFIGURE);
     }
-    
+
     if (existsOauth2AppConfig(oauth2)) {
         if (isConnected(oauth2)) {
             commands.push(Commands.SUBSCRIPTION);
             commands.push(Commands.INCIDENT);
             commands.push(Commands.LIST);
-            bindings.push(subscriptionBinding(context))
+            bindings.push(subscriptionBinding(context));
             bindings.push(listBinding(context));
             bindings.push(getIncidentsBinding(context));
         }

@@ -4,9 +4,9 @@ import {
     AppForm,
     Oauth2App,
 } from '../types';
-import {AppExpandLevels, AppFieldSubTypes, AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys} from '../constant';
-import {KVStoreProps, KVStoreClient, KVStoreOptions} from '../clients/kvstore';
-import {configureI18n} from "../utils/translations";
+import { AppExpandLevels, AppFieldSubTypes, AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys } from '../constant';
+import { KVStoreClient, KVStoreOptions, KVStoreProps } from '../clients/kvstore';
+import { configureI18n } from '../utils/translations';
 import { MattermostClient } from '../clients/mattermost';
 
 export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm> {
@@ -34,7 +34,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
                 value: oauth2.client_secret,
                 description: i18nObj.__('forms.configure-admin.description-secret'),
                 is_required: true,
-            }
+            },
         ],
         submit: {
             path: Routes.App.CallPathConfigSubmit,
@@ -44,7 +44,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
                 acting_user: AppExpandLevels.EXPAND_SUMMARY,
                 oauth2_app: AppExpandLevels.EXPAND_ALL,
                 channel: AppExpandLevels.EXPAND_SUMMARY,
-            }
+            },
         },
     };
     return form;
@@ -65,19 +65,18 @@ export async function pagerDutyConfigSubmit(call: AppCallRequest): Promise<strin
         mattermostUrl: <string>mattermostUrl,
         accessToken: <string>accessToken,
     };
-    
+
     const kvStoreClient = new KVStoreClient(options);
 
     const oauth2App: Oauth2App = {
         client_id: pagerDutyClientID,
         client_secret: pagerDutyClientSecret,
-    }
+    };
 
     await kvStoreClient.storeOauth2App(oauth2App);
     const mattermostClient: MattermostClient = new MattermostClient(options);
     await mattermostClient.addUserToTeam(<string>teamId, <string>botUserID);
 
-    
     return i18nObj.__('api.configure.configure_admin_account_response');
 }
 

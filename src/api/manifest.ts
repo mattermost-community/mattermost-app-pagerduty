@@ -1,6 +1,7 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
+
 import config from '../config';
-import {Manifest} from '../types';
+import { Manifest } from '../types';
 import manifest from '../manifest.json';
 
 export function getManifest(request: Request, response: Response): void {
