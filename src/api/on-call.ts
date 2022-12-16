@@ -9,7 +9,7 @@ import { showMessageToMattermost } from '../utils/utils';
 
 export const listOnCallSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
-	 const call: AppCallRequest = req.body;
+    const call: AppCallRequest = req.body;
 
     try {
         const onCallList: OnCallRecord[] = await getAllOnCall(req.body);
@@ -26,13 +26,13 @@ export const listOnCallSubmit: CallResponseHandler = async (req: Request, res: R
 };
 
 function getHeader(serviceLength: number, context: AppContext): string {
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     return h6(i18nObj.__('api.on_call.text', { length: serviceLength.toString() }));
 }
 
 function getOnCall(services: OnCallRecord[], context: AppContext): string {
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     return `${joinLines(
         services.map((record: OnCallRecord) => i18nObj.__('api.on_call.call',

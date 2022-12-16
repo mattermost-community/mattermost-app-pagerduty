@@ -8,7 +8,7 @@ import { tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function getServiceOptionList(pdOpt: PagerDutyOpts, context: AppContext): Promise<AppSelectOption[]> {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.ServicesPathPrefix),
@@ -28,7 +28,7 @@ export async function getServiceOptionList(pdOpt: PagerDutyOpts, context: AppCon
 
 export async function getUsersOptionList(pdOpt: PagerDutyOpts, context: AppContext): Promise<AppSelectOption[]> {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.UsersPathPrefix),
         ExceptionType.MARKDOWN,
@@ -48,7 +48,7 @@ export async function getUsersOptionList(pdOpt: PagerDutyOpts, context: AppConte
 
 export async function getPrioritiesOptionList(pdOpt: PagerDutyOpts, context: AppContext): Promise<AppSelectOption[]> {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.PrioritiesPathPrefix),
         ExceptionType.MARKDOWN,

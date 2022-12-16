@@ -148,5 +148,6 @@ async function updatePostResolveIncident(call: AppCallRequest, postId: string, i
     try {
         await mattermostClient.updatePost(<string>postId, updatePost);
     } catch (error) {
+        console.log(error);
     }
 }

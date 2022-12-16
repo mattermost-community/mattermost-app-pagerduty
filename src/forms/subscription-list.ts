@@ -30,13 +30,13 @@ export async function subscriptionListCall(call: AppCallRequest): Promise<string
 
     const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
-    const response: APIResponse = await tryPromiseForGenerateMessage(
+    const responseAPI: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix),
         ExceptionType.MARKDOWN,
         i18nObj.__('forms.subcription.webhook-failed')
     );
 
-    const subscriptions: WebhookSubscription[] = response.data.webhook_subscriptions;
+    const subscriptions: WebhookSubscription[] = responseAPI.data.webhook_subscriptions;
 
     const responseSubs: Promise<WebhookSubscription | undefined>[] = subscriptions.map(async (subs: WebhookSubscription) => {
         const response: APIResponse = await tryPromiseForGenerateMessage(

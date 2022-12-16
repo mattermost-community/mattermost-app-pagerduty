@@ -21,7 +21,7 @@ import { getServiceOptionList, getUsersOptionList } from './pagerduty-options';
 export async function createIncidentFormModal(call: AppCallRequest): Promise<AppForm> {
     const oauth2: Oauth2App | undefined = call.context.oauth2;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
-	 const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call.context);
     const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call.context);
@@ -76,7 +76,7 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
 
 export async function addIncidentFromCommand(call: AppCallRequest) {
     const values = call.values as CreateIncidentFormCommandType;
-	 const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     if (!values?.incident_impacted_service && !values?.incident_title) {
         throw new Error(i18nObj.__('forms.incident-create.add-incident-exception'));
@@ -88,8 +88,8 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
     const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call.context);
     const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call.context);
 
-    const service = serviceOpts.find((b) => b.value == values.incident_impacted_service || b.label == values.incident_impacted_service);
-    const assign = assignToOpts.find((b) => b.value == values.incident_assign_to || b.label == values.incident_assign_to);
+    const service = serviceOpts.find((b) => b.value === values.incident_impacted_service || b.label === values.incident_impacted_service);
+    const assign = assignToOpts.find((b) => b.value === values.incident_assign_to || b.label === values.incident_assign_to);
 
     const valuesData: CreateIncidentFormModalType = {
         incident_impacted_service: <AppSelectOption>service,
@@ -103,7 +103,7 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
 
 export async function submitCreateIncident(call: AppCallRequest): Promise<any> {
     const values = call.values as CreateIncidentFormModalType;
-	 const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     const oauth2: Oauth2App | undefined = call?.context?.oauth2;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
@@ -117,7 +117,7 @@ export async function submitCreateIncident(call: AppCallRequest): Promise<any> {
 
 async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: PagerDutyOpts, context: AppContext) {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     const incident: PostIncident = {
         incident: {

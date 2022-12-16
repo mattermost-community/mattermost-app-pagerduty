@@ -28,7 +28,7 @@ import { changeIncidentPriorityActionForm, changeIncidentPrioritySubmitForm } fr
 
 export const listIncidentSubmit: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
-	 const call: AppCallRequest = req.body;
+    const call: AppCallRequest = req.body;
 
     try {
         const incidents: Incident[] = await getAllIncidentsCall(req.body);
@@ -45,13 +45,13 @@ export const listIncidentSubmit: CallResponseHandler = async (req: Request, res:
 };
 
 function getHeader(serviceLength: number, context: AppContext): string {
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     return h6(i18nObj.__('api.incident.text', { length: serviceLength.toString() }));
 }
 
 function getIncidents(services: Incident[], context: AppContext): string {
-	 const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(context);
 
     return `${joinLines(
         services.map((incident: Incident) => `- ${incident.summary} - ${hyperlink(i18nObj.__('api.incident.detail'), incident.html_url)}`).join('\n')
@@ -62,7 +62,7 @@ export const createNewIncident: CallResponseHandler = async (req: Request, res: 
     const call: AppCallRequest = req.body;
     let callResponse: AppCallResponse;
     const values = call.values as CreateIncidentFormCommandType;
-	 const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     try {
         if (values?.incident_impacted_service && values?.incident_title) {
@@ -81,7 +81,7 @@ export const createNewIncident: CallResponseHandler = async (req: Request, res: 
 export const submitCreateNewIncident = async (req: Request, res: Response) => {
     const call: AppCallRequest = req.body;
     let callResponse: AppCallResponse;
-	 const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     try {
         await submitCreateIncident(call);
@@ -169,7 +169,7 @@ export const addNoteToIncidentSubmit = async (request: Request, response: Respon
 
 export const closePostActions = async (request: Request, response: Response) => {
     let callResponse: AppCallResponse = newOKCallResponse();
-	 const call: AppCallRequest = request.body;
+    const call: AppCallRequest = request.body;
 
     try {
         await deletePostCall(request.body, call.context);

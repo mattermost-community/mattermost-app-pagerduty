@@ -80,7 +80,7 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
             replace(Routes.PagerDuty.PriorityPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
         ),
         ExceptionType.MARKDOWN,
-			 i18nObj.__('forms.add-note.exception')
+        i18nObj.__('forms.add-note.exception')
     );
     const priority: Priority = responsePriority.data.priority;
 
@@ -99,5 +99,5 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
         ExceptionType.MARKDOWN,
         i18nObj.__('forms.change-incident.update')
     );
-	 return i18nObj.__('forms.change-incident.update-failed', { summary: incident.summary, name: priority.name });
+    return i18nObj.__('forms.change-incident.update-failed', { summary: incident.summary, name: priority.name });
 }

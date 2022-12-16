@@ -8,15 +8,177 @@ export type AppManifest = {
     root_url?: string;
 }
 
+export type AppAppContext = {
+    SchemaVersion: string,
+    app_id: string,
+    version: string,
+    homepage_url: string,
+    deploy_type: string,
+    webhook_secret: string,
+    bot_user_id: string,
+    bot_username: string,
+    remote_oauth2: any
+};
+
+export type AppActingUser = {
+    id: string,
+    delete_at: number,
+    username: string,
+    auth_service: string,
+    email: string,
+    nickname: string,
+    first_name: string,
+    last_name: string,
+    position: string,
+    roles: string,
+    locale: string,
+    timezone: any,
+    disable_welcome_email: boolean
+}
+
+export type AppFieldType = string;
+
+export type AppSelectOption = {
+    label: string;
+    value: string;
+    icon_data?: string;
+};
+
+export type Oauth2CurrentUser = {
+    token: string;
+}
+
+export interface Oauth2Data {
+    workspace: string;
+}
+
+export type Oauth2App = {
+    client_id: string;
+    client_secret: string;
+    connect_url?: string;
+    complete_url?: string;
+    user?: Oauth2CurrentUser;
+    data?: Oauth2Data;
+}
+
+export type ContextChannel = {
+    id: string;
+    team_id: string;
+}
+
+export type AppFormValue = string | AppSelectOption | boolean | null;
+
+export type AppFormValues = { [name: string]: AppFormValue };
+
+// This should go in mattermost-redux
+export type AppField = {
+
+    // Name is the name of the JSON field to use.
+    name: string;
+    type: AppFieldType;
+    is_required?: boolean;
+    readonly?: boolean;
+
+    // Present (default) value of the field
+    value?: AppFormValue;
+    description?: string;
+    label?: string;
+    hint?: string;
+    position?: number;
+    modal_label?: string;
+
+    // Select props
+    refresh?: boolean;
+    options?: AppSelectOption[];
+    multiselect?: boolean;
+
+    // Text props
+    subtype?: string;
+    min_length?: number;
+    max_length?: number;
+};
+
+export type AppCallValues = {
+    [name: string]: any;
+};
+
+export type AppCallType = string;
+
+export type AppContextProps = {
+    [name: string]: string;
+};
+
+export type AppExpandLevel = string;
+
+export type AppExpand = {
+    app?: AppExpandLevel;
+    acting_user?: AppExpandLevel;
+    channel?: AppExpandLevel;
+    config?: AppExpandLevel;
+    mentioned?: AppExpandLevel;
+    parent_post?: AppExpandLevel;
+    post?: AppExpandLevel;
+    root_post?: AppExpandLevel;
+    team?: AppExpandLevel;
+    user?: AppExpandLevel;
+};
+
+export type AppCall = {
+    path: string;
+    expand?: AppExpand;
+    state?: any;
+};
+
+export type AppForm = {
+    title?: string;
+    header?: string;
+    footer?: string;
+    icon?: string;
+    submit_buttons?: string;
+    cancel_button?: boolean;
+    submit_on_cancel?: boolean;
+    fields?: AppField[];
+    call?: AppCall;
+    depends_on?: string[];
+    form?: any;
+    source?: any;
+    submit?: any;
+    submit_label?: string;
+};
+
+export type AppContext = {
+    app_id: string;
+    location?: string;
+    locale?: string;
+    acting_user_id?: string;
+    bot_user_id?: string;
+    user_id?: string;
+    channel: ContextChannel;
+    team_id?: string;
+    post_id?: string;
+    root_id?: string;
+    props?: AppContextProps;
+    user_agent?: string;
+    bot_access_token?: string;
+    mattermost_site_url?: string;
+    app?: AppAppContext;
+    acting_user?: AppActingUser;
+    acting_user_access_token?: string;
+    oauth2?: Oauth2App;
+};
+
+export type AppCallRequest = AppCall & {
+    context: AppContext;
+    values?: AppCallValues;
+    raw_command?: string;
+    selected_field?: string;
+    query?: string;
+};
+
 export type AppModalState = {
     form: AppForm;
     call: AppCallRequest;
 }
-
-export type AppsState = {
-    location: string;
-    bindings: AppBinding[];
-};
 
 export type AppBinding = {
     location?: string;
@@ -44,94 +206,20 @@ export type AppBinding = {
     form?: AppForm;
 };
 
-export type AppCallValues = {
-    [name: string]: any;
+export type AppsState = {
+    location: string;
+    bindings: AppBinding[];
 };
 
-export type AppCallType = string;
-
-export type Oauth2CurrentUser = {
-    token: string;
-    user: {
-        id: string;
-        name: string;
-        email: string;
-        role: string;
-    }
+export type ExpandedOauth2App = AppContext & {
+    oauth2: Oauth2App,
 }
-
-export type Oauth2App = {
-    client_id: string;
-    client_secret: string;
-    connect_url?: string;
-    complete_url?: string;
-    user?: Oauth2CurrentUser;
-}
-
-export type PostApp = {
-    id: string,
-    channel_id: string
-}
-
-export type AppCall = {
-    path: string;
-    expand?: AppExpand;
-    state?: any;
-};
-
-export type AppCallRequest = AppCall & {
-    context: AppContext;
-    values?: AppCallValues;
-    raw_command?: string;
-    selected_field?: string;
-    query?: string;
-};
 
 export type ExpandedBotActingUser = AppContext & {
     acting_user: UserProfile,
     acting_user_access_token: string
     bot_user_id: string,
     bot_access_token: string,
-}
-
-export type AppCallDialog<T> = {
-    callback_id: string;
-    state: string;
-    user_id: string;
-    channel_id: string;
-    team_id: string;
-    submission: T;
-    cancelled: boolean;
-}
-
-export type AppCallAction<T> = {
-    user_id: string;
-    user_name: string;
-    channel_id: string;
-    channel_name: string;
-    team_id: string;
-    team_domain: string;
-    post_id: string;
-    trigger_id: string;
-    type: string;
-    data_source: string;
-    context: T;
-}
-
-export type AppActingUser = {
-    id: string,
-    delete_at: number,
-    username: string,
-    auth_service: string,
-    email: string,
-    nickname: string,
-    first_name: string,
-    last_name: string,
-    position: string,
-    roles: string,
-    locale: string,
-    timezone: any,
-    disable_welcome_email: boolean
 }
 
 export type AppCallResponseType = string;
@@ -145,137 +233,7 @@ export type AppCallResponse<Res = unknown> = {
     use_external_browser?: boolean;
     call?: AppCall;
     form?: AppForm;
-};
-
-export type AppContext = {
-    app_id: string;
-    location?: string;
-    locale?: string;
-    user_agent?: string;
-    track_as_submit?: boolean;
-    mattermost_site_url?: string;
-    developer_mode?: boolean;
-    app_path?: string;
-    bot_user_id?: string;
-    bot_access_token?: string;
-    app?: {
-        SchemaVersion: string;
-        app_id: string;
-        version: string;
-        homepage_url: string;
-        deploy_type: string;
-        webhook_secret: string;
-        bot_user_id: string;
-        bot_username: string;
-        remote_oauth2: any;
-    },
-    channel: {
-        id: string;
-        create_at: number;
-        update_at: number;
-        delete_at: number;
-        team_id: string;
-        type: string;
-        display_name: string;
-        name: string;
-        header: string;
-        purpose: string;
-        last_post_at: number;
-        total_msg_count: number;
-        extra_update_at: number;
-        creator_id: string;
-        scheme_id: string;
-        props: any;
-        group_constrained: boolean;
-        shared: any;
-        total_msg_count_root: number;
-        policy_id: any;
-        last_root_post_at: number;
-    }
-    acting_user?: AppActingUser;
-    acting_user_access_token?: string;
-    oauth2: Oauth2App;
-    post?: PostApp
-};
-
-export type AppContextProps = {
-    [name: string]: string;
-};
-
-export type AppExpandLevel = string;
-
-export type AppExpand = {
-    app?: AppExpandLevel;
-    acting_user?: AppExpandLevel;
-    acting_user_access_token?: AppExpandLevel;
-    admin_access_token?: AppExpandLevel;
-    channel?: AppExpandLevel;
-    post?: AppExpandLevel;
-    root_post?: AppExpandLevel;
-    team?: AppExpandLevel;
-    user?: AppExpandLevel;
-    oauth2_app?: AppExpandLevel;
-    oauth2_user?: AppExpandLevel;
-    locale?: AppExpandLevel;
-};
-
-export type AppFormSubmit = {
-    path: string;
-    expand: AppExpand;
-}
-
-export type AppForm = {
-    title?: string;
-    header?: string;
-    footer?: string;
-    icon?: string;
-    submit: AppFormSubmit;
-    fields: AppField[];
-    call?: AppCall;
-    depends_on?: string[];
-    source?: any;
-};
-
-export type AppFormValue = string | AppSelectOption[] | boolean | null;
-export type AppFormValues = {[name: string]: AppFormValue};
-
-export type AppSelectOption = {
-    label: string;
-    value: string;
-    icon_data?: string;
-};
-
-export type AppFieldType = string;
-
-// This should go in mattermost-redux
-export type AppField = {
-
-    // Name is the name of the JSON field to use.
-    name: string;
-    type: AppFieldType;
-    is_required?: boolean;
-    readonly?: boolean;
-
-    // Present (default) value of the field
-    value?: AppFormValue;
-
-    description?: string;
-
-    label?: string;
-    hint?: string;
-    position?: number;
-
-    modal_label?: string;
-
-    // Select props
-    refresh?: boolean;
-    options?: AppSelectOption[];
-    multiselect?: boolean;
-
-    // Text props
-    subtype?: string;
-    min_length?: number;
-    max_length?: number;
+    props?: any;
 };
 
 export type AutocompleteSuggestion = {
@@ -310,6 +268,56 @@ export type FormResponseData = {
 export type AppLookupResponse = {
     items: AppSelectOption[];
 }
+
+export type AppAttachmentActionIntegration = {
+    url: string;
+    context: any;
+}
+
+export type AppAttachmentActionOptions = {
+    text: string;
+    value: string;
+}
+
+export type AppAttachmentAction = {
+    id: string;
+    name: string;
+    integration: AppAttachmentActionIntegration;
+    options?: AppAttachmentActionOptions[];
+    type: string;
+}
+
+export type AppPostMessageAttachment = {
+    pretext?: string;
+    text?: string;
+    actions?: AppAttachmentAction[];
+}
+
+export type AppPostMessageProps = {
+    attachments: AppPostMessageAttachment[];
+}
+
+export type AppPostMessage = {
+    channel_id: string;
+    message: string;
+    props: AppPostMessageProps;
+}
+
+export type ExpandedBot = AppContext & {
+    bot_user_id: string,
+    bot_access_token: string,
+}
+
+export type ExpandedActingUserAccessToken = AppContext & {
+    acting_user_access_token: string
+}
+
+export type AppCallRequestWithValues = AppCall & {
+    values: AppCallValues
+    context: AppContext
+}
+
+export type CtxExpandedBotActingUserAccessToken = ExpandedActingUserAccessToken & ExpandedBot
 
 export type AppContextAction = {
     action: string;

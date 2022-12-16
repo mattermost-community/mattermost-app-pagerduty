@@ -11,7 +11,7 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
     const pdClient: PartialCall = api(tokenOpts);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
-	 const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(
@@ -52,7 +52,7 @@ export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string>
     const oauth2: Oauth2App | undefined = call.context.oauth2;
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
-	 const i18nObj = configureI18n(call.context);
+    const i18nObj = configureI18n(call.context);
 
     const values: AppCallValues | undefined = call.values;
     const incidentMessage: string = values?.[NoteModalForm.NOTE_MESSAGE];

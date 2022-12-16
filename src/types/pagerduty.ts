@@ -303,6 +303,23 @@ export type WebhookEvent<T> = {
         resource_type: string;
     }
 };
+
+export type ServiceResponse = {
+    id: string,
+    name: string,
+    description: string,
+    html_url: string
+}
+
+export type UserResponse = {
+    summary: string,
+    id: string,
+    type: 'user',
+    name: string,
+    email: string,
+    html_url: string,
+}
+
 export type GetResponse = {
     services?: Array<ServiceResponse>,
     users?: Array<UserResponse>,
@@ -330,27 +347,18 @@ export type UpdateIncident = {
     }
 }
 
-export type ServiceResponse = {
-    id: string,
-    name: string,
-    description: string,
-    html_url: string
-}
-
-export type UserResponse = {
-    summary: string,
-    id: string,
-    type: 'user',
-    name: string,
-    email: string,
-    html_url: string,
-}
-
 export type PostIncidentNote = {
     note: {
         content: string
     }
 };
+
+export type PostIncidentAssignee = {
+    assignee: {
+        id: string,
+        type: 'user'
+    }
+}
 
 export type PostIncident = {
     incident: {
@@ -365,13 +373,6 @@ export type PostIncident = {
             details: string
         },
         assignments?: Array<PostIncidentAssignee>
-    }
-}
-
-export type PostIncidentAssignee = {
-    assignee: {
-        id: string,
-        type: 'user'
     }
 }
 

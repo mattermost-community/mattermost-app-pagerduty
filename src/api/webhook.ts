@@ -5,21 +5,19 @@ import {
     AddNoteWebhook,
     AppCallResponse,
     AppContext,
-    AppContextAction,
-    EventWebhook, Incident,
+    EventWebhook,
     Manifest,
     PostCreate,
     WebhookEvent,
     WebhookRequest,
 } from '../types';
 import { newErrorCallResponseWithMessage, newOKCallResponse } from '../utils/call-responses';
-import { ActionsEvents, AppExpandLevels, options_incident } from '../constant';
+import { ActionsEvents, AppExpandLevels, Routes } from '../constant';
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
-import config from '../config';
-import { Routes } from '../constant';
 import { h6, hyperlink } from '../utils/markdown';
 import { configureI18n } from '../utils/translations';
 import manifest from '../manifest.json';
+import { WebhookFunction } from '../types/functions';
 
 async function notifyIncidentTriggered({ data: { event }, rawQuery }: WebhookRequest<WebhookEvent<EventWebhook>>, context: AppContext) {
     const mattermostUrl: string | undefined = context.mattermost_site_url;
@@ -339,7 +337,7 @@ async function notifyChangeIncidentPriority({ data: { event }, rawQuery }: Webho
     await mattermostClient.createPost(payload);
 }
 
-const WEBHOOKS_ACTIONS: { [key: string]: Function } = {
+const WEBHOOKS_ACTIONS: { [key: string]: WebhookFunction } = {
     'incident.triggered': notifyIncidentTriggered,
     'incident.annotated': notifyIncidentAnnotated,
     'incident.acknowledged': notifyIncidentAcknowledged,
@@ -356,7 +354,7 @@ export const incomingWebhook = async (request: Request, response: Response) => {
     let callResponse: AppCallResponse;
     try {
         console.log('webhook', webhookRequest.data.event);
-        const action: Function = WEBHOOKS_ACTIONS[webhookRequest.data.event.event_type];
+        const action: WebhookFunction = WEBHOOKS_ACTIONS[webhookRequest.data.event.event_type];
         if (action) {
             await action(webhookRequest, context);
         }
