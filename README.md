@@ -2,15 +2,17 @@
 
 * [Feature summary](#feature-summary)
 * [Set up](#setting-up)
-    * [Installation](#installation)
+    * [Installation HTTP](#installation-http)
+    * [Installation Mattermost Cloud](#installation-mattermost-cloud)
     * [Configuration](#configuration)
 * [Admin guide](#admin-guide)
     * [Slash commands](#slash-commands)
 * [End user guide](#end-user-guide)
     * [Get started](#get-started)
     * [Use /pd commands](#use-pd-commands)
-* [Development](#development)
+* [Development environment](#development-environment)
     * [Manual installation](#manual-installation)
+    * [Install dependencies](#install-dependencies)
     * [Run the local development environment](#run-the-local-development-environment)
     * [Run the local development environment with docker](#run-the-local-development-environment-with-docker)
 
@@ -22,31 +24,33 @@ This application allows you to integrate PagerDuty to your Mattermost instance, 
 
 # Set up
 
-## Installation
 
-This plugin requires that your Mattermost workspace has the ``/apps install`` command enabled.
+## Installation HTTP
 
-To install, as a super admin user role, run the command ``/apps install http PAGERDUTY_API_URL`` in any channel. 
+To install, as a Mattermost system admin user, run the command ``/apps install http PAGERDUTY_API`` in any channel. The ``/pd`` command should be available after the configuration has been successfully installed.
 
-The ``PAGERDUTY_API_URL`` should be replaced with the URL where the PagerDuty API instance is running. Example: ``/apps install http https://mattermost-pagerduty-dev.ancient.mx/manifest.json``.
+The ``PAGERDUTY_API`` should be replaced with the URL where the Trello API instance is running. Example: ``/apps install http https://myapp.com/manifest.json``
 
-The ``/pd`` command should be available after the configuration has been successfully installed.
+## Installation Mattermost Cloud
+
+To install, as a Mattermost system admin user, run the command ``/apps install listed pagerduty`` in any channel. The ``/pd`` command should be available after the configuration has been successfully installed.
+
 
 ## Configuration
 
-1. First, install the app in your current Mattermost instance (refer to [Installation](#installation)) so that the ``/pd`` command is available.
-2. Open your PagerDuty profile to get your credentials and link to your Mattermost instance. 
-3. Select the **Integration** tab in the toolbar. To the right of the popup (in the **Developer Tools** column) select **Developer Mode**
-4. On the **My Apps** page, select **Create New APP** and fill the form. 
-5. When the form is completed, select **OAuth 2.0** in the same form (on the **Add** button below). 
-6. In the **Redirect URL** field, add the following link (where "mattermostURL" should be replaced with the link to you Mattermost instance):
+After [installing](#installation)) the app:
+1. Open your PagerDuty profile to get your credentials and link to your Mattermost instance. 
+2. Select the **Integration** tab in the toolbar. To the right of the popup (in the **Developer Tools** column) select **Developer Mode**
+3. On the **My Apps** page, select **Create New APP** and fill the form. 
+4. When the form is completed, select **OAuth 2.0** in the same form (on the **Add** button below). 
+5. In the **Redirect URL** field, add the following link (where "mattermostURL" should be replaced with the link to you Mattermost instance):
 ``{mattermostURL}/plugins/com.mattermost.apps/apps/pagerduty/oauth2/remote/complete``
-7. Select **Save**.
-8. The ``Client ID`` and ``Client Secret`` will be displayed. Save them in a safe place - the ``Client Secret`` can't be recovered). 
-9. To finish, in the **Scopes** select **Read/Write**, then select **Save**.
-10. Return to Mattermost. 
-11. As a super admin role user, run the ``/pd configure`` command.
-12. Enter the PagerDuty ``Client ID`` and ``Client Secret`` when prompted.
+6. Select **Save**.
+7. The ``Client ID`` and ``Client Secret`` will be displayed. Save them in a safe place - the ``Client Secret`` can't be recovered). 
+8. To finish, in the **Scopes** select **Read/Write**, then select **Save**.
+9. Return to Mattermost. 
+10. As a super admin role user, run the ``/pd configure`` command.
+11. Enter the PagerDuty ``Client ID`` and ``Client Secret`` when prompted.
 
 # Admin guide
 
@@ -69,7 +73,7 @@ The ``/pd`` command should be available after the configuration has been success
 - ``/pd service list``: Get a list of the existing services available to the user.
 - ``/pd oncall list``: Get a list of the users that are on-call at the moment.
 
-# Development
+# Development environment
 
 ## Manual installation
 
@@ -77,9 +81,10 @@ The ``/pd`` command should be available after the configuration has been success
 
 ### Run the local development environment
 
-* You need to have installed at least node version 12 and maximum version 18. You can download the latest lts version of node for the required operating system here: https://nodejs.org/es/download/
+* You need to have installed at least node version 15 and maximum version 18. You can download the latest lts version of node for the required operating system here: https://nodejs.org/es/download/
 
-*  Install libraries: ``cd`` to the project's directory and execute ``npm install`` to download all dependency libraries.
+### Install dependencies
+* Move to the project directory or execute ``cd`` command to the project directory and execute ``npm install`` with a terminal to download all dependency libraries.
 
 ```
 $ npm install
@@ -90,9 +95,9 @@ $ npm install
 ```
 file: .env
 
-PROJECT=mattermost-pagerduty-app
+PROJECT=mattermost-app-pagerduty
 PORT=4002
-HOST=https://mattermost-pagerduty-dev.ancient.mx
+HOST=http://localhost:4002
 ```
 
 Variable definition
@@ -107,6 +112,12 @@ Variable definition
 $ npm run dev
 ```
 
+Or, if you would like to use the Makefile command:
+
+```
+$ make watch
+```
+
 ### Run the local development environment with Docker
 
 * You need to have Docker installed. You can find the necessary steps to install Docker for the following operating systems:
@@ -115,10 +126,20 @@ $ npm run dev
 [Mac](https://docs.docker.com/desktop/mac/install/)
 [Windows](https://docs.docker.com/desktop/windows/install/)
 
-* Once you have Docker installed, the next step would be to run the ``./build.sh`` file to create the API container and expose it locally or on the server, depending on the case required.
+* Once you have Docker installed, the next step would be to run the ``make run-server`` command to create the API container and expose it locally or on the server, depending on the case required.
 
 ```
-$ ./build
+$ make run-server
 ```
 
-When the container is created correctly, the API will be running at the url http://127.0.0.1:4002 in such a way that the installation can be carried out in Mattermost.
+When the container is created correctly, the API will be running at the url http://127.0.0.1:4002. If Mattermost is running on the same machine, run this slash command in Mattermost to install the app:
+
+```
+/apps install http http://127.0.0.1:4002/manifest.json
+```
+
+To stop the container, execute:
+
+```
+$ make stop-server
+```
