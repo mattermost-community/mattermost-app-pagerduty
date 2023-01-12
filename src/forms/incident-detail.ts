@@ -48,8 +48,8 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
         },
     ];
 
-    const priority: IncidentPriority = incident?.priority!;
-    if (Object.keys(priority).length) {
+    const priority: IncidentPriority | undefined = incident?.priority;
+    if (priority) {
         fields.push(
             {
                 short: true,

@@ -44,8 +44,8 @@
         "functions": [
             {
                 "path": "/",
-                "name": "pagerduty",
-                "handler": "pagerduty/index.handler",
+                "name": "bundle",
+                "handler": "bundle/index.handler",
                 "runtime": "nodejs16.x"
             }
         ]
