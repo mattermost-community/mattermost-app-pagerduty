@@ -3,7 +3,9 @@
     "google-error": "PagerDuty falló: ",
     "mattermost-error": "Mattermost falló: ",
     "validation-user": {
-      "system-admin": "Error: Este comando esta únicamente disponible a usuarios Mattermost System Admin"
+      "system-admin": "Error: Este comando esta únicamente disponible a usuarios Mattermost System Admin",
+      "oauth-user": "Error: No has vinculado tu cuenta de PagerDuty. La necesitas para realizar esta acción",
+      "not-provided": "El usuario no fue provisto"
     }
   },
   "api": {

@@ -12,7 +12,7 @@ import * as cWebhook from './webhook';
 import * as cService from './service';
 import * as cIncident from './incident';
 import * as cOnCall from './on-call';
-import { requireSystemAdmin } from '../restapi/middleware';
+import { requireSystemAdmin, requireUserOAuthConnected } from '../restapi/middleware';
 
 const router: Router = express.Router();
 
@@ -24,22 +24,22 @@ router.post(`${Routes.App.BindingPathHelp}`, cHelp.getHelp);
 router.post(`${Routes.App.CallPathConfigForm}`, requireSystemAdmin, cConfigure.configureAdminAccountForm);
 router.post(`${Routes.App.CallPathConfigSubmit}`, requireSystemAdmin, cConfigure.configureAdminAccountSubmit);
 
-router.post(`${Routes.App.CallPathSubscriptionAddSubmit}`, cSubscription.subscriptionAddSubmit);
-router.post(`${Routes.App.CallPathSubscriptionDeleteSubmit}`, cSubscription.subscriptionDeleteSubmit);
-router.post(`${Routes.App.CallPathSubscriptionListSubmit}`, cSubscription.subscriptionListSubmit);
+router.post(`${Routes.App.CallPathSubscriptionAddSubmit}`, requireUserOAuthConnected, cSubscription.subscriptionAddSubmit);
+router.post(`${Routes.App.CallPathSubscriptionDeleteSubmit}`, requireUserOAuthConnected, cSubscription.subscriptionDeleteSubmit);
+router.post(`${Routes.App.CallPathSubscriptionListSubmit}`, requireUserOAuthConnected, cSubscription.subscriptionListSubmit);
 
-router.post(`${Routes.App.CallPathServiceSubmit}`, cService.listTeamsSubmit);
-router.post(`${Routes.App.CallPathIncidentSubmit}`, cIncident.listIncidentSubmit);
-router.post(`${Routes.App.CallPathOnCallSubmit}`, cOnCall.listOnCallSubmit);
+router.post(`${Routes.App.CallPathServiceSubmit}`, requireUserOAuthConnected, cService.listTeamsSubmit);
+router.post(`${Routes.App.CallPathIncidentSubmit}`, requireUserOAuthConnected, cIncident.listIncidentSubmit);
+router.post(`${Routes.App.CallPathOnCallSubmit}`, requireUserOAuthConnected, cOnCall.listOnCallSubmit);
 
 router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
-router.post(`${Routes.App.CallPathDisconnectSubmit}`, cConfigure.fOauth2Disconnect);
+router.post(`${Routes.App.CallPathDisconnectSubmit}`, requireUserOAuthConnected, cConfigure.fOauth2Disconnect);
 router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);
 router.post(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);
 
 router.post(`${Routes.App.CallPathIncomingWebhookPath}`, cWebhook.incomingWebhook);
-router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`, cIncident.createNewIncident);
-router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`, cIncident.submitCreateNewIncident);
+router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`, requireUserOAuthConnected, cIncident.createNewIncident);
+router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`, requireUserOAuthConnected, cIncident.submitCreateNewIncident);
 
 // FROM WEBHOOK ACTIONS
 router.post(`${Routes.App.CallPathIncidentAcknowledgedAction}`, cIncident.ackIncidentAction);
