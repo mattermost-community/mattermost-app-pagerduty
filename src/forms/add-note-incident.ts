@@ -18,7 +18,8 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.add-note.exception')
+        i18nObj.__('forms.add-note.exception'),
+        call
     );
     const incident: Incident = responseIncident.data.incident;
     const fields: AppField[] = [
@@ -64,7 +65,8 @@ export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string>
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms..add-note.exception')
+        i18nObj.__('forms..add-note.exception'),
+        call
     );
 
     const incident: Incident = responseIncident.data.incident;
@@ -79,7 +81,7 @@ export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string>
         pdClient.post(
             `${replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)}${Routes.PagerDuty.NotesPathPrefix}`,
             { data }
-        ), ExceptionType.MARKDOWN, i18nObj.__('forms.add-note.failed'));
+        ), ExceptionType.MARKDOWN, i18nObj.__('forms.add-note.failed'), call);
 
     return i18nObj.__('forms.add-note.incident', { summary: incident.summary });
 }

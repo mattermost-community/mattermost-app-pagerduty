@@ -21,7 +21,8 @@ export async function showIncidentDetailPost(call: AppCallRequest): Promise<any>
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.incident-detail.exception')
+        i18nObj.__('forms.incident-detail.exception'),
+        call
     );
 
     const incident: Incident = responseIncident.data.incident;

@@ -113,7 +113,7 @@ export async function oauth2Disconnect(call: AppCallRequest): Promise<void> {
     const i18nObj = configureI18n(call.context);
 
     if (!isConnected(oauth2)) {
-        throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.oauth.exception-account'));
+        throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.oauth.exception-account'), call);
     }
 
     const kvOptionsOauth: KVStoreOptions = {

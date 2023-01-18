@@ -20,7 +20,8 @@ export async function subscriptionDeleteCall(call: AppCallRequest): Promise<stri
             replace(Routes.PagerDuty.WebhookSubscriptionPathPrefix, Routes.PathsVariable.Identifier, subscriptionId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.subcription.webhook-failed')
+        i18nObj.__('forms.subcription.webhook-failed'),
+        call
     );
     return i18nObj.__('api.subcription.deleted');
 }

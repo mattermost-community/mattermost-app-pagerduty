@@ -23,8 +23,8 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
     const i18nObj = configureI18n(call.context);
 
-    const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call.context);
-    const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call.context);
+    const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call);
+    const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call);
 
     const fields: AppField[] = [
         {
@@ -85,8 +85,8 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
     const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
 
-    const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call.context);
-    const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call.context);
+    const serviceOpts: AppSelectOption[] = await getServiceOptionList(tokenOpts, call);
+    const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call);
 
     const service = serviceOpts.find((b) => b.value === values.incident_impacted_service || b.label === values.incident_impacted_service);
     const assign = assignToOpts.find((b) => b.value === values.incident_assign_to || b.label === values.incident_assign_to);
@@ -98,7 +98,7 @@ export async function addIncidentFromCommand(call: AppCallRequest) {
         incident_assign_to: <AppSelectOption>assign,
     };
 
-    await postIncidentMethod(valuesData, tokenOpts, call.context);
+    await postIncidentMethod(valuesData, tokenOpts, call);
 }
 
 export async function submitCreateIncident(call: AppCallRequest): Promise<any> {
@@ -112,12 +112,12 @@ export async function submitCreateIncident(call: AppCallRequest): Promise<any> {
         throw new Error(i18nObj.__('forms.incident-create.create-incident-exception'));
     }
 
-    await postIncidentMethod(values, tokenOpts, call.context);
+    await postIncidentMethod(values, tokenOpts, call);
 }
 
-async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: PagerDutyOpts, context: AppContext) {
+async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: PagerDutyOpts, call: AppCallRequest) {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-    const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(call.context);
 
     const incident: PostIncident = {
         incident: {
@@ -157,6 +157,7 @@ async function postIncidentMethod(values: CreateIncidentFormModalType, pdOpt: Pa
     await tryPromiseForGenerateMessage(
         pdClient.post(Routes.PagerDuty.IncidentsPathPrefix, { data: incident }),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.incident-create.failed')
+        i18nObj.__('forms.incident-create.failed'),
+        call
     );
 }

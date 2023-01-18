@@ -2,18 +2,19 @@ import { api } from '@pagerduty/pdjs';
 import { APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
 
 import { ExceptionType, Routes } from '../constant';
-import { AppContext, AppSelectOption, PagerDutyOpts, Priority, Service } from '../types';
+import { AppCallRequest, AppContext, AppSelectOption, PagerDutyOpts, Priority, Service } from '../types';
 import { configureI18n } from '../utils/translations';
 import { tryPromiseForGenerateMessage } from '../utils/utils';
 
-export async function getServiceOptionList(pdOpt: PagerDutyOpts, context: AppContext): Promise<AppSelectOption[]> {
+export async function getServiceOptionList(pdOpt: PagerDutyOpts, call: AppCallRequest): Promise<AppSelectOption[]> {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-    const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(call.context);
 
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.ServicesPathPrefix),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.option.service-failed')
+        i18nObj.__('forms.option.service-failed'),
+        call
     );
     const services: Service[] = responseServices?.data.services;
     if (Boolean(services)) {
@@ -26,13 +27,14 @@ export async function getServiceOptionList(pdOpt: PagerDutyOpts, context: AppCon
     return [];
 }
 
-export async function getUsersOptionList(pdOpt: PagerDutyOpts, context: AppContext): Promise<AppSelectOption[]> {
+export async function getUsersOptionList(pdOpt: PagerDutyOpts, call: AppCallRequest): Promise<AppSelectOption[]> {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-    const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(call.context);
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.UsersPathPrefix),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.option.user-failed')
+        i18nObj.__('forms.option.user-failed'),
+        call
     );
 
     const users: Service[] = responseServices?.data.users;
@@ -46,13 +48,14 @@ export async function getUsersOptionList(pdOpt: PagerDutyOpts, context: AppConte
     return [];
 }
 
-export async function getPrioritiesOptionList(pdOpt: PagerDutyOpts, context: AppContext): Promise<AppSelectOption[]> {
+export async function getPrioritiesOptionList(pdOpt: PagerDutyOpts, call: AppCallRequest): Promise<AppSelectOption[]> {
     const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
-    const i18nObj = configureI18n(context);
+    const i18nObj = configureI18n(call.context);
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.PrioritiesPathPrefix),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.option.priorities-failed')
+        i18nObj.__('forms.option.priorities-failed'),
+        call
     );
 
     const priorities: Priority[] = responseServices?.data.priorities;

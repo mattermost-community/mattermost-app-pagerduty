@@ -27,21 +27,23 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
     const responseSubscriptions: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.subcription.webhook-failed')
+        i18nObj.__('forms.subcription.webhook-failed'),
+        call
     );
     const subscriptions: WebhookSubscription[] = responseSubscriptions.data.webhook_subscriptions;
 
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(replace(Routes.PagerDuty.ServicePathPrefix, Routes.PathsVariable.Identifier, serviceId)),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.subcription.service-failed')
+        i18nObj.__('forms.subcription.service-failed'),
+        call
     );
     const service: Service = responseServices.data.service;
 
     for (const subscription of subscriptions) {
         const params: URLSearchParams = new URL(subscription.delivery_method.url).searchParams;
         if (params.get('channelId') === channelId && subscription.filter.id === service.id) {
-            throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }));
+            throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }), call);
         }
     }
 
@@ -83,7 +85,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
                 type: 'webhook_subscription',
             },
         },
-    }), ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.webhook-failed'));
+    }), ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.webhook-failed'), call);
 
     const mattermostOption: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,

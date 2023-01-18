@@ -33,7 +33,8 @@ export async function subscriptionListCall(call: AppCallRequest): Promise<string
     const responseAPI: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.subcription.webhook-failed')
+        i18nObj.__('forms.subcription.webhook-failed'),
+        call
     );
 
     const subscriptions: WebhookSubscription[] = responseAPI.data.webhook_subscriptions;
@@ -42,7 +43,8 @@ export async function subscriptionListCall(call: AppCallRequest): Promise<string
         const response: APIResponse = await tryPromiseForGenerateMessage(
             pdClient.get(replace(Routes.PagerDuty.ServicePathPrefix, Routes.PathsVariable.Identifier, subs.filter.id)),
             ExceptionType.MARKDOWN,
-            i18nObj.__('forms.subcription.service-failed')
+            i18nObj.__('forms.subcription.service-failed'),
+            call
         );
 
         const service: Service = response.data.service;

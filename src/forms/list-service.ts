@@ -15,7 +15,8 @@ export async function getAllServicesCall(call: AppCallRequest): Promise<Service[
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.ServicesPathPrefix),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.list-service.message')
+        i18nObj.__('forms.list-service.message'), 
+        call
     );
     const services: Service[] = responseServices?.data.services;
     return services;

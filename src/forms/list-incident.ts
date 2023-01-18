@@ -19,7 +19,8 @@ export async function getAllIncidentsCall(call: AppCallRequest): Promise<Inciden
     const responseIncidents: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(`${Routes.PagerDuty.IncidentsPathPrefix}?${queryParams}`),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.incident-list.message')
+        i18nObj.__('forms.incident-list.message'),
+        call
     );
     const incidents: Incident[] = responseIncidents.data.incidents;
 

@@ -2,7 +2,7 @@ import { APIResponse } from '@pagerduty/pdjs/build/src/api';
 
 import { ExceptionType, StoreKeys } from '../constant';
 
-import { AppActingUser, AppCallResponse, AppContext, Oauth2App, Oauth2CurrentUser } from '../types';
+import { AppActingUser, AppCallRequest, AppCallResponse, AppContext, Oauth2App, Oauth2CurrentUser } from '../types';
 import { KVStoreClient, KVStoreProps } from '../clients/kvstore';
 
 import { Exception } from './exception';
@@ -60,7 +60,7 @@ export function errorDataPagerduty(data: any): string {
     return errorMessage;
 }
 
-export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: ExceptionType, message: string) {
+export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: ExceptionType, message: string, call: AppCallRequest) {
     return p.
         then((response) =>
             (Boolean(errorDataPagerduty(response)) ?
@@ -69,7 +69,7 @@ export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: Exc
         ).
         catch((error) => {
             const errorMessage: string = errorDataMessage(error);
-            throw new Exception(exceptionType, `"${message}".  ${errorMessage}`);
+            throw new Exception(exceptionType, `"${message}".  ${errorMessage}`, call);
         });
 }
 

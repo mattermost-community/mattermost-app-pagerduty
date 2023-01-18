@@ -22,11 +22,12 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.incident.exception')
+        i18nObj.__('forms.incident.exception'),
+        call
     );
     const incident: Incident = responseIncident.data.incident;
 
-    const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(tokenOpts, call.context);
+    const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(tokenOpts, call);
     const fields: AppField[] = [
         {
             modal_label: i18nObj.__('forms.change-incident.label-priorities'),
@@ -71,7 +72,8 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.add-note.exception')
+        i18nObj.__('forms.add-note.exception'),
+        call
     );
     const incident: Incident = responseIncident.data.incident;
 
@@ -80,7 +82,8 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
             replace(Routes.PagerDuty.PriorityPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.add-note.exception')
+        i18nObj.__('forms.add-note.exception'),
+        call
     );
     const priority: Priority = responsePriority.data.priority;
 
@@ -97,7 +100,8 @@ export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Pr
             { data }
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.change-incident.update')
+        i18nObj.__('forms.change-incident.update'),
+        call
     );
     return i18nObj.__('forms.change-incident.update-failed', { summary: incident.summary, name: priority.name });
 }

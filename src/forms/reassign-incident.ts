@@ -22,11 +22,12 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.reassign.incident-failed')
+        i18nObj.__('forms.reassign.incident-failed'),
+        call
     );
     const incident: Incident = responseIncident.data.incident;
 
-    const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call.context);
+    const assignToOpts: AppSelectOption[] = await getUsersOptionList(tokenOpts, call);
     const fields: AppField[] = [
         {
             modal_label: 'User',
@@ -71,7 +72,8 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.reassign.header')
+        i18nObj.__('forms.reassign.header'),
+        call
     );
     const incident: Incident = responseIncident.data.incident;
 
@@ -80,7 +82,8 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
             replace(Routes.PagerDuty.UserPathPrefix, Routes.PathsVariable.Identifier, assignTo.value)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.reassign.user-failed')
+        i18nObj.__('forms.reassign.user-failed'),
+        call
     );
     const user: UserResponse = responseUser.data.user;
 
@@ -104,7 +107,8 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
             { data }
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.reassign.user-update')
+        i18nObj.__('forms.reassign.user-update'),
+        call
     );
     return i18nObj.__('forms.reassign.reassign-incident', { summary: incident.summary, name: user?.name });
 }

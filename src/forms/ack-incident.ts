@@ -25,7 +25,8 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
                 replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
             ),
             ExceptionType.MARKDOWN,
-            i18nObj.__('forms.incident.exception')
+            i18nObj.__('forms.incident.exception'), 
+            call
         );
 
         const incident: Incident = responseSubscriptions.data.incident;
@@ -47,7 +48,8 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
                 { data }
             ),
             ExceptionType.MARKDOWN,
-            i18nObj.__('forms.incident.exception_update')
+            i18nObj.__('forms.incident.exception_update'),
+            call
         );
 
         message = i18nObj.__('forms.incident.message', { summary: incident.summary });
