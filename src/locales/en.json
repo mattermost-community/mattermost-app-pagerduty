@@ -96,9 +96,9 @@
 				"modal_impacted_description": "Impacted service name",
 				"modal_title_label": "Title",
 				"modal_title_description": "Incident title",
-				"modal_description_label": "Description (optional)",
+				"modal_description_label": "Description",
 				"modal_description_description": "Incident description",
-				"modal_assign_label": "Assign to (optional)",
+				"modal_assign_label": "Assign to",
 				"modal_assign_description": "To whom this incident will be assigned"
 			},
 			"configure": {
