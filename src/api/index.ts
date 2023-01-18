@@ -42,21 +42,21 @@ router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}`, r
 router.post(`${Routes.App.CallPathForms}${Routes.App.CallPathIncidentCreate}${Routes.App.CallPathSubmit}`, requireUserOAuthConnected, cIncident.submitCreateNewIncident);
 
 // FROM WEBHOOK ACTIONS
-router.post(`${Routes.App.CallPathIncidentAcknowledgedAction}`, cIncident.ackIncidentAction);
+router.post(`${Routes.App.CallPathIncidentAcknowledgedAction}`, requireUserOAuthConnected, cIncident.ackIncidentAction);
 
-router.post(`${Routes.App.CallPathIncidentResolveAction}`, cIncident.resolveIncidentModal);
-router.post(`${Routes.App.CallPathIncidentResolveSubmit}`, cIncident.resolveIncidentSubmit);
+router.post(`${Routes.App.CallPathIncidentResolveAction}`, requireUserOAuthConnected, cIncident.resolveIncidentModal);
+router.post(`${Routes.App.CallPathIncidentResolveSubmit}`, requireUserOAuthConnected, cIncident.resolveIncidentSubmit);
 
-router.post(`${Routes.App.CallPathDetailViewIncidentAction}`, cIncident.showIncidentDetail);
+router.post(`${Routes.App.CallPathDetailViewIncidentAction}`, requireUserOAuthConnected, cIncident.showIncidentDetail);
 
-router.post(`${Routes.App.CallPathNoteToIncidentAction}`, cIncident.addNoteToIncidentModal);
-router.post(`${Routes.App.CallPathNoteToIncidentSubmit}`, cIncident.addNoteToIncidentSubmit);
+router.post(`${Routes.App.CallPathNoteToIncidentAction}`, requireUserOAuthConnected, cIncident.addNoteToIncidentModal);
+router.post(`${Routes.App.CallPathNoteToIncidentSubmit}`, requireUserOAuthConnected, cIncident.addNoteToIncidentSubmit);
 
-router.post(`${Routes.App.CallPathAssignIncidentAction}`, cIncident.reassignIncidentModal);
-router.post(`${Routes.App.CallPathAssignIncidentSubmit}`, cIncident.reassignIncidentSubmit);
+router.post(`${Routes.App.CallPathAssignIncidentAction}`, requireUserOAuthConnected, cIncident.reassignIncidentModal);
+router.post(`${Routes.App.CallPathAssignIncidentSubmit}`, requireUserOAuthConnected, cIncident.reassignIncidentSubmit);
 
-router.post(`${Routes.App.CallPathChangeIncidentPriorityAction}`, cIncident.changePriorityIncidentModal);
-router.post(`${Routes.App.CallPathChangeIncidentPrioritySubmit}`, cIncident.changePriorityIncidentSubmit);
+router.post(`${Routes.App.CallPathChangeIncidentPriorityAction}`, requireUserOAuthConnected, cIncident.changePriorityIncidentModal);
+router.post(`${Routes.App.CallPathChangeIncidentPrioritySubmit}`, requireUserOAuthConnected, cIncident.changePriorityIncidentSubmit);
 
 const staticRouter = express.Router();
 staticRouter.use(express.static('static'));
