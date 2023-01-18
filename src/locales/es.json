@@ -1,4 +1,11 @@
 {
+  "general": {
+    "google-error": "PagerDuty falló: ",
+    "mattermost-error": "Mattermost falló: ",
+    "validation-user": {
+      "system-admin": "Error: Este comando esta únicamente disponible a usuarios Mattermost System Admin"
+    }
+  },
   "api": {
     "configure": {
       "error_admin_account": "No se puede abrir el formulario de configuración: {{ message }}",

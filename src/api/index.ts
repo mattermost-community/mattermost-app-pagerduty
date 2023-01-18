@@ -12,6 +12,7 @@ import * as cWebhook from './webhook';
 import * as cService from './service';
 import * as cIncident from './incident';
 import * as cOnCall from './on-call';
+import { requireSystemAdmin } from '../restapi/middleware';
 
 const router: Router = express.Router();
 
@@ -20,8 +21,8 @@ router.post(Routes.App.BindingsPath, cBindings.getBindings);
 router.post(Routes.App.InstallPath, cInstall.getInstall);
 router.post(`${Routes.App.BindingPathHelp}`, cHelp.getHelp);
 
-router.post(`${Routes.App.CallPathConfigForm}`, cConfigure.configureAdminAccountForm);
-router.post(`${Routes.App.CallPathConfigSubmit}`, cConfigure.configureAdminAccountSubmit);
+router.post(`${Routes.App.CallPathConfigForm}`, requireSystemAdmin, cConfigure.configureAdminAccountForm);
+router.post(`${Routes.App.CallPathConfigSubmit}`, requireSystemAdmin, cConfigure.configureAdminAccountSubmit);
 
 router.post(`${Routes.App.CallPathSubscriptionAddSubmit}`, cSubscription.subscriptionAddSubmit);
 router.post(`${Routes.App.CallPathSubscriptionDeleteSubmit}`, cSubscription.subscriptionDeleteSubmit);

@@ -1,4 +1,11 @@
 {
+	"general": {
+		"pagerduty-error": "PagerDuty failed: ",
+		"mattermost-error": "Mattermost failed: ",
+		"validation-user": {
+			"system-admin": "Error: This command is only available for Mattermost System Admin"
+		}
+	},
 	"api": {
 		"configure": {
 			"error_admin_account": "Unable to open configuration form: {{ message }}",
