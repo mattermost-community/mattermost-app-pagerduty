@@ -20,7 +20,7 @@ export async function getAllOnCall(call: AppCallRequest): Promise<OnCallRecord[]
     const responseCalls: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(`${Routes.PagerDuty.OnCallPathPrefix}?${queryParams}`),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.list-call.message'),
+        i18nObj.__('forms.list-call.get-oncall-failed'),
         call
     );
     const onCallList: OnCallRecord[] = responseCalls.data.oncalls;

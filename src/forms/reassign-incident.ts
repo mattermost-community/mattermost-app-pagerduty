@@ -72,7 +72,7 @@ export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.reassign.header'),
+        i18nObj.__('forms.reassign.incident-failed'),
         call
     );
     const incident: Incident = responseIncident.data.incident;

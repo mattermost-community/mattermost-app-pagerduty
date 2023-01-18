@@ -25,7 +25,7 @@ export async function ackAlertAction(call: AppCallRequest): Promise<string> {
                 replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
             ),
             ExceptionType.MARKDOWN,
-            i18nObj.__('forms.incident.exception'), 
+            i18nObj.__('forms.incident.get-incident-exception'), 
             call
         );
 

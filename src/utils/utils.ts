@@ -69,7 +69,7 @@ export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: Exc
         ).
         catch((error) => {
             const errorMessage: string = errorDataMessage(error);
-            throw new Exception(exceptionType, `"${message}".  ${errorMessage}`, call);
+            throw new Exception(exceptionType, message, errorMessage, call);
         });
 }
 

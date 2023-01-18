@@ -43,7 +43,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
     for (const subscription of subscriptions) {
         const params: URLSearchParams = new URL(subscription.delivery_method.url).searchParams;
         if (params.get('channelId') === channelId && subscription.filter.id === service.id) {
-            throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }), call);
+            throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }), i18nObj.__('forms.subcription.service-exception', { summary: service.summary, channel: channelName }), call);
         }
     }
 
@@ -85,7 +85,7 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
                 type: 'webhook_subscription',
             },
         },
-    }), ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.webhook-failed'), call);
+    }), ExceptionType.MARKDOWN, i18nObj.__('forms.subcription.webhook-post-failed'), call);
 
     const mattermostOption: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
