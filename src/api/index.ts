@@ -2,6 +2,8 @@ import express, { Router } from 'express';
 
 import { Routes } from '../constant';
 
+import { requireSystemAdmin, requireUserOAuthConnected } from '../restapi/middleware';
+
 import * as cManifest from './manifest';
 import * as cBindings from './bindings';
 import * as cInstall from './install';
@@ -12,7 +14,6 @@ import * as cWebhook from './webhook';
 import * as cService from './service';
 import * as cIncident from './incident';
 import * as cOnCall from './on-call';
-import { requireSystemAdmin, requireUserOAuthConnected } from '../restapi/middleware';
 
 const router: Router = express.Router();
 

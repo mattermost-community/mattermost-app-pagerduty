@@ -1,7 +1,7 @@
 import { AppCallRequest } from '../types';
 import { ExceptionType } from '../constant';
-import { logger } from './logger';
 
+import { logger } from './logger';
 
 export class Exception extends Error {
     constructor(
