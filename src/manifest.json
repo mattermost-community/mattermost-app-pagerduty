@@ -30,9 +30,6 @@
     "requested_locations": [
         "/command"
     ],
-    "http": {
-        "root_url": "https://mattermost-pagerduty-dev.ancient.mx"
-    },
     "remote_webhook_auth_type": "none",
     "on_remote_webhook": {
         "path": "/webhook",

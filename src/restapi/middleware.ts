@@ -36,3 +36,16 @@ export const requireUserOAuthConnected = (req: Request, res: Response, next: () 
 
     next();
 };
+
+export const requireUserOAuthDisconnected = (req: Request, res: Response, next: () => void) => {
+    const call: AppCallRequest = req.body as AppCallRequest;
+    const i18nObj = configureI18n(call.context);
+    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+
+    if (isConnected(oauth2)) {
+        res.json(showMessageToMattermost(new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth-user-already'), i18nObj.__('general.validation-user.oauth-user-already'), call)));
+        return;
+    }
+
+    next();
+};

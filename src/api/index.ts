@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 
 import { Routes } from '../constant';
 
-import { requireSystemAdmin, requireUserOAuthConnected } from '../restapi/middleware';
+import { requireSystemAdmin, requireUserOAuthConnected, requireUserOAuthDisconnected } from '../restapi/middleware';
 
 import * as cManifest from './manifest';
 import * as cBindings from './bindings';
@@ -33,7 +33,7 @@ router.post(`${Routes.App.CallPathServiceSubmit}`, requireUserOAuthConnected, cS
 router.post(`${Routes.App.CallPathIncidentSubmit}`, requireUserOAuthConnected, cIncident.listIncidentSubmit);
 router.post(`${Routes.App.CallPathOnCallSubmit}`, requireUserOAuthConnected, cOnCall.listOnCallSubmit);
 
-router.post(`${Routes.App.CallPathConnectSubmit}`, cConfigure.connectAccountLoginSubmit);
+router.post(`${Routes.App.CallPathConnectSubmit}`, requireUserOAuthDisconnected, cConfigure.connectAccountLoginSubmit);
 router.post(`${Routes.App.CallPathDisconnectSubmit}`, requireUserOAuthConnected, cConfigure.fOauth2Disconnect);
 router.post(`${Routes.App.OAuthConnectPath}`, cConfigure.fOauth2Connect);
 router.post(`${Routes.App.OAuthCompletePath}`, cConfigure.fOauth2Complete);

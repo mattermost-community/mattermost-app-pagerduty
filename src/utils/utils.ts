@@ -1,12 +1,12 @@
 import { APIResponse } from '@pagerduty/pdjs/build/src/api';
 
-import { ExceptionType, StoreKeys } from '../constant';
+import { ExceptionType } from '../constant';
 
-import { AppActingUser, AppCallRequest, AppCallResponse, AppContext, Oauth2App, Oauth2CurrentUser } from '../types';
-import { KVStoreClient, KVStoreProps } from '../clients/kvstore';
+import { AppActingUser, AppCallRequest, AppCallResponse, Oauth2App, Oauth2CurrentUser } from '../types';
 
 import { Exception } from './exception';
 import { newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown } from './call-responses';
+import config from '../config';
 
 export function replace(value: string, searchValue: string, replaceValue: string): string {
     return value.replace(searchValue, replaceValue);
@@ -100,4 +100,15 @@ export function isConfigured(oauth2: any): boolean {
 
 export function isUserSystemAdmin(actingUser: AppActingUser): boolean {
     return Boolean(actingUser.roles && actingUser.roles.includes('system_admin'));
+}
+
+export function getHTTPPath(): string {
+    const host: string = config.APP.HOST;
+    const ip: string = host.replace(/^(http:\/\/|https:\/\/|)/g, '');
+
+    if ((/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/).test(ip)) {
+        return `${config.APP.HOST}:${config.APP.PORT}`;
+    }
+
+    return config.APP.HOST;
 }
