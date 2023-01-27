@@ -5,6 +5,8 @@
     "validation-user": {
       "system-admin": "Error: Este comando esta únicamente disponible a usuarios Mattermost System Admin",
       "oauth-user": "Error: No has vinculado tu cuenta de PagerDuty. La necesitas para realizar esta acción",
+      "oauth-user-already": "Error: Ya cuentas con una cuenta PagerDuty activa. Necesitas desconectar la cuenta para realizar esta acción",
+      "oauth2-not-found": "Error: No se encontró la configuración de accesso",
       "not-provided": "El usuario no fue provisto"
     }
   },

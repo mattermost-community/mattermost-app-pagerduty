@@ -5,6 +5,8 @@
 		"validation-user": {
 			"system-admin": "Error: This command is only available for Mattermost System Admin",
 			"oauth-user": "Error: You haven't linked your PagerDuty account. You need it to perform this action",
+			"oauth-user-already": "Error: You have an active link PagerDuty account. You need to disconnect to perform this action",
+			"oauth2-not-found": "Error: Configuration access not found!",
 			"not-provided": "Not acting user provided"
 		}
 	},

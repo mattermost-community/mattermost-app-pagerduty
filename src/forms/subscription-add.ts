@@ -1,11 +1,11 @@
 import { APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
 import { api } from '@pagerduty/pdjs';
 
-import { AppCallRequest, AppCallValues, Oauth2App, Service, WebhookSubscription } from '../types';
-import { ExceptionType, PDFailed, Routes, SubscriptionCreateForm } from '../constant';
+import { AppCallRequest, AppCallValues, PagerDutyOpts, Service, WebhookSubscription } from '../types';
+import { ExceptionType, Routes, SubscriptionCreateForm } from '../constant';
 import { Exception } from '../utils/exception';
 import { configureI18n } from '../utils/translations';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 
 export async function subscriptionAddCall(call: AppCallRequest): Promise<string> {
@@ -14,15 +14,15 @@ export async function subscriptionAddCall(call: AppCallRequest): Promise<string>
     const botUserID: string | undefined = call.context.bot_user_id;
     const appPath: string | undefined = call.context.app_path;
     const whSecret: string | undefined = call.context.app?.webhook_secret;
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
-    const values: AppCallValues | undefined = call.values;
     const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const values: AppCallValues | undefined = call.values;
 
     const channelId: string = values?.[SubscriptionCreateForm.CHANNEL_ID].value;
     const channelName: string = values?.[SubscriptionCreateForm.CHANNEL_ID].label;
     const serviceId: string = values?.[SubscriptionCreateForm.SERVICE_ID];
 
-    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
+    const pdClient: PartialCall = api(pdToken);
 
     const responseSubscriptions: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix),

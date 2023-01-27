@@ -1,17 +1,18 @@
 import { APIResponse, PartialCall, api } from '@pagerduty/pdjs/build/src/api';
 
+import { Exception } from '../utils/exception';
+
 import { AppExpandLevels, AppFieldTypes, ExceptionType, NoteModalForm, PagerDutyIcon, Routes } from '../constant';
 import { AppCallRequest, AppCallValues, AppField, AppForm, Incident, Oauth2App, PagerDutyOpts, PostIncidentNote } from '../types';
 import { configureI18n } from '../utils/translations';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
-    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
-    const pdClient: PartialCall = api(tokenOpts);
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
-    const i18nObj = configureI18n(call.context);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(
@@ -50,15 +51,15 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
 }
 
 export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
-    const i18nObj = configureI18n(call.context);
 
     const values: AppCallValues | undefined = call.values;
     const incidentMessage: string = values?.[NoteModalForm.NOTE_MESSAGE];
 
-    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
+    const pdClient: PartialCall = api(pdToken);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(

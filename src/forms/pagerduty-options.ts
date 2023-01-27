@@ -2,12 +2,13 @@ import { api } from '@pagerduty/pdjs';
 import { APIResponse, PartialCall } from '@pagerduty/pdjs/build/src/api';
 
 import { ExceptionType, Routes } from '../constant';
-import { AppCallRequest, AppContext, AppSelectOption, PagerDutyOpts, Priority, Service } from '../types';
+import { AppCallRequest, AppSelectOption, PagerDutyOpts, Priority, Service } from '../types';
 import { configureI18n } from '../utils/translations';
-import { tryPromiseForGenerateMessage } from '../utils/utils';
+import { returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
-export async function getServiceOptionList(pdOpt: PagerDutyOpts, call: AppCallRequest): Promise<AppSelectOption[]> {
-    const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
+export async function getServiceOptionList(call: AppCallRequest): Promise<AppSelectOption[]> {
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
     const i18nObj = configureI18n(call.context);
 
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
@@ -27,8 +28,9 @@ export async function getServiceOptionList(pdOpt: PagerDutyOpts, call: AppCallRe
     return [];
 }
 
-export async function getUsersOptionList(pdOpt: PagerDutyOpts, call: AppCallRequest): Promise<AppSelectOption[]> {
-    const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
+export async function getUsersOptionList(call: AppCallRequest): Promise<AppSelectOption[]> {
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
     const i18nObj = configureI18n(call.context);
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.UsersPathPrefix),
@@ -48,8 +50,9 @@ export async function getUsersOptionList(pdOpt: PagerDutyOpts, call: AppCallRequ
     return [];
 }
 
-export async function getPrioritiesOptionList(pdOpt: PagerDutyOpts, call: AppCallRequest): Promise<AppSelectOption[]> {
-    const pdClient: PartialCall = api({ token: pdOpt.token, tokenType: pdOpt.tokenType });
+export async function getPrioritiesOptionList(call: AppCallRequest): Promise<AppSelectOption[]> {
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
     const i18nObj = configureI18n(call.context);
     const responseServices: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.PrioritiesPathPrefix),

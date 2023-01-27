@@ -6,7 +6,6 @@ import {
     Commands,
     PagerDutyIcon,
 } from '../constant';
-import { KVStoreClient, KVStoreOptions } from '../clients/kvstore';
 import { existsOauth2AppConfig, isConnected, isUserSystemAdmin } from '../utils/utils';
 import { configureI18n } from '../utils/translations';
 
@@ -37,7 +36,7 @@ const newCommandBindings = (context: AppContext, bindings: AppBinding[], command
 };
 
 export const getCommandBindings = async (call: AppCallRequest): Promise<AppsState> => {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
     const actingUser: AppActingUser | undefined = call.context.acting_user;
     const context = call.context as AppContext;
 

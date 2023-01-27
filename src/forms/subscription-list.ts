@@ -7,28 +7,28 @@ import {
     AppCallRequest,
     Channel,
     Oauth2App,
+    PagerDutyOpts,
     Service,
     WebhookSubscription,
 } from '../types';
 import { ExceptionType, Routes } from '../constant';
 import { configureI18n } from '../utils/translations';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 import { h6, joinLines } from '../utils/markdown';
 
 export async function subscriptionListCall(call: AppCallRequest): Promise<string> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const userAccessToken: string | undefined = call.context.acting_user_access_token;
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
 
     const options: MattermostOptions = {
         mattermostUrl: <string>mattermostUrl,
         accessToken: <string>userAccessToken,
     };
     const mattermostClient: MattermostClient = new MattermostClient(options);
-
-    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
 
     const responseAPI: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(Routes.PagerDuty.WebhookSubscriptionsPathPrefix),

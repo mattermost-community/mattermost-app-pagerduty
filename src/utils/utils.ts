@@ -2,11 +2,13 @@ import { APIResponse } from '@pagerduty/pdjs/build/src/api';
 
 import { ExceptionType } from '../constant';
 
-import { AppActingUser, AppCallRequest, AppCallResponse, Oauth2App, Oauth2CurrentUser } from '../types';
+import { AppActingUser, AppCallRequest, AppCallResponse, Oauth2App, Oauth2CurrentUser, PagerDutyOpts } from '../types';
+
+import config from '../config';
 
 import { Exception } from './exception';
 import { newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown } from './call-responses';
-import config from '../config';
+import { configureI18n } from './translations';
 
 export function replace(value: string, searchValue: string, replaceValue: string): string {
     return value.replace(searchValue, replaceValue);
@@ -23,7 +25,10 @@ export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: s
     });
 }
 
-export function isConnected(oauth2: Oauth2App): boolean {
+export function isConnected(oauth2: Oauth2App | undefined): boolean {
+    if (!oauth2) {
+        return false;
+    }
     return Boolean(oauth2?.user) && Boolean(Object.keys(<Oauth2CurrentUser>oauth2.user).length);
 }
 
@@ -33,7 +38,10 @@ export function encodeFormData(data: any): string {
         join('&');
 }
 
-export function existsOauth2AppConfig(oauth2App: Oauth2App): boolean {
+export function existsOauth2AppConfig(oauth2App: Oauth2App | undefined): boolean {
+    if (!oauth2App) {
+        return false;
+    }
     return Boolean(oauth2App.client_id) && Boolean(oauth2App.client_secret);
 }
 
@@ -111,4 +119,19 @@ export function getHTTPPath(): string {
     }
 
     return config.APP.HOST;
+}
+
+export function returnPagerdutyToken(call: AppCallRequest): PagerDutyOpts {
+    const i18nObj = configureI18n(call.context);
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    if (!oauth2) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call);
+    }
+
+    const userToken = oauth2.user?.token;
+    if (!userToken) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call);
+    }
+
+    return { token: userToken, tokenType: 'bearer' };
 }

@@ -2,19 +2,19 @@ import { APIResponse, PartialCall, api } from '@pagerduty/pdjs/build/src/api';
 
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 import { ExceptionType, Routes } from '../constant';
-import { AppAttachmentField, AppCallRequest, AppCallValues, AppField, Incident, IncidentPriority, Oauth2App, PostEphemeralCreate } from '../types';
+import { AppAttachmentField, AppCallRequest, AppCallValues, Incident, IncidentPriority, PagerDutyOpts } from '../types';
 import { h6, hyperlink } from '../utils/markdown';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 import { configureI18n } from '../utils/translations';
 
 export async function showIncidentDetailPost(call: AppCallRequest): Promise<any> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
-    const i18nObj = configureI18n(call.context);
     const userId = call.context.acting_user?.id as string;
 
-    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
+    const pdClient: PartialCall = api(pdToken);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(

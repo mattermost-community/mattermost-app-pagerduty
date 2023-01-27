@@ -27,7 +27,10 @@ export const requireSystemAdmin = (req: Request, res: Response, next: () => void
 export const requireUserOAuthConnected = (req: Request, res: Response, next: () => void) => {
     const call: AppCallRequest = req.body as AppCallRequest;
     const i18nObj = configureI18n(call.context);
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    if (!oauth2) {
+        res.json(showMessageToMattermost(new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call)));
+    }
 
     if (!isConnected(oauth2)) {
         res.json(showMessageToMattermost(new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth-user'), i18nObj.__('general.validation-user.oauth-user'), call)));
@@ -40,7 +43,10 @@ export const requireUserOAuthConnected = (req: Request, res: Response, next: () 
 export const requireUserOAuthDisconnected = (req: Request, res: Response, next: () => void) => {
     const call: AppCallRequest = req.body as AppCallRequest;
     const i18nObj = configureI18n(call.context);
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    if (!oauth2) {
+        res.json(showMessageToMattermost(new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call)));
+    }
 
     if (isConnected(oauth2)) {
         res.json(showMessageToMattermost(new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth-user-already'), i18nObj.__('general.validation-user.oauth-user-already'), call)));

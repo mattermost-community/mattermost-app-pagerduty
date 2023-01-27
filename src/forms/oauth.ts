@@ -21,7 +21,11 @@ import config from '../config';
 import { MattermostClient, MattermostOptions } from '../clients/mattermost';
 
 export async function oauth2Connect(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const i18nObj = configureI18n(call.context);
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    if (!oauth2) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call);
+    }
     const state: string | undefined = call.values?.state;
     const url = `${config.PAGERDUTY.IDENTITY}${Routes.PagerDuty.OAuthAuthorizationPathPrefix}`;
 
@@ -42,7 +46,10 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
     const actingUserID: string | undefined = call.context.acting_user?.id;
     const values: AppCallValues | undefined = call.values;
     const i18nObj = configureI18n(call.context);
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    if (!oauth2) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call);
+    }
 
     if (!values?.code) {
         throw new Error(values?.error_description || i18nObj.__('forms.oauth.exception-complete'));
@@ -109,8 +116,11 @@ export async function oauth2Complete(call: AppCallRequest): Promise<void> {
 export async function oauth2Disconnect(call: AppCallRequest): Promise<void> {
     const mattermostUrl: string | undefined = call.context.mattermost_site_url;
     const accessToken: string | undefined = call.context.acting_user_access_token;
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const i18nObj = configureI18n(call.context);
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    if (!oauth2) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call);
+    }
 
     if (!isConnected(oauth2)) {
         throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.oauth.exception-account'), i18nObj.__('forms.oauth.exception-account'), call);

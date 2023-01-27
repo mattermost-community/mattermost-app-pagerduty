@@ -1,21 +1,21 @@
 import { APIResponse, PartialCall, api } from '@pagerduty/pdjs/build/src/api';
 
+import { Exception } from '../utils/exception';
+
 import { AppExpandLevels, AppFieldTypes, ChangeIncidentPriorityForm, ExceptionType, PagerDutyIcon, ReassignIncidentForm, Routes } from '../constant';
 import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Incident, Oauth2App, PagerDutyOpts, Priority, UpdateIncident, UserResponse } from '../types';
 import { configureI18n } from '../utils/translations';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
-import { getPrioritiesOptionList, getUsersOptionList } from './pagerduty-options';
+import { getPrioritiesOptionList } from './pagerduty-options';
 
 export async function changeIncidentPriorityActionForm(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
-    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
     const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
 
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
-
-    const pdClient: PartialCall = api(tokenOpts);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(
@@ -27,7 +27,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
     );
     const incident: Incident = responseIncident.data.incident;
 
-    const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(tokenOpts, call);
+    const prioritiesOpts: AppSelectOption[] = await getPrioritiesOptionList(call);
     const fields: AppField[] = [
         {
             modal_label: i18nObj.__('forms.change-incident.label-priorities'),
@@ -56,16 +56,16 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
 }
 
 export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
-    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
     const i18nObj = configureI18n(call.context);
+
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
 
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
 
     const values: AppCallValues | undefined = call.values;
     const assignTo: AppSelectOption = values?.[ChangeIncidentPriorityForm.PRIORITY];
-    const pdClient: PartialCall = api(tokenOpts);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(

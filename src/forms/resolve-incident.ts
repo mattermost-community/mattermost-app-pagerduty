@@ -15,19 +15,18 @@ import {
     UpdateIncident,
 } from '../types';
 import { configureI18n } from '../utils/translations';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
 import { Exception } from '../utils/exception';
 import { h6, hyperlink } from '../utils/markdown';
 
 export async function confirmResolveOpenModal(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
-    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
-    const pdClient: PartialCall = api(tokenOpts);
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
     const postId: string = <string>call.context.post?.id;
-    const i18nObj = configureI18n(call.context);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(
@@ -65,13 +64,13 @@ export async function confirmResolveOpenModal(call: AppCallRequest): Promise<App
 }
 
 export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
     const postId: string = <string>call.state.post?.id;
-    const i18nObj = configureI18n(call.context);
 
-    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
+    const pdClient: PartialCall = api(pdToken);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(

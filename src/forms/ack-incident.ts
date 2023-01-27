@@ -5,21 +5,22 @@ import {
     AppCallValues,
     Incident,
     Oauth2App,
+    PagerDutyOpts,
     UpdateIncident,
 } from '../types';
 import { ExceptionType, Routes } from '../constant';
 import { configureI18n } from '../utils/translations';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
 export async function ackAlertAction(call: AppCallRequest): Promise<string> {
-    let message: string;
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
     const incidentValue: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValue?.id;
-    const i18nObj = configureI18n(call.context);
+    let message: string;
 
     try {
-        const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
+        const pdClient: PartialCall = api(pdToken);
         const responseSubscriptions: APIResponse = await tryPromiseForGenerateMessage(
             pdClient.get(
                 replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
