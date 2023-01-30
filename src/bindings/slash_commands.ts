@@ -6,7 +6,6 @@ import {
     Commands,
     PagerDutyIcon,
 } from '../constant';
-import { KVStoreClient, KVStoreOptions } from '../clients/kvstore';
 import { existsOauth2AppConfig, isConnected, isUserSystemAdmin } from '../utils/utils';
 import { configureI18n } from '../utils/translations';
 
@@ -37,7 +36,7 @@ const newCommandBindings = (context: AppContext, bindings: AppBinding[], command
 };
 
 export const getCommandBindings = async (call: AppCallRequest): Promise<AppsState> => {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
     const actingUser: AppActingUser | undefined = call.context.acting_user;
     const context = call.context as AppContext;
 
@@ -58,15 +57,15 @@ export const getCommandBindings = async (call: AppCallRequest): Promise<AppsStat
             commands.push(Commands.SUBSCRIPTION);
             commands.push(Commands.INCIDENT);
             commands.push(Commands.LIST);
+            commands.push(Commands.DISCONNECT);
             bindings.push(subscriptionBinding(context));
             bindings.push(listBinding(context));
             bindings.push(getIncidentsBinding(context));
+            bindings.push(accountLogoutBinding(context));
+        } else {
+            commands.push(Commands.CONNECT);
+            bindings.push(accountLoginBinding(context));
         }
-
-        commands.push(Commands.CONNECT);
-        commands.push(Commands.DISCONNECT);
-        bindings.push(accountLoginBinding(context));
-        bindings.push(accountLogoutBinding(context));
     }
 
     return newCommandBindings(context, bindings, commands);

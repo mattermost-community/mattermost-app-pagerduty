@@ -4,14 +4,15 @@ import {
     AppForm,
     Oauth2App,
 } from '../types';
-import { AppExpandLevels, AppFieldSubTypes, AppFieldTypes, ConfigureForm, PagerDutyIcon, Routes, StoreKeys } from '../constant';
+import { AppExpandLevels, AppFieldSubTypes, AppFieldTypes, ConfigureForm, ExceptionType, PagerDutyIcon, Routes, StoreKeys } from '../constant';
 import { KVStoreClient, KVStoreOptions, KVStoreProps } from '../clients/kvstore';
 import { configureI18n } from '../utils/translations';
 import { MattermostClient } from '../clients/mattermost';
+import { Exception } from '../utils/exception';
 
 export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
     const i18nObj = configureI18n(call.context);
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
 
     const form: AppForm = {
         title: i18nObj.__('forms.configure-admin.title'),
@@ -22,7 +23,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
                 type: AppFieldTypes.TEXT,
                 name: ConfigureForm.CLIENT_ID,
                 modal_label: i18nObj.__('forms.configure-admin.label-client'),
-                value: oauth2.client_id,
+                value: oauth2?.client_id,
                 description: i18nObj.__('forms.configure-admin.description-client'),
                 is_required: true,
             },
@@ -31,7 +32,7 @@ export async function pagerDutyConfigForm(call: AppCallRequest): Promise<AppForm
                 subtype: AppFieldSubTypes.PASSWORD,
                 name: ConfigureForm.CLIENT_SECRET,
                 modal_label: i18nObj.__('forms.configure-admin.label-secret'),
-                value: oauth2.client_secret,
+                value: oauth2?.client_secret,
                 description: i18nObj.__('forms.configure-admin.description-secret'),
                 is_required: true,
             },

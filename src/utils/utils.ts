@@ -1,12 +1,14 @@
 import { APIResponse } from '@pagerduty/pdjs/build/src/api';
 
-import { ExceptionType, StoreKeys } from '../constant';
+import { ExceptionType } from '../constant';
 
-import { AppActingUser, AppCallResponse, AppContext, Oauth2App, Oauth2CurrentUser } from '../types';
-import { KVStoreClient, KVStoreProps } from '../clients/kvstore';
+import { AppActingUser, AppCallRequest, AppCallResponse, Oauth2App, Oauth2CurrentUser, PagerDutyOpts } from '../types';
+
+import config from '../config';
 
 import { Exception } from './exception';
 import { newErrorCallResponseWithMessage, newOKCallResponseWithMarkdown } from './call-responses';
+import { configureI18n } from './translations';
 
 export function replace(value: string, searchValue: string, replaceValue: string): string {
     return value.replace(searchValue, replaceValue);
@@ -23,7 +25,10 @@ export async function tryPromisePagerdutyWithMessage(p: Promise<any>, message: s
     });
 }
 
-export function isConnected(oauth2: Oauth2App): boolean {
+export function isConnected(oauth2: Oauth2App | undefined): boolean {
+    if (!oauth2) {
+        return false;
+    }
     return Boolean(oauth2?.user) && Boolean(Object.keys(<Oauth2CurrentUser>oauth2.user).length);
 }
 
@@ -33,7 +38,10 @@ export function encodeFormData(data: any): string {
         join('&');
 }
 
-export function existsOauth2AppConfig(oauth2App: Oauth2App): boolean {
+export function existsOauth2AppConfig(oauth2App: Oauth2App | undefined): boolean {
+    if (!oauth2App) {
+        return false;
+    }
     return Boolean(oauth2App.client_id) && Boolean(oauth2App.client_secret);
 }
 
@@ -60,7 +68,7 @@ export function errorDataPagerduty(data: any): string {
     return errorMessage;
 }
 
-export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: ExceptionType, message: string) {
+export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: ExceptionType, message: string, call: AppCallRequest) {
     return p.
         then((response) =>
             (Boolean(errorDataPagerduty(response)) ?
@@ -69,7 +77,7 @@ export function tryPromiseForGenerateMessage(p: Promise<any>, exceptionType: Exc
         ).
         catch((error) => {
             const errorMessage: string = errorDataMessage(error);
-            throw new Exception(exceptionType, `"${message}".  ${errorMessage}`);
+            throw new Exception(exceptionType, message, errorMessage, call);
         });
 }
 
@@ -100,4 +108,30 @@ export function isConfigured(oauth2: any): boolean {
 
 export function isUserSystemAdmin(actingUser: AppActingUser): boolean {
     return Boolean(actingUser.roles && actingUser.roles.includes('system_admin'));
+}
+
+export function getHTTPPath(): string {
+    const host: string = config.APP.HOST;
+    const ip: string = host.replace(/^(http:\/\/|https:\/\/|)/g, '');
+
+    if ((/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/).test(ip)) {
+        return `${config.APP.HOST}:${config.APP.PORT}`;
+    }
+
+    return config.APP.HOST;
+}
+
+export function returnPagerdutyToken(call: AppCallRequest): PagerDutyOpts {
+    const i18nObj = configureI18n(call.context);
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+    if (!oauth2) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call);
+    }
+
+    const userToken = oauth2.user?.token;
+    if (!userToken) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.validation-user.oauth2-not-found'), i18nObj.__('general.validation-user.oauth2-not-found'), call);
+    }
+
+    return { token: userToken, tokenType: 'bearer' };
 }
