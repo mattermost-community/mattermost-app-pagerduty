@@ -15,32 +15,32 @@ import {
     UpdateIncident,
 } from '../types';
 import { configureI18n } from '../utils/translations';
-import { replace, tryPromiseForGenerateMessage } from '../utils/utils';
+import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
 import { Exception } from '../utils/exception';
 import { h6, hyperlink } from '../utils/markdown';
 
 export async function confirmResolveOpenModal(call: AppCallRequest): Promise<AppForm> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
-    const tokenOpts: PagerDutyOpts = { token: <string>oauth2.user?.token, tokenType: 'bearer' };
-    const pdClient: PartialCall = api(tokenOpts);
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
+    const pdClient: PartialCall = api(pdToken);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
     const postId: string = <string>call.context.post?.id;
-    const i18nObj = configureI18n(call.context);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.resolved.incident-failed')
+        i18nObj.__('forms.resolved.incident-failed'),
+        call
     );
 
     const incident: Incident = responseIncident.data.incident;
     if (incident?.status === 'resolved') {
         await updatePostResolveIncident(call, postId, incident);
-        throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }));
+        throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }), i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }), call);
     }
 
     return {
@@ -64,27 +64,28 @@ export async function confirmResolveOpenModal(call: AppCallRequest): Promise<App
 }
 
 export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<string> {
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const i18nObj = configureI18n(call.context);
+    const pdToken: PagerDutyOpts = returnPagerdutyToken(call);
     const incidentValues: AppCallValues | undefined = call.state.incident;
     const incidentId: string = incidentValues?.id;
     const postId: string = <string>call.state.post?.id;
-    const i18nObj = configureI18n(call.context);
 
-    const pdClient: PartialCall = api({ token: oauth2.user?.token, tokenType: 'bearer' });
+    const pdClient: PartialCall = api(pdToken);
 
     const responseIncident: APIResponse = await tryPromiseForGenerateMessage(
         pdClient.get(
             replace(Routes.PagerDuty.IncidentPathPrefix, Routes.PathsVariable.Identifier, incidentId)
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.resolved.incident-failed"')
+        i18nObj.__('forms.resolved.incident-failed'),
+        call
     );
 
     const incident: Incident = responseIncident.data.incident;
 
     if (incident.status === 'resolved') {
         await updatePostResolveIncident(call, postId, incident);
-        throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }));
+        throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }), i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }), call);
     }
 
     const data: UpdateIncident = {
@@ -100,7 +101,8 @@ export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<s
             { data }
         ),
         ExceptionType.MARKDOWN,
-        i18nObj.__('forms.resolved.incident-update-failed')
+        i18nObj.__('forms.resolved.resolve-failed'),
+        call
     );
 
     await updatePostResolveIncident(call, postId, incident);
@@ -118,7 +120,7 @@ async function updatePostResolveIncident(call: AppCallRequest, postId: string, i
     };
 
     const mattermostClient: MattermostClient = new MattermostClient(mattermostOptions);
-    await tryPromiseForGenerateMessage(mattermostClient.getPost(postId), ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.failed'));
+    await tryPromiseForGenerateMessage(mattermostClient.getPost(postId), ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.get-post-failed'), call);
 
     const updatePost: PostUpdate = {
         id: postId,

@@ -14,6 +14,8 @@ import { pagerDutyConfigForm, pagerDutyConfigSubmit } from '../forms/configure-a
 import { oauth2Complete, oauth2Connect, oauth2Disconnect } from '../forms/oauth';
 import { isConnected, showMessageToMattermost } from '../utils/utils';
 import { configureI18n } from '../utils/translations';
+import { ExceptionType } from '../constant';
+import { Exception } from '../utils/exception';
 
 export const configureAdminAccountForm: CallResponseHandler = async (req: Request, res: Response) => {
     let callResponse: AppCallResponse;
@@ -49,9 +51,10 @@ export const connectAccountLoginSubmit: CallResponseHandler = async (req: Reques
     const call: AppCallRequest = req.body;
     const i18nObj = configureI18n(call.context);
     const connectUrl: string | undefined = call.context.oauth2?.connect_url;
-    const oauth2: Oauth2App = call.context.oauth2 as Oauth2App;
+    const oauth2: Oauth2App | undefined = call.context.oauth2;
+
     const message: string = isConnected(oauth2) ?
-        i18nObj.__('api.configure.connect_account_login', { user: oauth2.user!.user.name.toString() }) :
+        i18nObj.__('api.configure.connect_account_login', { user: oauth2?.user!.user.name.toString() }) :
         i18nObj.__('api.configure.follow_account_login', { url: hyperlink('link', <string>connectUrl) });
     const callResponse: AppCallResponse = newOKCallResponseWithMarkdown(message);
     res.json(callResponse);
