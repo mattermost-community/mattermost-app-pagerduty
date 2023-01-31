@@ -135,3 +135,7 @@ export function returnPagerdutyToken(call: AppCallRequest): PagerDutyOpts {
 
     return { token: userToken, tokenType: 'bearer' };
 }
+
+export function routesJoin(routes: Array<string>) {
+    return ''.concat(...routes);
+}
