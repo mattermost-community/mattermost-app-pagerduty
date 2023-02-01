@@ -3,11 +3,17 @@ import { Request, Response } from 'express';
 import config from '../config';
 import { Manifest } from '../types';
 import manifest from '../manifest.json';
+import { getHTTPPath } from '../utils/utils';
 
 export function getManifest(request: Request, response: Response): void {
-    const m: Manifest = manifest;
+    let m: Manifest = manifest;
+    const http = {
+        http: {
+            root_url: getHTTPPath(),
+        },
+    };
 
-    m.http.root_url = `${config.APP.HOST}`;
+    m = { ...m, ...http };
 
     response.json(m);
 }
