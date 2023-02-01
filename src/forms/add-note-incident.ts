@@ -6,6 +6,7 @@ import { AppExpandLevels, AppFieldTypes, ExceptionType, NoteModalForm, PagerDuty
 import { AppCallRequest, AppCallValues, AppField, AppForm, Incident, Oauth2App, PagerDutyOpts, PostIncidentNote } from '../types';
 import { configureI18n } from '../utils/translations';
 import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
+import { AppFormValidator } from '../utils/validator';
 
 export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
     const i18nObj = configureI18n(call.context);
@@ -34,7 +35,7 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
         },
     ];
 
-    return {
+    const form = {
         title: i18nObj.__('forms.add-note.title'),
         icon: PagerDutyIcon,
         fields,
@@ -48,6 +49,12 @@ export async function addNoteOpenModal(call: AppCallRequest): Promise<AppForm> {
             state: call.state,
         },
     } as AppForm;
+
+    if (!AppFormValidator.safeParse(form).success) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.pagerduty-error'), i18nObj.__('forms.incident.get-incident-exception'), call);
+    }
+
+    return form;
 }
 
 export async function addNoteSubmitDialog(call: AppCallRequest): Promise<string> {

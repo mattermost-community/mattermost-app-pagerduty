@@ -19,6 +19,7 @@ import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../
 
 import { Exception } from '../utils/exception';
 import { h6, hyperlink } from '../utils/markdown';
+import { AppFormValidator } from '../utils/validator';
 
 export async function confirmResolveOpenModal(call: AppCallRequest): Promise<AppForm> {
     const i18nObj = configureI18n(call.context);
@@ -43,7 +44,7 @@ export async function confirmResolveOpenModal(call: AppCallRequest): Promise<App
         throw new Exception(ExceptionType.MARKDOWN, i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }), i18nObj.__('forms.resolved.incident-exception', { summary: incident.summary }), call);
     }
 
-    return {
+    const form = {
         title: i18nObj.__('forms.resolved.title-incident'),
         header: i18nObj.__('forms.resolved.header-incident', { summary: incident.summary }),
         icon: PagerDutyIcon,
@@ -61,6 +62,12 @@ export async function confirmResolveOpenModal(call: AppCallRequest): Promise<App
             },
         },
     } as AppForm;
+
+    if (!AppFormValidator.safeParse(form).success) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.pagerduty-error'), i18nObj.__('forms.incident.get-incident-exception'), call);
+    }
+
+    return form;
 }
 
 export async function callResolveIncidentSubmit(call: AppCallRequest): Promise<string> {

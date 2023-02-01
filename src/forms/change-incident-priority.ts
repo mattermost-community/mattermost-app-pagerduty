@@ -7,6 +7,8 @@ import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Inci
 import { configureI18n } from '../utils/translations';
 import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
+import { AppFormValidator } from '../utils/validator';
+
 import { getPrioritiesOptionList } from './pagerduty-options';
 
 export async function changeIncidentPriorityActionForm(call: AppCallRequest): Promise<AppForm> {
@@ -38,7 +40,7 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
         },
     ];
 
-    return {
+    const form = {
         title: i18nObj.__('forms.change-incident.title'),
         header: i18nObj.__('forms.change-incident.header', { summary: incident.summary }),
         icon: PagerDutyIcon,
@@ -53,6 +55,12 @@ export async function changeIncidentPriorityActionForm(call: AppCallRequest): Pr
             state: call.state,
         },
     } as AppForm;
+
+    if (!AppFormValidator.safeParse(form).success) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.pagerduty-error'), i18nObj.__('forms.incident.get-incident-exception'), call);
+    }
+
+    return form;
 }
 
 export async function changeIncidentPrioritySubmitForm(call: AppCallRequest): Promise<string> {
