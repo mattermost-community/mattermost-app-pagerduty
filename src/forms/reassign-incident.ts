@@ -7,6 +7,8 @@ import { AppCallRequest, AppCallValues, AppField, AppForm, AppSelectOption, Inci
 import { configureI18n } from '../utils/translations';
 import { replace, returnPagerdutyToken, tryPromiseForGenerateMessage } from '../utils/utils';
 
+import { AppFormValidator } from '../utils/validator';
+
 import { getUsersOptionList } from './pagerduty-options';
 
 export async function reassignIncidentActionForm(call: AppCallRequest): Promise<AppForm> {
@@ -39,7 +41,7 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
         },
     ];
 
-    return {
+    const form = {
         title: i18nObj.__('forms.reassign.title'),
         header: i18nObj.__('forms.reassign.header', { summary: incident.summary }),
         icon: PagerDutyIcon,
@@ -54,6 +56,12 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
             state: call.state,
         },
     } as AppForm;
+
+    if (!AppFormValidator.safeParse(form).success) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.pagerduty-error'), i18nObj.__('forms.incident.error-validation-form'), call);
+    }
+
+    return form;
 }
 
 export async function reassignIncidentSubmitForm(call: AppCallRequest): Promise<string> {

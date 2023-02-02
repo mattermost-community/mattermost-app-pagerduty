@@ -155,7 +155,8 @@
       "exception": "\"PagerDuty falló\": Falló la creación del webhook",
       "error": "Ya has reconocido \"{{ summary }}\"",
       "exception_update": "\"PagerDuty falló\": La actualización del incidente de PagerDuty falló",
-      "message": "Has reconocido el incidente \"{{ summary }}\""
+      "message": "Has reconocido el incidente \"{{ summary }}\"",
+      "error-validation-form": "El formulario es invalido"
     },
     "add-note": {
       "exception": "\"PagerDuty falló\": Error al obtener el incidente de PagerDuty",
