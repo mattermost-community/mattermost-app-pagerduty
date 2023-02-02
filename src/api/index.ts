@@ -14,6 +14,7 @@ import * as cWebhook from './webhook';
 import * as cService from './service';
 import * as cIncident from './incident';
 import * as cOnCall from './on-call';
+import { requireSystemAdmin, requireUserOAuthConnected, requireUserOAuthDisconnected } from '../restapi/middleware';
 
 const router: Router = express.Router();
 
@@ -22,19 +23,19 @@ router.post(Routes.App.BindingsPath, cBindings.getBindings);
 router.post(Routes.App.InstallPath, cInstall.getInstall);
 router.post(Routes.App.BindingPathHelp, cHelp.getHelp);
 
-router.post(Routes.App.CallPathConfigForm, cConfigure.configureAdminAccountForm);
-router.post(Routes.App.CallPathConfigSubmit, cConfigure.configureAdminAccountSubmit);
+router.post(Routes.App.CallPathConfigForm, requireSystemAdmin, cConfigure.configureAdminAccountForm);
+router.post(Routes.App.CallPathConfigSubmit, requireSystemAdmin, cConfigure.configureAdminAccountSubmit);
 
-router.post(Routes.App.CallPathSubscriptionAddSubmit, cSubscription.subscriptionAddSubmit);
-router.post(Routes.App.CallPathSubscriptionDeleteSubmit, cSubscription.subscriptionDeleteSubmit);
-router.post(Routes.App.CallPathSubscriptionListSubmit, cSubscription.subscriptionListSubmit);
+router.post(Routes.App.CallPathSubscriptionAddSubmit, requireUserOAuthConnected, cSubscription.subscriptionAddSubmit);
+router.post(Routes.App.CallPathSubscriptionDeleteSubmit, requireUserOAuthConnected, cSubscription.subscriptionDeleteSubmit);
+router.post(Routes.App.CallPathSubscriptionListSubmit, requireUserOAuthConnected, cSubscription.subscriptionListSubmit);
 
-router.post(Routes.App.CallPathServiceSubmit, cService.listTeamsSubmit);
-router.post(Routes.App.CallPathIncidentSubmit, cIncident.listIncidentSubmit);
-router.post(Routes.App.CallPathOnCallSubmit, cOnCall.listOnCallSubmit);
+router.post(Routes.App.CallPathServiceSubmit, requireUserOAuthConnected, cService.listTeamsSubmit);
+router.post(Routes.App.CallPathIncidentSubmit, requireUserOAuthConnected, cIncident.listIncidentSubmit);
+router.post(Routes.App.CallPathOnCallSubmit, requireUserOAuthConnected, cOnCall.listOnCallSubmit);
 
-router.post(Routes.App.CallPathConnectSubmit, cConfigure.connectAccountLoginSubmit);
-router.post(Routes.App.CallPathDisconnectSubmit, cConfigure.fOauth2Disconnect);
+router.post(Routes.App.CallPathConnectSubmit, requireUserOAuthDisconnected, cConfigure.connectAccountLoginSubmit);
+router.post(Routes.App.CallPathDisconnectSubmit, requireUserOAuthConnected, cConfigure.fOauth2Disconnect);
 router.post(Routes.App.OAuthConnectPath, cConfigure.fOauth2Connect);
 router.post(Routes.App.OAuthCompletePath, cConfigure.fOauth2Complete);
 
@@ -43,18 +44,18 @@ router.post(routesJoin([Routes.App.CallPathForms, Routes.App.CallPathIncidentCre
 router.post(routesJoin([Routes.App.CallPathForms, Routes.App.CallPathIncidentCreate, Routes.App.CallPathSubmit]), cIncident.submitCreateNewIncident);
 
 // FROM WEBHOOK ACTIONS
-router.post(Routes.App.CallPathIncidentAcknowledgedAction, cIncident.ackIncidentAction);
+router.post(Routes.App.CallPathIncidentAcknowledgedAction, requireUserOAuthConnected, cIncident.ackIncidentAction);
 
-router.post(Routes.App.CallPathIncidentResolveAction, cIncident.resolveIncidentModal);
-router.post(Routes.App.CallPathIncidentResolveSubmit, cIncident.resolveIncidentSubmit);
+router.post(Routes.App.CallPathIncidentResolveAction, requireUserOAuthConnected, cIncident.resolveIncidentModal);
+router.post(Routes.App.CallPathIncidentResolveSubmit, requireUserOAuthConnected, cIncident.resolveIncidentSubmit);
 
-router.post(Routes.App.CallPathDetailViewIncidentAction, cIncident.showIncidentDetail);
+router.post(Routes.App.CallPathDetailViewIncidentAction, requireUserOAuthConnected, cIncident.showIncidentDetail);
 
-router.post(Routes.App.CallPathNoteToIncidentAction, cIncident.addNoteToIncidentModal);
-router.post(Routes.App.CallPathNoteToIncidentSubmit, cIncident.addNoteToIncidentSubmit);
+router.post(Routes.App.CallPathNoteToIncidentAction, requireUserOAuthConnected, cIncident.addNoteToIncidentModal);
+router.post(Routes.App.CallPathNoteToIncidentSubmit, requireUserOAuthConnected, cIncident.addNoteToIncidentSubmit);
 
-router.post(Routes.App.CallPathAssignIncidentAction, cIncident.reassignIncidentModal);
-router.post(Routes.App.CallPathAssignIncidentSubmit, cIncident.reassignIncidentSubmit);
+router.post(Routes.App.CallPathAssignIncidentAction, requireUserOAuthConnected, cIncident.reassignIncidentModal);
+router.post(Routes.App.CallPathAssignIncidentSubmit, requireUserOAuthConnected, cIncident.reassignIncidentSubmit);
 
 router.post(Routes.App.CallPathChangeIncidentPriorityAction, cIncident.changePriorityIncidentModal);
 router.post(Routes.App.CallPathChangeIncidentPrioritySubmit, cIncident.changePriorityIncidentSubmit);
