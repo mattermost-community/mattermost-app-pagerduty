@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { AppsPluginName, Routes } from '../constant';
 import { Manifest, Oauth2App, Oauth2CurrentUser } from '../types';
 import manifest from '../manifest.json';
+import { routesJoin } from 'src/utils/utils';
 
 export interface KVStoreOptions {
     mattermostUrl: string;
@@ -24,7 +25,7 @@ export class KVStoreClient {
     }
 
     public kvSet(key: string, value: KVStoreProps): Promise<any> {
-        const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathKV}/${key}`;
+        const url = routesJoin([this.config.mattermostUrl, '/plugins/', AppsPluginName, Routes.Mattermost.ApiVersionV1, Routes.Mattermost.PathKV, '/', key]);
         return axios.post(url, value, {
             headers: {
                 Authorization: `BEARER ${this.config.accessToken}`,
@@ -34,7 +35,7 @@ export class KVStoreClient {
     }
 
     public kvGet(key: string): Promise<KVStoreProps> {
-        const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathKV}/${key}`;
+        const url = routesJoin([this.config.mattermostUrl, '/plugins/', AppsPluginName, Routes.Mattermost.ApiVersionV1, Routes.Mattermost.PathKV, '/', key]);
         return axios.get(url, {
             headers: {
                 Authorization: `BEARER ${this.config.accessToken}`,
@@ -44,7 +45,7 @@ export class KVStoreClient {
     }
 
     public storeOauth2User(currentUser: Oauth2CurrentUser | object): Promise<any> {
-        const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathOAuth2User}`;
+        const url = routesJoin([this.config.mattermostUrl, '/plugins/', AppsPluginName, Routes.Mattermost.ApiVersionV1, Routes.Mattermost.PathOAuth2User]);
         return axios.post(url, currentUser, {
             headers: {
                 Authorization: `BEARER ${this.config.accessToken}`,
@@ -54,7 +55,7 @@ export class KVStoreClient {
     }
 
     public storeOauth2App(data: Oauth2App): Promise<any> {
-        const url = `${this.config.mattermostUrl}/plugins/${AppsPluginName}${Routes.Mattermost.ApiVersionV1}${Routes.Mattermost.PathOAuth2App}`;
+        const url = routesJoin([this.config.mattermostUrl, '/plugins/', AppsPluginName, Routes.Mattermost.ApiVersionV1, Routes.Mattermost.PathOAuth2App]);
         return axios.post(url, data, {
             headers: {
                 Authorization: `BEARER ${this.config.accessToken}`,
