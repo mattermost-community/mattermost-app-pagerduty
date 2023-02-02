@@ -58,7 +58,7 @@ export async function reassignIncidentActionForm(call: AppCallRequest): Promise<
     } as AppForm;
 
     if (!AppFormValidator.safeParse(form).success) {
-        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.pagerduty-error'), i18nObj.__('forms.incident.get-incident-exception'), call);
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.pagerduty-error'), i18nObj.__('forms.incident.error-validation-form'), call);
     }
 
     return form;
