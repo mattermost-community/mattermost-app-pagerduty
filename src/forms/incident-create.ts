@@ -16,6 +16,10 @@ import { PagerDutyOpts, PostIncident } from '../types/pagerduty';
 import { returnPagerdutyToken, tryPromiseForGenerateMessage, tryPromisePagerdutyWithMessage } from '../utils/utils';
 import { configureI18n } from '../utils/translations';
 
+import { AppFormValidator } from '../utils/validator';
+
+import { Exception } from '../utils/exception';
+
 import { getServiceOptionList, getUsersOptionList } from './pagerduty-options';
 
 export async function createIncidentFormModal(call: AppCallRequest): Promise<AppForm> {
@@ -57,7 +61,7 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
         },
     ];
 
-    return {
+    const form = {
         title: i18nObj.__('forms.incident-create.title'),
         icon: PagerDutyIcon,
         fields,
@@ -70,6 +74,12 @@ export async function createIncidentFormModal(call: AppCallRequest): Promise<App
             },
         },
     } as AppForm;
+
+    if (!AppFormValidator.safeParse(form).success) {
+        throw new Exception(ExceptionType.TEXT_ERROR, i18nObj.__('general.pagerduty-error'), i18nObj.__('forms.incident.error-validation-form'), call);
+    }
+
+    return form;
 }
 
 export async function addIncidentFromCommand(call: AppCallRequest) {

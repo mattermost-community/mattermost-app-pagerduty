@@ -159,7 +159,8 @@
 			"exception": "\"PagerDuty failed\": Failed to create the webhook",
 			"error": "You already have acknowledged \"{{ summary }}\"",
 			"exception_update": "\"PagerDuty failed\": Update incident failed",
-			"message": "You have acknowledged incident \"{{ summary }}\""
+			"message": "You have acknowledged incident \"{{ summary }}\"",
+			"error-validation-form": "The form is invalid"
 		},
 		"add-note": {
 			"exception": "\"PagerDuty failed\": Get PagerDuty incident failed",
