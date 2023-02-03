@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { AppsPluginName, Routes } from '../constant';
 import { Manifest, Oauth2App, Oauth2CurrentUser } from '../types';
 import manifest from '../manifest.json';
-import { routesJoin } from 'src/utils/utils';
+import { routesJoin } from '../utils/utils';
 
 export interface KVStoreOptions {
     mattermostUrl: string;
