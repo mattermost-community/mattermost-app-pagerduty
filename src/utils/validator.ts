@@ -24,13 +24,13 @@ export const AppFormFieldValidator = z.object({
     subtype: z.string().optional(),
     min_length: z.number().int().optional(),
     max_length: z.number().int().optional(),
-});
+}).optional();
 
 export const AppFormValidator = z.object({
     title: z.string(),
     icon: z.string(),
     header: z.string().optional(),
-    fields: z.array(AppFormFieldValidator).optional(),
+    fields: z.union([z.array(AppFormFieldValidator), z.tuple([])]),
     submit: z.object({
         path: z.string(),
         expand: z.any(),
