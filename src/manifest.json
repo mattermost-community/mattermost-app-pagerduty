@@ -1,0 +1,50 @@
+{
+    "app_id": "pagerduty",
+    "version": "0.1.2",
+    "homepage_url": "https://github.com/development-ancient/mattermost-app-pagerduty",
+    "display_name": "PagerDuty",
+    "description": "PagerDuty cloud app for Mattermost",
+    "icon": "pagerduty.png",
+    "on_install": {
+        "expand": {
+            "app": "all",
+            "acting_user_access_token": "all"
+        },
+        "path": "/install"
+    },
+    "bindings": {
+        "path": "/bindings",
+        "expand": {
+            "acting_user": "all",
+            "oauth2_app": "all",
+            "oauth2_user": "all",
+            "locale": "all"
+        }
+    },
+    "requested_permissions": [
+        "act_as_bot",
+        "act_as_user",
+        "remote_webhooks",
+        "remote_oauth2"
+    ],
+    "requested_locations": [
+        "/command"
+    ],
+    "remote_webhook_auth_type": "none",
+    "on_remote_webhook": {
+        "path": "/webhook",
+        "expand": {
+            "oauth2_app": "all"
+        }
+    },
+    "aws_lambda": {
+        "functions": [
+            {
+                "path": "/",
+                "name": "bundle",
+                "handler": "bundle/index.handler",
+                "runtime": "nodejs16.x"
+            }
+        ]
+    }
+}
